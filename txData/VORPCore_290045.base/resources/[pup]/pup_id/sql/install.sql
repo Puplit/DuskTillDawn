@@ -1,0 +1,7 @@
+-- pup_id | database
+--
+-- Nothing to install. pup_id creates no tables, adds no items and writes nothing.
+--
+-- It only reads `society_shops` (id, society, name), which belongs to pup_mercantile and is
+-- created by that resource's own sql/install.sql. When the table is missing, the paper prints
+-- the character's job key instead of the shop name.

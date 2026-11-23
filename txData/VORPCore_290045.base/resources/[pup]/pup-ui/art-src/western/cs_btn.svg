@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="73" viewBox="0 0 300 73">
+  <!-- pup-ui row plate: one charcoal brush stroke, pulled left to right.
+       Drawn for pup-ui (GPL-3.0). Rendered to cs_btn.png at 300x73. -->
+  <defs>
+    <filter id="edge" x="-5%" y="-20%" width="110%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.09" numOctaves="3" seed="14" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="fray" x="-5%" y="-20%" width="110%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.45" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 2.5" result="m"/>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/>
+    </filter>
+    <filter id="drag" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.16" numOctaves="3" seed="9" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.22  0 0 0 0 0.215  0 0 0 0 0.205  0 0 0 2.2 -1.25" result="s"/>
+      <feComposite in="s" in2="SourceAlpha" operator="in"/>
+    </filter>
+    <clipPath id="body"><rect x="3" y="6" width="294" height="61"/></clipPath>
+  </defs>
+  <!-- frayed top and bottom bristles -->
+  <rect x="1" y="2" width="298" height="69" fill="#1e1e1e" opacity="0.75" filter="url(#fray)"/>
+  <!-- the stroke -->
+  <rect x="3" y="6" width="294" height="61" fill="#202020" filter="url(#edge)"/>
+  <!-- the drag marks -->
+  <g clip-path="url(#body)" opacity="0.28">
+    <rect x="3" y="6" width="294" height="61" fill="#000" filter="url(#drag)"/>
+  </g>
+</svg>

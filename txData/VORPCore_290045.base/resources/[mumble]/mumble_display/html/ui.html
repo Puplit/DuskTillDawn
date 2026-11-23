@@ -1,0 +1,38 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="hidden">
+    <div class="main">
+        <ul id="menu">
+            <li>
+                <div class="circle3">
+                    <div class="wave3">
+                        <div class="heart_icon">
+                            <img class="mic1 hide" src="./mic.png">
+                            <img class="mic2" src="./mic_inactive.png">
+                        </div>
+                    </div>
+                </div>
+                <span id="range"></span>
+            </li>
+        </ul>
+    </div>
+    <script src="style.js"></script>
+    <!-- pup: /hud drag offset. fred_hud owns the saved position and pushes it
+         here; .main is already position:absolute so a transform shifts the
+         whole gauge, mic and range pill together. -->
+    <style>
+    .main { transform: translate(var(--pup-voice-dx, 0px), var(--pup-voice-dy, 0px)); }
+    </style>
+    <script>
+    window.addEventListener("message", function (e) {
+        var d = e.data || {};
+        if (d.action !== "pupVoicePos") return;
+        var r = document.documentElement.style;
+        r.setProperty("--pup-voice-dx", (Number(d.dx) || 0) + "px");
+        r.setProperty("--pup-voice-dy", (Number(d.dy) || 0) + "px");
+    });
+    </script>
+</body>
+</html>

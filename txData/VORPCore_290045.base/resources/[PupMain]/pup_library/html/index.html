@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Library Book</title>
+    <link rel="stylesheet" href="book.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <div id="stage">
+            <div id="book">
+                <div class="half left" id="half-left"></div>
+                <div class="half right" id="half-right"></div>
+                <div id="spine"></div>
+                <div id="leaf" class="hidden">
+                    <div class="face front"><div class="face-page" id="leaf-front"></div><div class="shade" id="shade-front"></div></div>
+                    <div class="face back"><div class="face-page" id="leaf-back"></div><div class="shade" id="shade-back"></div></div>
+                </div>
+                <div class="zone left hidden" id="zone-left"><div class="corner"></div></div>
+                <div class="zone right hidden" id="zone-right"><div class="corner"></div></div>
+            </div>
+            <button type="button" id="close-btn"></button>
+            <div id="hint" class="hidden"></div>
+        </div>
+        <div id="warn" class="hidden">
+            <div class="warn-card">
+                <p id="warn-text"></p>
+                <div class="warn-buttons">
+                    <button type="button" id="warn-keep"></button>
+                    <button type="button" id="warn-discard" class="danger"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="clean.js"></script>
+    <script src="writer.js"></script>
+    <script src="book.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+/* vorp_character - character select + spawn picker.
+   Same parchment assets as the face page, so the two screens match. */
+
+#CharSelect, #SpawnPick {
+    position: fixed; inset: 0;
+    font-family: 'PupSlab', Georgia, serif;
+    color: #E8E8E8;
+}
+
+/* ============================================================ char select */
+
+/* a vignette rather than a flat wash - the posed peds stay readable */
+#CharSelect {
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 58%),
+        radial-gradient(ellipse at 62% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%);
+}
+
+.cs-panel {
+    position: absolute; left: 0.781vw; top: 1.852vh;
+    /* sized to its content rather than a fixed tall box: the list is short, so a
+       92vh panel was mostly empty parchment */
+    width: 20.833vw; max-height: 88vh;
+    padding: 2.963vh 0 2.037vh;
+    background: url(img/bg.png) center / 100% 100% no-repeat;
+    display: flex; flex-direction: column; align-items: center;
+    overflow: hidden;
+}
+
+.cs-head {
+    width: 82%; padding: 1.481vh 0;
+    background: url(img/menu_header.png) center / 100% 100% no-repeat;
+    display: flex; justify-content: center;
+}
+.cs-head h1 {
+    font-family: 'PupSerif'; font-size: 1.094vw; font-weight: 500;
+    color: #E8E8E8; letter-spacing: 0.06em;
+}
+
+.cs-sep { width: 82%; margin: 0.648vh 0; }
+
+/* ---- the highlighted character ---- */
+.cs-name {
+    width: 84%; margin-top: 0.37vh;
+    font-family: 'PupSerif'; font-size: 1.406vw; line-height: 1.1;
+    color: #F2E9D8; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cs-sub {
+    width: 84%; margin-top: 0.556vh;
+    font-size: 0.677vw; color: #A79B88;
+    text-align: center; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+.cs-badge {
+    display: inline-block; margin: 0.741vh 0.156vw 0;
+    padding: 0.278vh 0.625vw; border: 1px solid #ac0b10; border-radius: 99px;
+    font-size: 0.573vw; letter-spacing: 0.12em; text-transform: uppercase; color: #e08b8b;
+    white-space: nowrap;
+}
+/* jail carries a countdown, so it reads as information rather than a warning */
+.cs-badge.jail { border-color: #8a7a4e; color: #d9c48a; }
+
+/* ---- info rows ---- */
+/* never shrink: the card rows stay whole and the slot list below gives up the space */
+.cs-info { width: 84%; margin-top: 0.278vh; display: flex; flex-direction: column; gap: 0.156vw; flex: 0 0 auto; }
+.cs-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.463vh 0.625vw;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+}
+.cs-row .k { font-size: 0.625vw; letter-spacing: 0.1em; text-transform: uppercase; color: #9A9184; flex: 0 0 auto; }
+/* a long place name ellipses instead of pushing the label off the row */
+.cs-row .v {
+    font-family: 'PupSerif'; font-size: 0.729vw; color: #E8E8E8;
+    margin-left: 0.52vw; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;
+}
+.cs-row .v.coin { color: #C8A24A; }
+.cs-row .v.dim { color: #9A9184; }
+
+/* ---- slot list ---- */
+.cs-listwrap { width: 84%; margin-top: 0.648vh; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.cs-label { font-size: 0.573vw; letter-spacing: 0.14em; text-transform: uppercase; color: #7E7669; margin-bottom: 0.556vh; }
+.cs-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.26vw; padding-right: 0.208vw; }
+
+.cs-slot {
+    display: flex; align-items: center; gap: 0.521vw;
+    padding: 0.648vh 0.625vw;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+    cursor: pointer;
+}
+.cs-slot:hover { border-color: #6a6152; }
+.cs-slot.sel { border-color: #ac0b10; }
+.cs-slot .num { font-size: 0.573vw; color: #7E7669; width: 0.833vw; }
+.cs-slot .nm { font-family: 'PupSerif'; font-size: 0.781vw; color: #D8D2C6; flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-slot.sel .nm { color: #fff; }
+.cs-slot.empty .nm { color: #8d8578; font-style: italic; }
+.cs-slot .tag { font-size: 0.573vw; letter-spacing: 0.08em; text-transform: uppercase; color: #7E7669; flex: 0 0 auto; }
+.cs-slot .tag.jail { color: #d9c48a; }
+.cs-slot.dead .nm { color: #a98b8b; }
+
+/* ---- buttons ---- */
+.cs-actions { width: 84%; margin-top: 0.741vh; display: flex; flex-direction: column; gap: 0.313vw; }
+.cs-btn {
+    position: relative; width: 100%; padding: 0.926vh 0; text-align: center;
+    font-family: 'PupSerif'; font-size: 0.781vw; color: #E8E8E8;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px; cursor: pointer;
+    overflow: hidden; user-select: none;
+}
+.cs-btn:hover { border-color: #ac0b10; }
+.cs-btn.ghost { font-size: 0.729vw; color: #B9B2A5; }
+.cs-btn.danger:hover { border-color: #ac0b10; color: #ffb4b4; }
+
+/* delete is hold-to-confirm: the fill IS the timer */
+.cs-btn .fill {
+    position: absolute; inset: 0 auto 0 0; width: 0%;
+    background: rgba(172, 11, 16, 0.45);
+    pointer-events: none;
+}
+.cs-btn .lbl { position: relative; }
+
+.cs-hint { margin-top: 0.926vh; font-size: 0.573vw; color: #7E7669; letter-spacing: 0.08em; text-align: center; }
+.cs-hint b { color: #C8A24A; font-weight: normal; }
+
+/* ============================================================ spawn picker */
+
+#SpawnPick {
+    background: rgba(0, 0, 0, 0.72);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+
+.sp-kicker { font-size: 0.625vw; letter-spacing: 0.3em; text-transform: uppercase; color: #8d8578; }
+
+.sp-stage { margin-top: 1.667vh; display: flex; align-items: center; gap: 1.354vw; }
+
+.sp-arrow {
+    display: flex; align-items: center; justify-content: center;
+    width: 2.813vw; height: 5vh; border-radius: 99px; cursor: pointer;
+    border: 1px solid rgba(200, 162, 74, 0.35);
+}
+.sp-arrow:hover { background: rgba(200, 162, 74, 0.14); }
+.sp-arrow img { width: 0.781vw; height: 1.389vh; }
+.sp-arrow.right img { transform: rotate(180deg); }
+
+.sp-card { width: 39.583vw; text-align: center; }
+.sp-town {
+    font-family: 'PupSerif'; font-size: 3.854vw; line-height: 1.05; color: #F2E9D8;
+    letter-spacing: 0.02em;
+}
+.sp-rule { width: 11.458vw; height: 0.093vh; margin: 1.481vh auto; background: linear-gradient(90deg, transparent, #C8A24A, transparent); }
+.sp-lore { font-size: 0.781vw; line-height: 1.75; color: #BDB5A7; min-height: 7.593vh; }
+
+.sp-dots { margin-top: 2.037vh; display: flex; justify-content: center; gap: 0.469vw; }
+.sp-dot { width: 0.365vw; height: 0.648vh; border-radius: 99px; background: #4a463f; cursor: pointer; }
+.sp-dot.on { background: #C8A24A; }
+
+.sp-actions { margin-top: 3.148vh; display: flex; gap: 0.625vw; }
+.sp-btn {
+    min-width: 10.938vw; padding: 1.296vh 1.354vw; text-align: center;
+    font-family: 'PupSerif'; font-size: 0.885vw; color: #E8E8E8;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px; cursor: pointer; user-select: none;
+}
+.sp-btn:hover { border-color: #ac0b10; }
+.sp-btn.ghost { min-width: 7.813vw; font-size: 0.729vw; color: #B9B2A5; }
+
+.sp-hint { margin-top: 1.481vh; font-size: 0.573vw; color: #7E7669; letter-spacing: 0.08em; }
+.sp-hint b { color: #C8A24A; font-weight: normal; }
+
+/* fade both screens in so they don't pop */
+.cs-fade { animation: csIn 420ms ease both; }
+@keyframes csIn { from { opacity: 0 } to { opacity: 1 } }
+
+#CharSelect ::-webkit-scrollbar { width: 0.26vw; }
+#CharSelect ::-webkit-scrollbar-track { background: transparent; }
+#CharSelect ::-webkit-scrollbar-thumb { background: #6a6152; }

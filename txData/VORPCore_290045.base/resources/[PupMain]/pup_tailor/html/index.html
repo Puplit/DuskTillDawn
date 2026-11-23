@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dye Book</title>
+<link rel="stylesheet" href="book.css">
+</head>
+<body>
+<div id="book" class="book hidden" role="dialog" aria-labelledby="bk-title">
+  <header class="bk-head">
+    <svg class="bk-mark" viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M13 27 L27 13 M24 13 h3 v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="14" cy="26" r="2.5" fill="currentColor"/>
+    </svg>
+    <div class="bk-titles">
+      <h1 id="bk-title"></h1>
+      <div id="bk-sub" class="bk-sub"></div>
+    </div>
+    <button id="bk-close" class="bk-x" type="button" aria-label="Close">&times;</button>
+  </header>
+
+  <section id="scr-list" class="scr">
+    <div id="list-items" class="list-items"></div>
+    <p id="list-empty" class="muted hidden"></p>
+  </section>
+
+  <section id="scr-edit" class="scr hidden">
+    <button id="ed-back" class="btn link" type="button"></button>
+    <div class="ed-cols">
+      <ul id="ed-garments" class="garments" role="listbox"></ul>
+      <div class="ed-tools">
+        <div id="ed-grid" class="grid" role="group"></div>
+        <div class="pal-line">
+          <span id="pal-name" class="pal-name"></span>
+          <input id="pal-input" type="text" maxlength="24" autocomplete="off">
+          <button id="pal-btn" class="btn small" type="button"></button>
+        </div>
+        <div id="ed-sliders" class="sliders"></div>
+        <div class="row-btns">
+          <button id="ed-copy" class="btn small" type="button"></button>
+          <button id="ed-paste" class="btn small" type="button"></button>
+          <button id="ed-undye" class="btn small" type="button"></button>
+          <button id="ed-before" class="btn small" type="button"></button>
+        </div>
+      </div>
+    </div>
+    <div id="ed-cost" class="cost"></div>
+    <button id="ed-save" class="btn primary" type="button"></button>
+  </section>
+
+  <footer id="bk-keys" class="bk-keys"></footer>
+</div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="book.js"></script>
+</body>
+</html>

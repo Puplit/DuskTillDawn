@@ -1,0 +1,81 @@
+/*----------------------------*/
+/*----      GOLD PAN      ----*/
+/*----------------------------*/
+
+.gold_pan_container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+}
+
+#gold_pan_canvas {
+    width: 360px;
+    height: 360px;
+}
+
+.gold_pan_meters {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 300px;
+}
+
+.gp_meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gp_label {
+    width: 42px;
+    font-family: 'PupRDR', Georgia, serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--rdr-text-dim);
+    text-transform: uppercase;
+}
+
+.gp_track {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    overflow: hidden;
+}
+
+.gp_fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 999px;
+}
+
+.gp_silt { background: #6b5438; }
+.gp_gold { background: #d8b34a; }
+
+.gold_pan_hint {
+    font-family: 'PupRDR', Georgia, serif;
+    font-size: 0.9rem;
+    color: var(--rdr-text-dim);
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    max-width: 420px;
+}
+
+/* live coaching: says WHY the gauge has gone red */
+.gold_pan_status {
+    min-height: 1.25rem;
+    font-family: 'PupRDR', Georgia, serif;
+    font-size: 1.02rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    transition: color 0.15s ease;
+}
+
+.gold_pan_status.gp_good { color: #ffffff; }
+.gold_pan_status.gp_slow { color: rgba(255, 255, 255, 0.55); }
+.gold_pan_status.gp_fast { color: var(--rdr-red-light, #c23a3a); }

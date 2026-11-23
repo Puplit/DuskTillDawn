@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>pup-mdt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Rye&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/public.css">
+</head>
+<body>
+
+<!-- the clipboard (law and attorney MDT) -->
+<div id="mdt" class="hidden">
+  <div id="board" class="board">
+    <div class="board-plank"></div>
+    <div class="board-hole"></div>
+    <div class="board-knot"></div>
+    <div class="sheet sheet-under2"></div>
+    <div class="sheet sheet-under1 ledger"></div>
+    <div id="page" class="sheet page">
+      <header id="letterhead" class="letterhead"></header>
+      <main id="content" class="content"></main>
+      <img id="cornerStamp" class="corner-stamp" alt="" src="img/logo.png">
+    </div>
+    <button id="bmIndex" class="bookmark bm-index" type="button"></button>
+    <button id="bmBack" class="bookmark bm-back" type="button"></button>
+    <nav id="edgeTabs" class="edge-tabs"></nav>
+    <aside id="drawer" class="drawer"></aside>
+  </div>
+</div>
+
+<!-- overlays that live outside the clipboard (removed on close) -->
+<div id="overlays"></div>
+
+<!-- dispatch slips (toasts) -->
+<div id="slips" class="slips pos-bottom-center"></div>
+
+<!-- public records kiosk -->
+<div id="kiosk" class="hidden"></div>
+
+<!-- bounty hunter board -->
+<div id="bhboard" class="hidden"></div>
+
+<!-- prison register board -->
+<div id="register" class="hidden"></div>
+
+<!-- prisoner countdown -->
+<div id="jailtimer" class="hidden"></div>
+
+<script src="js/core.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/shell.js"></script>
+<script src="js/tab-dashboard.js"></script>
+<script src="js/tab-citizens.js"></script>
+<script src="js/tab-records.js"></script>
+<script src="js/tab-reports.js"></script>
+<script src="js/tab-casework.js"></script>
+<script src="js/tab-staff.js"></script>
+<script src="js/tab-admin.js"></script>
+<script src="js/tab-legal.js"></script>
+<script src="js/tab-firm.js"></script>
+<script src="js/public.js"></script>
+<script src="js/router.js"></script>
+</body>
+</html>

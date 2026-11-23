@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pup-perks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="pk-wrap" class="hidden">
+        <div id="pk-panel">
+            <div id="pk-top">
+                <div id="pk-titles">
+                    <div id="pk-title">Perks and Progression</div>
+                    <div id="pk-subtitle">Shape your character. Build your strengths.</div>
+                </div>
+
+                <div id="pk-prog">
+                    <!-- which side you are looking at. Each has its own level,
+                         its own points and its own specialisation. -->
+                    <div id="pk-sides"></div>
+                    <div id="pk-prog-row">
+                        <span id="pk-level-tag">Level</span>
+                        <span id="pk-level">1</span>
+                        <div id="pk-xp-block">
+                            <div id="pk-xp-track"><div id="pk-xp-fill"></div><div id="pk-xp-ghost"></div></div>
+                            <div id="pk-xp-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pk-topright">
+                    <div class="pk-navbtn" id="pk-guide-btn">Guide</div>
+                    <div id="pk-points" title="Unspent perk points">
+                        <span id="pk-points-n">0</span>
+                        <span id="pk-points-tag">Points</span>
+                    </div>
+                    <div id="pk-close" title="Close">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pk-rule"></div>
+
+            <div id="pk-body">
+                <div id="pk-nav">
+                    <div id="pk-nav-cats"></div>
+                    <div id="pk-nav-foot">
+                        <div class="pk-navbtn" id="pk-view-toggle">Tree View</div>
+                        <div class="pk-navbtn danger hidden" id="pk-reset">Reset Perks</div>
+                    </div>
+                </div>
+
+                <div id="pk-main">
+                    <div id="pk-toolbar">
+                        <div id="pk-search-box">
+                            <svg class="pk-search-ico" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="11" cy="11" r="6" /><line x1="15.5" y1="15.5" x2="20" y2="20" />
+                            </svg>
+                            <input id="pk-search" type="text" placeholder="Search perks..." autocomplete="off" spellcheck="false">
+                        </div>
+                        <div class="pk-select" id="pk-filter">
+                            <div class="pk-select-btn"><span>All</span><i></i></div>
+                            <div class="pk-select-menu"></div>
+                        </div>
+                        <div class="pk-select" id="pk-sort">
+                            <div class="pk-select-btn"><span>Default</span><i></i></div>
+                            <div class="pk-select-menu"></div>
+                        </div>
+                    </div>
+
+                    <div id="pk-scroll">
+                        <!-- shown INSTEAD of the perks until this side has a
+                             specialisation committed -->
+                        <div id="pk-pick" class="hidden">
+                            <div id="pk-pick-head">
+                                <div id="pk-pick-title">Choose your specialisation</div>
+                                <div id="pk-pick-sub"></div>
+                            </div>
+                            <div id="pk-pick-cards"></div>
+                            <!-- the nav rail is hidden while choosing, so the
+                                 reset lives here instead -->
+                            <div id="pk-pick-foot" class="hidden">
+                                <div class="pk-navbtn danger" id="pk-pick-reset">Reset Perks</div>
+                            </div>
+                        </div>
+
+                        <!-- read the whole tree BEFORE committing to it -->
+                        <div id="pk-preview" class="hidden">
+                            <div id="pk-preview-top">
+                                <div class="pk-navbtn" id="pk-preview-back">Back</div>
+                                <div id="pk-preview-titles">
+                                    <div id="pk-preview-name"></div>
+                                    <div id="pk-preview-desc"></div>
+                                </div>
+                                <div class="pk-btn" id="pk-preview-commit">Commit</div>
+                            </div>
+                            <div id="pk-preview-list"></div>
+                        </div>
+                        <div id="pk-grid"></div>
+                        <div id="pk-tree" class="hidden">
+                            <svg id="pk-tree-links"></svg>
+                            <div id="pk-tree-nodes"></div>
+                        </div>
+                        <div id="pk-empty" class="hidden"></div>
+                    </div>
+                </div>
+
+                <div id="pk-detail" class="hidden"></div>
+                <div id="pk-guide" class="hidden"></div>
+            </div>
+
+            <div id="pk-rule-foot"></div>
+
+            <div id="pk-slots">
+                <div id="pk-slots-label">Equipped</div>
+                <div id="pk-slots-row"></div>
+                <div id="pk-slots-count"></div>
+            </div>
+        </div>
+
+        <div id="pk-modal" class="hidden">
+            <div id="pk-modal-card">
+                <div id="pk-modal-title"></div>
+                <div id="pk-modal-body"></div>
+                <div id="pk-modal-actions">
+                    <div class="pk-btn ghost" id="pk-modal-cancel">Cancel</div>
+                    <div class="pk-btn" id="pk-modal-ok">Confirm</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pk-tip" class="hidden"></div>
+    </div>
+<script src="perks.js"></script>
+</body>
+</html>

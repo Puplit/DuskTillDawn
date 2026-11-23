@@ -1,0 +1,83 @@
+<!-- vorp_character | face & body page: parchment panel, slider rows -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="charselect.css">
+
+<div id="Menu" class="hidden">
+    <div id="MenuContent" class="unselectable">
+        <div id="title"><h1 id="menuTitle">FACE &amp; BODY</h1></div>
+        <img src="img/separator.png" alt="" class="separator">
+        <div id="Categories"></div>
+        <div id="FaceTools">
+            <div class="ft-group">
+                <span class="ft-lbl">View</span>
+                <a href="#" class="ft-btn" data-cam="head">Head</a>
+                <a href="#" class="ft-btn" data-cam="torso">Torso</a>
+                <a href="#" class="ft-btn" data-cam="full">Full</a>
+            </div>
+            <div class="ft-group">
+                <a href="#" class="ft-btn wide" id="ftRandom">Randomise</a>
+                <a href="#" class="ft-btn wide" id="ftReset">Reset</a>
+            </div>
+        </div>
+        <div id="StyleProperties"></div>
+        <div id="MenuInteraction">
+            <img src="img/separator.png" alt="" class="separator">
+            <div id="CamHint">
+                <span><b>A</b>/<b>D</b> turn</span>
+                <span><b>W</b>/<b>S</b> camera</span>
+                <span><b>Shift</b>/<b>Ctrl</b> zoom</span>
+            </div>
+            <a href="#" id="ConfirmBtn" class="button hidden">Confirm</a>
+            <a href="#" id="DoneBtn" class="button">Done</a>
+        </div>
+    </div>
+</div>
+
+<!-- character selection -->
+<div id="CharSelect" class="hidden unselectable">
+    <div class="cs-panel">
+        <div class="cs-head"><h1 id="csTitle">CHARACTERS</h1></div>
+        <img src="img/separator.png" alt="" class="cs-sep">
+
+        <div class="cs-name" id="csName">&nbsp;</div>
+        <div class="cs-sub"  id="csSub">&nbsp;</div>
+        <div id="csBadgeWrap" style="text-align:center"></div>
+
+        <img src="img/separator.png" alt="" class="cs-sep">
+        <div class="cs-info" id="csInfo"></div>
+
+        <div class="cs-listwrap">
+            <div class="cs-label" id="csCount">Characters</div>
+            <div class="cs-list" id="csList"></div>
+        </div>
+
+        <div class="cs-actions">
+            <div class="cs-btn danger hidden" id="csDelete"><span class="fill"></span><span class="lbl">Hold to delete</span></div>
+        </div>
+        <div class="cs-hint" id="csHint"><b>W/S</b> or <b>&uarr;&darr;</b> to look &middot; <b>Enter</b> to play</div>
+    </div>
+</div>
+
+<!-- where a new character wakes up -->
+<div id="SpawnPick" class="hidden unselectable">
+    <div class="sp-kicker" id="spKicker">Where will you begin?</div>
+    <div class="sp-stage">
+        <a class="sp-arrow" id="spPrev"><img src="img/arrow.png" alt=""></a>
+        <div class="sp-card">
+            <div class="sp-town" id="spTown">&nbsp;</div>
+            <div class="sp-rule"></div>
+            <div class="sp-lore" id="spLore">&nbsp;</div>
+        </div>
+        <a class="sp-arrow right" id="spNext"><img src="img/arrow.png" alt=""></a>
+    </div>
+    <div class="sp-dots" id="spDots"></div>
+    <div class="sp-actions">
+        <div class="sp-btn" id="spConfirm">Begin here</div>
+        <div class="sp-btn ghost" id="spRandom">Let fate decide</div>
+    </div>
+    <div class="sp-hint"><b>&larr;&rarr;</b> to travel &middot; <b>Enter</b> to settle</div>
+</div>
+
+<!-- RedM caches NUI pages: bump ?v= on every edit to app.js or it serves the old one -->
+<script src="app.js?v=2"></script>
+<script src="charselect.js"></script>

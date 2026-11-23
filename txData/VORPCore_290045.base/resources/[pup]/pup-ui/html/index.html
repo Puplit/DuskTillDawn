@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="banner-wrap">
+        <div id="banner" class="hidden">
+            <div class="banner-rule"></div>
+            <div id="banner-title"></div>
+            <div id="banner-sub"></div>
+            <div class="banner-rule"></div>
+        </div>
+    </div>
+
+    <div id="toasts"></div>
+
+    <!-- RDR2-style progress bar (replaces vorp_progressbar): dark plate, serif
+         label + percent, red segmented fill. Time-based; takes no NUI focus. -->
+    <div id="prog-wrap" class="hidden style-line">
+        <!-- the ring is only shown in the 'ring' style; r=40 -> circumference 251.33 -->
+        <svg id="prog-ring" viewBox="0 0 90 90"><circle class="ring-bg" cx="45" cy="45" r="40" fill="none" stroke-width="7"/><circle id="prog-ring-fg" cx="45" cy="45" r="40" fill="none" stroke-width="7"/></svg>
+        <div id="prog-body">
+            <div id="prog-top">
+                <span id="prog-label"></span>
+                <span id="prog-pct">0%</span>
+            </div>
+            <div id="prog-track"><div id="prog-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- icons are inline SVG on purpose: RedM's NUI has no color-emoji
+         font, so emoji render as ugly monochrome fallback blobs -->
+    <div id="hud-wrap" class="hidden">
+        <div class="hud-row" id="hud-health">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M12 21S4 14.6 4 9.3C4 6.4 6.2 4.2 9 4.2c1.7 0 3 .9 3 .9s1.3-.9 3-.9c2.8 0 5 2.2 5 5.1C20 14.6 12 21 12 21z"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row" id="hud-stamina">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row" id="hud-deadeye">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row" id="hud-hunger">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M7 3v7c0 1.4 1 2.5 2.2 2.9L9 21h2l-.2-8.1C12 12.5 13 11.4 13 10V3h-1.6v7H10V3H8.4v7H7.2L7 3zm10 0c-1.7 0-3 2-3 4.5 0 1.9.8 3.4 1.9 4.1L15.6 21h2l-.3-9.4c1-.7 1.7-2.2 1.7-4.1C19 5 18.7 3 17 3z"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row" id="hud-thirst">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M12 2.5S5.5 10.2 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.2 12 2.5 12 2.5z"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row hidden" id="hud-infection">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M12 2.5S5.5 10.2 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.2 12 2.5 12 2.5z"/><path d="M12 8v8M8 12h8" stroke="#0b0906" stroke-width="2.2" fill="none"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+        <div class="hud-row hidden" id="hud-noise">
+            <svg class="hud-icon" viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+            <div class="hud-track"><div class="hud-fill"></div></div>
+        </div>
+    </div>
+
+
+    <div id="wheel-wrap" class="hidden">
+        <svg id="wheel-svg" viewBox="-110 -110 220 220"></svg>
+        <div id="wheel-center">
+            <div class="wheel-rule"></div>
+            <div id="wheel-label">Provisions</div>
+            <div id="wheel-desc">Select an item to use it.</div>
+            <div class="wheel-rule"></div>
+        </div>
+        <div id="wheel-foot">ESC to close</div>
+    </div>
+
+    <div id="radial-wrap" class="hidden">
+        <svg id="radial-svg" viewBox="-110 -110 220 220"></svg>
+        <div id="radial-center">
+            <div class="wheel-rule"></div>
+            <div id="radial-label">Actions</div>
+            <div id="radial-desc">Select an action.</div>
+            <div class="wheel-rule"></div>
+        </div>
+        <div id="radial-foot">Right-click to go back &mdash; ESC to close</div>
+    </div>
+
+    <div id="death-wrap" class="hidden">
+        <div id="death-inner">
+            <div id="death-title">DEAD</div>
+            <div id="death-killer"></div>
+            <div id="death-cause"></div>
+            <div class="death-rule"></div>
+            <div id="death-count"></div>
+            <div id="death-hint"></div>
+        </div>
+    </div>
+
+    <div id="honor-wrap" class="hidden">
+        <div id="honor-label">HONOR</div>
+        <div id="honor-row">
+            <span class="honor-end honor-bad">☠</span>
+            <div id="honor-track">
+                <div class="honor-notch"></div>
+                <div id="honor-marker"></div>
+            </div>
+            <span class="honor-end honor-good">❦</span>
+        </div>
+        <div id="honor-delta"></div>
+    </div>
+
+    <div id="shop-wrap" class="hidden">
+        <div id="shop-panel">
+            <div id="shop-head">
+                <div id="shop-title"></div>
+                <div id="shop-purse"></div>
+            </div>
+            <div class="pm-rule"></div>
+            <div id="shop-cats" class="hidden"></div>
+            <div id="shop-items"></div>
+            <div id="shop-foot">Select to buy &mdash; ESC to leave</div>
+        </div>
+    </div>
+
+    <div id="ward-wrap" class="hidden">
+        <div id="ward-panel">
+            <div id="ward-head">
+                <div id="ward-title"></div>
+                <div id="ward-sub"></div>
+            </div>
+            <div class="pm-rule"></div>
+            <div id="ward-cats"></div>
+            <div id="ward-items"></div>
+            <div id="ward-actions">
+                <div class="ward-btn" id="ward-save">SAVE OUTFIT</div>
+                <div class="ward-rotate">
+                    <span class="ward-rot" data-dir="-1">&#10094;</span>
+                    <span class="ward-rot-label">ROTATE</span>
+                    <span class="ward-rot" data-dir="1">&#10095;</span>
+                </div>
+            </div>
+            <div id="ward-foot"></div>
+        </div>
+    </div>
+
+    <div id="prompt-wrap" class="hidden">
+        <span id="prompt-key"></span>
+        <span id="prompt-label"></span>
+    </div>
+
+    <!-- floating world key cap (doors, and anything else that wants one) -->
+    <div id="wk-wrap" class="hidden">
+        <div id="wk-cap"></div>
+        <div id="wk-rule"></div>
+        <div id="wk-text"></div>
+    </div>
+
+    <div id="list-wrap" class="hidden">
+        <div id="list-panel">
+            <div id="list-title"></div>
+            <div id="list-sub"></div>
+            <div class="pm-rule"></div>
+            <div id="list-tools" class="hidden">
+                <input id="list-search" type="text" placeholder="Search" autocomplete="off" spellcheck="false">
+                <select id="list-filter"></select>
+            </div>
+            <div id="list-options"></div>
+            <div id="list-foot"><b class="k-sym">&#8593;&#8595;</b> to look &middot; <b>Enter</b> to pick &middot; <b>Esc</b> to go back</div>
+        </div>
+    </div>
+
+    <div id="input-wrap" class="hidden">
+        <div id="input-panel">
+            <div id="input-title"></div>
+            <div id="input-sub"></div>
+            <div class="pm-rule"></div>
+            <div id="input-fields"></div>
+            <div id="input-actions">
+                <div class="input-btn" id="input-submit">CONFIRM</div>
+                <div class="input-btn ghost" id="input-cancel">CANCEL</div>
+            </div>
+            <div id="input-foot">ENTER to confirm &mdash; ESC to cancel</div>
+        </div>
+    </div>
+
+    <div id="ink-wrap" class="hidden">
+        <div id="ink-panel">
+            <div id="ink-title"></div>
+            <div id="ink-sub"></div>
+            <div class="pm-rule"></div>
+            <div id="ink-options"></div>
+            <div id="ink-foot"><b class="k-sym">&#8593;&#8595;</b> to look &middot; <b class="k-sym">&#8592;&#8594;</b> to change &middot; <b>Enter</b> to pick &middot; <b>Esc</b> to go back</div>
+        </div>
+        <!-- reference art for the focused row (character creator). Stays hidden
+             unless that row supplies an `image`, so every other menu is unchanged. -->
+        <img id="ink-img" class="hidden" alt="">
+    </div>
+
+    <!-- Centred price picker: a headline, the floor/current/ceiling readout, a
+         track with a draggable-looking handle and a confirm hint. Driven by
+         left/right; used by the underground drug haggle. -->
+    <div id="price-wrap" class="hidden">
+        <div id="price-panel">
+            <div id="price-caption"></div>
+            <div id="price-title"></div>
+            <div id="price-row">
+                <span id="price-min"></span>
+                <span id="price-cur"></span>
+                <span id="price-max"></span>
+            </div>
+            <div id="price-track">
+                <div id="price-fill"></div>
+                <div id="price-handle"></div>
+            </div>
+            <div id="price-foot"></div>
+        </div>
+    </div>
+
+    <div id="deck-wrap" class="hidden">
+        <div id="deck-head">
+            <div id="deck-title">ABILITIES</div>
+            <div id="deck-sub"></div>
+        </div>
+        <div id="deck-cats"></div>
+        <div id="deck-cards"></div>
+        <div id="deck-foot">Select a card to equip or remove it &mdash; ESC to close</div>
+    </div>
+
+    <div id="pm-wrap" class="hidden">
+        <div id="pm-panel">
+            <div id="pm-head">
+                <div id="pm-name"></div>
+                <div id="pm-sub"></div>
+            </div>
+            <div class="pm-rule"></div>
+            <div id="pm-stats"></div>
+            <div class="pm-rule"></div>
+            <div class="pm-section-title">ABILITIES</div>
+            <div id="pm-perks"></div>
+            <div id="pm-foot">ESC to close &mdash; select an ability to equip or remove it</div>
+        </div>
+    </div>
+
+    <div id="poster-wrap" class="hidden">
+        <div id="poster">
+            <div class="poster-head">WANTED</div>
+            <div id="poster-name"></div>
+            <div class="poster-line"></div>
+            <div id="poster-crime"></div>
+            <div id="poster-reward"></div>
+            <div class="poster-foot">DEAD OR ALIVE &mdash; ALIVE PAYS DOUBLE</div>
+        </div>
+    </div>
+
+    <!-- full-screen data-driven app / dashboard (society board, crafting bench,
+         ...). Callers drive it via pup-ui:OpenApp/UpdateApp; the top bar, left
+         nav and every content block are built by app.js from the passed data. -->
+    <div id="app-wrap" class="hidden">
+        <div id="app-top">
+            <div id="app-titles">
+                <div id="app-title"></div>
+                <div id="app-subtitle"></div>
+            </div>
+            <div id="app-topright">
+                <div id="app-badge"></div>
+                <!-- inline SVG, not "&times;": the panel font has no glyph for it,
+                     so the button rendered as an empty box (same reason the icons
+                     elsewhere in this file are SVG rather than text/emoji) -->
+                <div id="app-close" title="Close">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div id="app-rule"></div>
+        <div id="app-body">
+            <div id="app-nav"></div>
+            <div id="app-content"></div>
+        </div>
+    </div>
+
+
+    <!-- floating 3D world labels (client/world3d.lua): monochrome pills
+         positioned per-frame at world->screen coords; never interactive. -->
+    <div id="world3d-wrap" class="hidden"></div>
+
+    <!-- scene labels (client/world3d.lua DrawSceneLabels): free text at world->screen coords, drawn here so any
+         Unicode symbol renders, which the game's own text natives cannot do. -->
+    <div id="scene-wrap" class="hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

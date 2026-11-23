@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Post Office</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400&family=Bitter:wght@400;600&family=Cormorant+Garamond:wght@400;600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Homemade+Apple&family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@600;700&family=Special+Elite&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-motion="full" data-paper="parchment">
+
+    <!-- HUD envelope: fred_hud's layout editor expects 40x34 px at bottom 10px, left 60px -->
+    <div id="hud" class="hud hidden" aria-hidden="true">
+        <svg viewBox="0 0 40 34" class="hud-env">
+            <rect x="2" y="5" width="36" height="25" rx="2.5" class="hud-paper"/>
+            <path d="M3 7l17 13L37 7" class="hud-fold"/>
+            <path d="M3 29l12-11M37 29L25 18" class="hud-fold thin"/>
+            <circle cx="20" cy="19.5" r="4.2" class="hud-seal"/>
+        </svg>
+        <span id="hud-p" class="hud-n p hidden"></span>
+        <span id="hud-b" class="hud-n b hidden"></span>
+        <span id="hud-g" class="hud-n g hidden"></span>
+    </div>
+
+    <div id="dim" class="dim hidden"></div>
+
+    <div id="win" class="win hidden" role="dialog" aria-label="Mail">
+        <aside id="rail" class="rail"></aside>
+        <section class="main">
+            <header id="topbar" class="topbar">
+                <button id="back" class="btn small hidden" type="button">Back</button>
+                <div class="titles">
+                    <div id="kicker" class="kicker"></div>
+                    <h1 id="heading" class="heading"></h1>
+                </div>
+                <div id="tools" class="tools"></div>
+                <button id="closeBtn" class="mini close" type="button" title="Close"></button>
+            </header>
+            <div class="rule"></div>
+            <div id="view" class="view"></div>
+        </section>
+        <div id="toasts" class="toasts"></div>
+        <div id="busy" class="busy hidden"><div class="spinner"></div></div>
+        <div id="modal" class="modal hidden"></div>
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    </div>
+
+    <script src="js/util.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/emoji.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

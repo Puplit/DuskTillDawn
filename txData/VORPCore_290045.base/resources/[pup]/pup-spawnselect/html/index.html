@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- tiles, leaflet and the fonts all come from resources already on the server -->
+<link rel="stylesheet" href="nui://vorp_admin/html/vendor/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="wrap" class="hidden">
+        <div id="mapwrap"><div id="map"></div></div>
+
+        <section id="panel">
+            <div id="panel-img" class="hidden"></div>
+            <span id="panel-area"></span>
+            <h2 id="panel-name"></h2>
+            <p id="panel-blurb"></p>
+            <button id="confirm" disabled>Spawn Here</button>
+        </section>
+
+        <div id="brand">
+            <span id="title"></span>
+            <span id="subtitle"></span>
+        </div>
+
+        <div id="hint">Click on the town you want to spawn in</div>
+        <span id="timer"></span>
+    </div>
+
+    <script src="nui://vorp_admin/html/vendor/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

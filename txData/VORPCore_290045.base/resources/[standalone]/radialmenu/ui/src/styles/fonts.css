@@ -1,0 +1,22 @@
+/* free fonts, licences next to them in ../assets/fonts:
+   IM Fell English (SIL OFL 1.1) and Roboto Slab (Apache 2.0) */
+@font-face {
+  font-family: 'IM Fell English';
+  src: url('../assets/fonts/imfell.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Slab';
+  src: url('../assets/fonts/robotoslab.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Segoe Script';
+  src: local('Segoe Script');
+  font-weight: normal;
+  font-style: normal;
+}

@@ -1,0 +1,345 @@
+/* pup_gunsmith | bench page. No bundled fonts or images: the faces come from pup-ui's
+   theme (nui://pup-ui/html/fonts/...) with system serif fallbacks, and every ornament
+   is CSS or inline SVG. */
+
+:root {
+    --ink: #0b0907;
+    --ink-2: #16120d;
+    --paper: #efe6d2;
+    --text: #f3ece0;
+    --dim: #a59a88;
+    --gold: #c9a24d;
+    --red: #b03a32;
+    --ok: #6f9a4a;
+    --line: rgba(201, 162, 77, 0.35);
+    --focus: rgba(176, 58, 50, 0.85);
+    --font-title: 'GsTitle', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --font-body: 'GsBody', Georgia, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--font-body);
+    color: var(--text);
+    user-select: none;
+}
+
+.hidden { display: none !important; }
+
+#root { position: fixed; inset: 0; }
+
+/* ---- framing ---- */
+.vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 40% 50%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.65) 100%);
+}
+.shade {
+    position: absolute; top: 0; right: 0; bottom: 0; width: 45%; pointer-events: none;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75));
+}
+.letterbox {
+    position: absolute; left: 0; right: 0; height: 6vh; background: #000; pointer-events: none;
+    transition: transform 0.6s ease;
+}
+.lb-top { top: 0; transform: translateY(-100%); }
+.lb-bottom { bottom: 0; transform: translateY(100%); }
+#root.ongun .lb-top, #root.ongun .lb-bottom { transform: translateY(0); }
+
+#stage { position: absolute; top: 0; left: 0; bottom: 0; right: max(25vw, 380px); cursor: default; }
+#root.ongun #stage { cursor: grab; }
+#root.ongun #stage.dragging { cursor: grabbing; }
+
+/* ---- key hints ---- */
+.keys {
+    position: absolute; left: 2.2vw; bottom: calc(6vh + 1.6vh);
+    padding: 12px 16px; min-width: 240px;
+    background: rgba(8, 6, 4, 0.72); border: 1px solid var(--line);
+    font-size: 13px; line-height: 1.75;
+}
+.keys .k { display: flex; gap: 12px; }
+.keys .cap { color: var(--gold); min-width: 64px; font-family: var(--font-title); letter-spacing: 0.04em; }
+
+/* ---- the panel ---- */
+#panel {
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: 25vw; min-width: 380px;
+    padding: 6vh 1.4vw;
+}
+
+/* menus on the left (the player's /hud choice): panel, shade, drag area and key hints all mirror */
+#root.menu-left #panel { right: auto; left: 0; }
+#root.menu-left .shade { right: auto; left: 0; background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75)); }
+#root.menu-left #stage { left: max(25vw, 380px); right: 0; }
+#root.menu-left .keys { left: auto; right: 2.2vw; }
+#root.menu-left .vignette { background: radial-gradient(ellipse at 60% 50%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.65) 100%); }
+.plate {
+    position: relative; height: 100%;
+    display: flex; flex-direction: column;
+    background:
+        radial-gradient(ellipse at 30% 0%, rgba(201, 162, 77, 0.10), rgba(0, 0, 0, 0) 60%),
+        repeating-linear-gradient(93deg, rgba(255, 255, 255, 0.012) 0 2px, rgba(0, 0, 0, 0.02) 2px 5px),
+        linear-gradient(180deg, var(--ink-2), var(--ink));
+    border: 1px solid var(--line);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.55), 0 0 0 5px var(--line), 0 18px 48px rgba(0, 0, 0, 0.6);
+}
+.plate::before, .plate::after {
+    content: ''; position: absolute; width: 22px; height: 22px; pointer-events: none;
+    border-color: var(--gold); border-style: solid; opacity: 0.8;
+}
+.plate::before { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+.plate::after { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+.view { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+
+.head { padding: 22px 22px 0; }
+.kicker { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+.title {
+    margin: 4px 0 2px; font-family: var(--font-title); font-weight: normal;
+    font-size: 30px; letter-spacing: 0.03em; color: var(--text);
+}
+.sub { font-size: 14px; color: var(--dim); min-height: 1em; }
+.rule {
+    height: 9px; margin: 12px 0 8px;
+    background:
+        linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat,
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='9'><path d='M9 0 L13 4.5 L9 9 L5 4.5 Z' fill='%23c9a24d'/></svg>") center / 18px 9px no-repeat;
+}
+
+.scroll { flex: 1; overflow-y: auto; padding: 4px 16px 8px; min-height: 0; }
+.scroll::-webkit-scrollbar { width: 4px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--line); }
+
+.foot { padding: 10px 22px 18px; font-size: 13px; color: var(--dim); text-align: center; }
+
+/* ---- tabs ---- */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 12px; }
+.tab {
+    font-family: var(--font-title); font-size: 15px; color: var(--dim); cursor: pointer;
+    padding: 2px 0; border-bottom: 2px solid transparent;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--text); border-bottom-color: var(--red); }
+
+/* ---- rows and cards ---- */
+.row, .gun {
+    position: relative; margin: 6px 0; padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+}
+.row.focus, .gun.focus {
+    border-color: var(--focus);
+    box-shadow: inset 0 0 0 1px var(--focus), 0 0 14px rgba(176, 58, 50, 0.25);
+}
+.row.changed { background: rgba(201, 162, 77, 0.07); }
+.row.disabled { opacity: 0.45; cursor: default; }
+
+.gun { display: flex; align-items: center; gap: 10px; }
+.gun .main { flex: 1; min-width: 0; }
+.gun .name { font-family: var(--font-title); font-size: 18px; }
+.gun .meta { font-size: 13px; color: var(--dim); }
+.gun .go { font-size: 12px; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.empty { padding: 26px 8px; text-align: center; color: var(--dim); font-size: 14px; line-height: 1.6; }
+
+.r-head { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--dim); }
+.r-head .now { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
+.selector { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 2px; }
+.selector .cur { flex: 1; text-align: center; font-family: var(--font-title); font-size: 18px; }
+.arrow {
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    color: var(--dim); cursor: pointer;
+}
+.arrow:hover { color: var(--gold); }
+.arrow svg { width: 14px; height: 14px; fill: currentColor; }
+.r-meta { font-size: 12px; color: var(--dim); text-align: center; }
+.r-meta .gold { color: var(--gold); }
+.dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); }
+.dot.fitted { background: var(--gold); opacity: 0.55; }
+.dot.sel { background: var(--text); transform: scale(1.3); }
+
+.line-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.line-row .lbl { font-family: var(--font-title); font-size: 17px; }
+.line-row .val { font-size: 13px; color: var(--gold); white-space: nowrap; }
+.line-row .val.dim { color: var(--dim); }
+.line-row .val.warn { color: var(--red); }
+.x {
+    margin-left: 8px; color: var(--dim); font-size: 14px; cursor: pointer; padding: 0 4px;
+}
+.x:hover { color: var(--red); }
+.small { font-size: 12px; color: var(--dim); margin-top: 3px; }
+
+.section { margin: 14px 4px 4px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
+.note { margin: 10px 4px; font-size: 14px; line-height: 1.55; color: var(--dim); }
+
+.name-box label { display: block; font-size: 12px; color: var(--dim); margin-bottom: 4px; }
+.name-box input {
+    width: 100%; padding: 8px 10px; font: inherit; font-size: 16px; color: var(--text);
+    background: rgba(0, 0, 0, 0.45); border: 1px solid var(--line); outline: none;
+}
+.name-box input:focus { border-color: var(--gold); }
+
+/* gauges and tier pips */
+.gauge { margin: 8px 4px; }
+.gauge .g-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--dim); }
+.gauge .g-track { height: 6px; margin-top: 4px; background: rgba(255, 255, 255, 0.08); }
+.gauge .g-fill { height: 100%; background: var(--ok); }
+.gauge.low .g-fill { background: var(--red); }
+.pips { display: flex; gap: 6px; margin: 8px 4px; }
+.pip { width: 18px; height: 18px; transform: rotate(45deg); border: 1px solid var(--gold); }
+.pip.lit { background: var(--gold); }
+.mat { display: flex; justify-content: space-between; font-size: 13px; margin: 3px 4px; }
+.mat.ok .n { color: var(--ok); }
+.mat.short .n { color: var(--red); }
+
+/* ---- bill ---- */
+.bill { padding: 0 22px 18px; }
+.bill-line { display: flex; justify-content: space-between; font-size: 15px; }
+.gold { color: var(--gold); }
+.wallet { font-size: 13px; color: var(--dim); margin: 4px 0 10px; }
+.buttons { display: flex; gap: 10px; }
+.btn {
+    flex: 1; padding: 10px 8px; cursor: pointer;
+    font-family: var(--font-title); font-size: 16px; letter-spacing: 0.04em;
+    color: var(--text); background: rgba(176, 58, 50, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.btn.quiet { background: rgba(255, 255, 255, 0.04); border-color: var(--line); }
+.btn:hover:not(:disabled) { filter: brightness(1.15); }
+.btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ---- receipt ---- */
+.modal {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+}
+.modal .card {
+    width: 420px; max-width: 90vw; padding: 24px 26px;
+    background: linear-gradient(180deg, var(--ink-2), var(--ink));
+    border: 1px solid var(--line);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.6), 0 0 0 4px var(--line), 0 0 0 7px rgba(0, 0, 0, 0.6), 0 0 0 8px var(--line);
+}
+.rc-lines { max-height: 40vh; overflow-y: auto; }
+.rc-line { display: flex; justify-content: space-between; margin: 8px 0; }
+.rc-line .c { font-size: 12px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+.rc-line .p { font-family: var(--font-title); font-size: 16px; }
+.rc-line .v { color: var(--gold); font-size: 14px; align-self: center; }
+.modal .buttons { margin-top: 16px; }
+
+/* ---- progress and toast ---- */
+.progress {
+    position: absolute; left: 50%; bottom: 14vh; transform: translateX(-50%);
+    width: 360px; padding: 10px 14px; background: rgba(8, 6, 4, 0.85); border: 1px solid var(--line);
+}
+.progress-label { font-family: var(--font-title); font-size: 15px; text-align: center; margin-bottom: 6px; }
+.progress-track { height: 6px; background: rgba(255, 255, 255, 0.08); }
+.progress-fill { height: 100%; width: 0; background: var(--gold); }
+
+.toast {
+    position: absolute; left: 50%; top: 9vh; transform: translateX(-50%);
+    max-width: 50vw; padding: 10px 18px; font-size: 15px;
+    background: rgba(8, 6, 4, 0.9); border: 1px solid var(--line); border-left: 3px solid var(--gold);
+}
+.toast.bad { border-left-color: var(--red); }
+.toast.good { border-left-color: var(--ok); }
+
+/* ================================================================== */
+/* WESTERN SKIN: the same art as pup-ui's menus (Job Menu and others), */
+/* read from pup-ui so both always match. Delete this block to go back */
+/* to the flat look above.                                             */
+/* ================================================================== */
+:root {
+    --text: #F5F1E8;
+    --dim: #9A9184;
+}
+
+/* the panel: the ink-roller plate, no frame lines or corner marks */
+#panel { width: 25vw; min-width: 380px; padding: 5vh 1.2vw; }
+.plate {
+    background: url('nui://pup-ui/html/img/western/inkroller_1a.png') center / 100% 100% no-repeat;
+    border: none;
+    box-shadow: none;
+    padding: 2.6vh 1.2vw 2vh;
+}
+.plate::before, .plate::after { display: none; }
+
+/* header: title on the engraved plate, the bench and hint centred under it */
+.head { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 0.4vw; }
+.head .title {
+    order: 0;
+    width: 100%;
+    margin: 0;
+    padding: 3vh 1vw 2.8vh;
+    background: url('nui://pup-ui/html/img/western/menu_header_1a.png') center / contain no-repeat;
+    font-size: 2.7vh;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+}
+.head .kicker { order: 1; margin-top: 0.6vh; font-size: 1.5vh; letter-spacing: 0.14em; color: var(--dim); }
+.head .sub { order: 2; font-size: 1.4vh; color: var(--dim); }
+.head .tabs { order: 3; justify-content: center; }
+.head .rule { order: 4; width: 100%; }
+
+/* the engraved divider instead of the gold line and diamond */
+.rule {
+    height: 5px;
+    margin: 1.2vh 0 0.8vh;
+    background: url('nui://pup-ui/html/img/western/divider_line.png') center / 100% 100% no-repeat;
+    opacity: 0.95;
+}
+
+/* rows: textured boxes; the focused one gets the red selection box */
+.scroll { padding: 0.6vh 0.6vw 0.8vh; }
+.row, .gun {
+    margin: 0 0 0.5vh;
+    padding: 1.2vh 1.1vw;
+    background: url('nui://pup-ui/html/img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+}
+.row.focus, .gun.focus, .row:hover, .gun:hover {
+    background:
+        url('nui://pup-ui/html/img/western/selsected.png') center / 100% 100% no-repeat,
+        url('nui://pup-ui/html/img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    box-shadow: none;
+}
+.row.changed {
+    background:
+        linear-gradient(rgba(201, 162, 77, 0.10), rgba(201, 162, 77, 0.10)),
+        url('nui://pup-ui/html/img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+}
+.gun .name, .line-row .lbl { letter-spacing: 0.04em; }
+.gun.focus .name, .row.focus .lbl { color: #ffffff; }
+
+/* footer hints like the other menus */
+.foot { font-size: 1.15vh; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+
+/* buttons: the engraved plate pup-ui's dialogs use */
+.btn, .btn.quiet {
+    background: url('nui://pup-ui/html/img/western/grid.png') center / 100% 100% no-repeat;
+    border: none;
+    color: var(--text);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.btn:not(.quiet) { color: var(--gold); }
+.btn:hover:not(:disabled) { filter: none; transform: scale(0.97); }
+
+/* the receipt: pup-ui's double-bordered dialog */
+.modal .card {
+    background: rgba(12, 10, 8, 0.94) url('nui://pup-ui/html/img/western/double_border.png') center / 100% 100% no-repeat;
+    border: none;
+    box-shadow: none;
+    padding: 4vh 2.2vw 3.4vh;
+}
+
+/* key hints and progress on the same dark plates as the menus */
+.keys, .progress, .toast { background: rgba(10, 10, 10, 0.92); border-color: rgba(255, 255, 255, 0.12); }

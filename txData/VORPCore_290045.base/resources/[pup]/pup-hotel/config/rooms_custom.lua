@@ -1,0 +1,1 @@
+-- Rooms added in game by /hotelroom. The server appends here; lines may be edited or removed by hand.

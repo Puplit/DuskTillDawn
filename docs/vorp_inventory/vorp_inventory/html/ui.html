@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="author" content="">
+    <title>Inventory HUD</title>
+    <link rel="stylesheet" id="themonic-fonts-css" href="css/contextMenu.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" id="themonic-fonts-css" href="css/jquery.dialog.min.css" type="text/css" media="all" />
+    <!-- RedM caches NUI pages: bump ?v= on every edit to ui.min.css -->
+    <link rel="stylesheet" id="themonic-fonts-css" href="css/ui.min.css?v=2" type="text/css" media="all" />
+    <!-- pup inventory customisation: hide the header action icons (Saddle/Craft/Sort),
+         the main category-filter rail (icons + < All >), and the left "drop items here"
+         panel. Kept as CSS so the JS that references these elements never breaks. -->
+    <style>
+        #inventorySaddleBtn,
+        #handCraftingOpenBtn,
+        #inventorySortBtn { display: none !important; }
+        #inventoryHud .item-groups-rail { display: none !important; }
+        #mainInventoryDropZone { display: none !important; }
+
+        /* The drag-and-drop attachments ("Mods") panel is a SECOND weapon
+           customization path that bypasses the gunsmith - no payment, no job
+           gate - and its removeWeaponAttachment posts overwrite loadout.comps,
+           which is what kept undoing work done at pup-weaponsV2. Config now
+           gates it properly (CONFIG.ENABLE_WEAPON_ATTACHMENTS_UI), this is the
+           belt-and-braces so it cannot reappear from a stale config value. */
+        #weaponAttachmentsOpenBtn { display: none !important; }
+        #weaponAttachmentsPanel { display: none !important; }
+
+        /* The slot badge now reads "held / stack limit" (3/20) instead of a bare
+           count, so it needs more room than ui.min.css's 2.2vw one-or-two-digit
+           pill. 3.1vw still clipped three-digit limits - "7/100" rendered as
+           "7/10", which reads as a completely different number. Wider again,
+           and nowrap + visible overflow so a long value can never be silently
+           truncated into a plausible-looking wrong one. The parchment badge art
+           is background-size:100% 100%, so it stretches to match. */
+        #inventoryElement .item .count,
+        #secondInventoryElement .item .count {
+            width: 3.9vw;
+            height: 3.8vh;
+            font-size: 0.60vw;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+            overflow: visible;
+        }
+
+        /* vorp_core's ui/hud.html is the ONE persistent money/ID display on this
+           server, so the satchel's own "ID <serverid>" readout is hidden - it was
+           the only element left here that duplicated it on screen (ui.min.css
+           positions it at top:77.2vh; left:35vw whenever the satchel is open).
+           #cash / #gold / #rol are already clip-hidden by ui.min.css; all four
+           stay in the DOM on purpose because script.js reads their amounts back
+           out for the give/drop dialogs - hide them, never delete them. */
+        #inventoryHud #id { display: none !important; }
+
+        /* ------------------------------------------------------------------
+           pup inventory customisation: SECONDARY panel (containers/stashes/
+           stores, #secondInventoryHud) restyled to match the MAIN satchel
+           panel. Pure override block on top of css/ui.min.css — delete this
+           section to restore the stock secondary look. No JS is touched.
+           ------------------------------------------------------------------ */
+
+        /* 1. Panel chrome: same ink-paper background strength as the main
+           panel (#inventoryHud uses 0.99, secondary shipped at 0.94). */
+        #secondInventoryHud { opacity: 0.99; }
+
+        /* 2. Title block: cylinder mark + title on one row with a rule under it,
+           matching the main satchel's header. #satchelTitle is absolutely
+           positioned by ui.min.css, so it has to be reset to flow inside the row. */
+        #secondInventoryHud .inv-title-block--second {
+            top: 8.6vh;
+            gap: 0.7vh;
+        }
+
+        #secondInventoryHud .inv-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7vw;
+        }
+
+        #secondInventoryHud #satchelTitle {
+            position: static;
+            left: auto;
+            top: auto;
+            transform: none;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        #secondInventoryHud .inv-title-mark {
+            width: 2.4vh;
+            height: 2.4vh;
+            flex: 0 0 auto;
+            display: block;
+        }
+        #secondInventoryHud .inv-title-mark svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 2.2;
+            opacity: 0.92;
+        }
+
+        /* the stock rule is display:none; show it for the secondary header */
+        #secondInventoryHud .inv-title-divider--second {
+            display: block;
+            width: 24vw;
+        }
+
+        /* rule under the grid, sitting on the grid's bottom edge */
+        #secondInventoryHud .inv-foot-divider--second {
+            position: absolute;
+            top: 60.6vh;
+            left: 11.5vw;
+            width: 24vw;
+            height: 0.3vh;
+            min-height: 2px;
+            background: var(--divider-image) no-repeat center;
+            background-size: 100% 100%;
+            z-index: 12;
+            pointer-events: none;
+        }
+
+        /* 3. Search row: the stock .controls sits at top:10vh, which the new title
+           block now occupies. Drop the SECONDARY one below the title rule and
+           left-align it, as in the reference. Scoped so the main panel's own
+           .controls (same class) is untouched. */
+        #secondInventoryHud .controls {
+            top: 12.9vh;
+            left: 11.5vw;
+        }
+
+        /* 4. Grid shell: pushed down to clear the title block + search row, with
+           its height reduced by the same amount so the bottom edge still lands
+           on the footer rule at ~60.4vh. */
+        #secondInventoryGridShell.inventory-grid-shell {
+            top: 16.4vh;
+            height: calc(36.8vh * 5 / 4 - 2.1vh);
+        }
+
+        /* 5. Capacity counter: plain "used/total" text sitting at the BOTTOM-RIGHT
+           under the grid, matching the reference layout. The grid spans
+           11.5vw..35.5vw inside #secondInventoryHud, so right-aligning to 35.5vw
+           puts it flush with the grid's right edge. The stock weight icon is
+           dropped; the circular ring that used to live here is gone (section 6). */
+        #secondInventoryHud .capacity {
+            left: auto;
+            right: 11.2vw;
+            top: 62.2vh;
+            transform: none;
+            font-family: "crock", serif;
+            background-image: none;
+            padding-left: 0;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0;
+            z-index: 30;
+        }
+
+        /* 6. Hide the secondary category rail (icons + < All > nav), the
+           same way the main rail is hidden above. CSS-only so the strip JS
+           keeps running harmlessly against the hidden nodes. */
+        #secondInventoryHud .imageButtonContainer1 { display: none !important; }
+
+        /* ------------------------------------------------------------------
+           7. Capacity readout: plain "used / total" text, bottom-right under the
+           grid. Counts OCCUPIED SLOTS against the container's slot capacity (a
+           stack of 20 is still one slot) - the same system as the main satchel
+           footer, never the stock weight numbers. The circular ring that lived
+           here was replaced with this on request. The stock #current-cap-value /
+           #capacity-value spans stay in the DOM because other code writes them,
+           but are hidden - the pup script writes .pup-cap-text instead.
+           ------------------------------------------------------------------ */
+        #secondInventoryHud .capacity .inv-weight-text { display: none; }
+
+        /* close button, top-right of the secondary panel, level with its title */
+        #secondInventoryClose {
+            position: absolute;
+            top: 8.2vh;
+            right: 11.5vw;
+            width: 3.2vh;
+            height: 3.2vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(245, 240, 230, 0.75);
+            background: rgba(22, 21, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.6vh;
+            cursor: pointer;
+            z-index: 40;
+            transition: color 120ms, border-color 120ms, background 120ms;
+        }
+        #secondInventoryClose svg {
+            width: 55%; height: 55%;
+            fill: none; stroke: currentColor;
+            stroke-width: 2.4; stroke-linecap: round;
+        }
+        #secondInventoryClose:hover {
+            color: #ffffff;
+            border-color: rgba(224, 59, 45, 0.8);
+            background: rgba(58, 28, 28, 0.65);
+        }
+
+        /* pup: SHOW ITEM - the card held above a player's head. The wrapper
+           spans the screen and never takes input; cards are positioned by the
+           client's per-frame screen coords. */
+        #showItemWrap {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 30;
+        }
+        .showitem-card {
+            position: absolute; top: 0; left: 0;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0.4vh;
+            will-change: transform;
+            transition: opacity 140ms linear;
+            filter: drop-shadow(0 0.4vh 0.6vh rgba(0,0,0,0.85));
+        }
+        .showitem-img {
+            width: 5.2vh; height: 5.2vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .showitem-img img { max-width: 100%; max-height: 100%; }
+        .showitem-name {
+            font-family: 'crock', serif;
+            font-size: 1.35vh;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #f5f0e6;
+            background: rgba(8, 6, 5, 0.82);
+            border: 1px solid rgba(214, 178, 106, 0.45);
+            border-radius: 2px;
+            padding: 0.3vh 0.7vh;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* A to Z, in the controls row so it cannot sit on the container's name.
+           Matches #sortToggle's frame and typeface exactly. */
+        #secondInventoryHud .controls #secondInventorySort {
+            position: absolute;
+            right: 0;
+            top: 0;
+            min-width: 3.0vw;
+            min-height: 2.4vh;
+            padding: 0.45vh 0.6vw 0.75vh 0.6vw;
+            background-color: transparent;
+            background-image: var(--selection-box-image);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
+            border: none;
+            box-sizing: border-box;
+            font-family: "rdr";
+            font-size: 0.7vw;
+            letter-spacing: 0.02vw;
+            color: #ffffff;
+            cursor: pointer;
+            opacity: 0.55;
+            transition: opacity 120ms ease;
+        }
+        #secondInventoryHud .controls #secondInventorySort:hover { opacity: 0.85; }
+
+        /* A-Z is appended AFTER Sort, so when Sort is present this pushes A-Z to
+           its left instead of the two stacking on top of each other */
+        #secondInventoryHud .controls #sortToggle ~ #secondInventorySort {
+            right: 4.6vw;
+        }
+
+
+        #secondInventoryHud .capacity .pup-cap-text {
+            font-family: "crock", serif;
+            font-size: 0.95vw;
+            line-height: 1;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        /* >= 85% full tints the number */
+        #secondInventoryHud .capacity .pup-cap-text.is-near-full {
+            color: #e03b2d;
+        }
+
+        /* 7b. MAIN satchel capacity: NUMBERS ONLY.
+           The stock sheet paints the weight icon as a background-image on
+           #check and reserves 1.6vw of padding to sit it in, so dropping the
+           image alone would leave the number indented into empty space. Both
+           go. The secondary panel dropped its icon long ago (section 5); this
+           brings the main one in line. Weight is not a mechanic here anyway -
+           it is a fixed 200-SLOT satchel, so a scales icon says nothing. */
+        #inventoryHud #check.inv-weight-main {
+            background-image: none;
+            padding-left: 0;
+        }
+
+        /* ------------------------------------------------------------------
+           8. ITEM HOVER TOOLTIP - legibility pass.
+
+           ui.min.css sizes this panel's text in absolute vw: name 0.65vw,
+           description 0.55vw, rarity 0.52vw. On a 1080p screen that is 12px /
+           10px / 10px - readable if you lean in, not if you are playing. Every
+           size below is scaled ~35% and the whole panel is widened to match so
+           the longer lines do not turn into a narrow column.
+
+           Scoped to `.tooltip--rich` (2 classes) ON PURPOSE: the compact HUD
+           variant deliberately runs smaller and its rules are written as
+           `.tooltip.tooltip--rich.tooltip--rich-compact-hud ...` (4 classes),
+           so it still wins and is left exactly as it was.
+
+           Delete this section to restore the stock sizes.
+           ------------------------------------------------------------------ */
+
+        /* container: font-size here is the base for the `em`-sized children
+           (the "stack is full" line), and the panel art stretches 100% 100%
+           so widening it does not distort. */
+        .tooltip.tooltip--rich {
+            font-size: 0.8vw;
+            max-width: 23vw;
+            /* drop-shadow, not box-shadow - the panel art has transparent
+               edges, so this follows the artwork instead of drawing a hard
+               rectangle around it. */
+            filter: drop-shadow(0 0.4vh 0.9vh rgba(0, 0, 0, 0.75));
+        }
+
+        /* every line gets a shadow so pale text stays sharp wherever the
+           panel lands on the grid */
+        .tooltip.tooltip--rich .tooltip-rich-meta,
+        .tooltip.tooltip--rich .tooltip-rich-hud-strip {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+        }
+
+        .tooltip--rich .tooltip-rich-label {
+            font-size: 0.92vw;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 0.45vh;
+        }
+
+        .tooltip--rich .tooltip-rich-desc {
+            font-size: 0.75vw;
+            line-height: 1.35;
+            opacity: 1;
+            color: #ece7dc;
+        }
+
+        .tooltip--rich .tooltip-rich-rarity {
+            font-size: 0.68vw;
+            letter-spacing: 0.06em;
+        }
+
+        .tooltip--rich .tooltip-rich-stats,
+        .tooltip--rich .tooltip-rich-instruction,
+        .tooltip--rich .tooltip-rich-metadata,
+        .tooltip--rich .tooltip-rich-ammo,
+        .tooltip--rich .tooltip-rich-weapon-status,
+        .tooltip--rich .tooltip-rich-ammo-line,
+        .tooltip--rich .tooltip-rich-hud-amount {
+            font-size: 0.75vw;
+            line-height: 1.35;
+        }
+
+        /* the instruction line ("press ... to use") shipped noticeably dimmer
+           than the rest; bring it up to the same footing */
+        .tooltip--rich .tooltip-rich-instruction {
+            color: rgba(228, 226, 220, 0.95);
+        }
+
+        /* separators were 1px hairlines that vanished against the panel art */
+        .tooltip--rich .tooltip-rich-stats,
+        .tooltip--rich .tooltip-rich-instruction,
+        .tooltip--rich .tooltip-rich-metadata,
+        .tooltip--rich .tooltip-rich-ammo,
+        .tooltip--rich .tooltip-rich-weapon-status,
+        .tooltip--rich .tooltip-rich-overflow-locked {
+            border-top-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* icon scaled with the text so the row stays balanced */
+        .tooltip--rich .tooltip-rich-thumb {
+            width: 3.9vw !important;
+            height: 6.1vh !important;
+        }
+
+        /* ------------------------------------------------------------------
+           9. STORE INFO FOOTER. In a shop the hovered item's name, price and
+           description are drawn HERE, under the grid, instead of in the floating
+           tooltip - the tooltip sat over neighbouring tiles and, for items whose
+           description is a picture, hid the price. Only used while a store is
+           open (mainInvScript.js mouseenter); every other container keeps the
+           tooltip.
+           ------------------------------------------------------------------ */
+        #pupStoreInfo {
+            position: absolute;
+            top: 63.6vh;
+            left: 11.5vw;
+            width: 24vw;
+            max-height: 15vh;
+            overflow: hidden;
+            display: none;
+            text-align: center;
+            font-family: "crock", serif;
+            color: #ece7dc;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+            z-index: 30;
+            pointer-events: none;
+        }
+        #pupStoreInfo .pup-store-info-name {
+            font-size: 1.05vw;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 0.6vh;
+        }
+        #pupStoreInfo .pup-store-info-desc {
+            font-size: 0.78vw;
+            line-height: 1.4;
+        }
+        #pupStoreInfo .pup-store-info-desc img {
+            display: block;
+            margin: 0.4vh auto 0;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 7vh;
+        }
+
+        /* ------------------------------------------------------------------
+           9b. SATCHEL INFO PANEL. The same idea as the store footer above,
+           for the MAIN grid: the hovered item's name and description are drawn
+           in a fixed panel under the grid instead of a tooltip that follows the
+           cursor and covers the neighbouring tiles.
+
+           Unlike #pupStoreInfo this is NOT given fixed vw coordinates - the main
+           grid's geometry lives in the minified stock sheet, so the panel is
+           measured against the grid at show time (see mainInvScript.js). Nothing
+           to keep in sync if the layout moves.
+
+           Serial, condition and stack limit are deliberately absent: the serial
+           is copyable from the item options, condition reads off the weapon
+           wheel, and the slot already prints its own x/y badge.
+           ------------------------------------------------------------------ */
+        /* The satchel's capacity counter sat dead centre at 20.4vw, right where the
+           item description wants to be. Right-aligned to the grid edge instead,
+           using the same `right: 11.5vw` the second inventory already uses for its
+           own counter, so both read the same way. */
+        #inventoryHud .inv-weight-main,
+        #inventoryHud #check.inv-weight-main {
+            left: auto;
+            right: 11.5vw;
+        }
+
+        /* Pinned, not measured. The empty box under the capacity counter and above
+           the gunbelt strip is fixed real estate: grid ends 60.3vh, counter runs to
+           62.3vh, strip starts 73vh. The panel owns 61.5vh - 70.5vh of it and
+           centres its content, so a one-line item and a four-line one both sit in
+           the middle of the same box instead of drifting. */
+        #pupMainInfo {
+            position: absolute;
+            top: 61.5vh;
+            left: 11.5vw;
+            width: 24vw;
+            height: 9vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+            font-family: "crock", serif;
+            color: #ece7dc;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+            z-index: 30;
+            pointer-events: none;
+        }
+        #pupMainInfo .pup-store-info-name {
+            font-size: 1.05vw;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 0.6vh;
+        }
+        #pupMainInfo .pup-store-info-desc {
+            font-size: 0.78vw;
+            line-height: 1.4;
+        }
+        /* 5vh, not the store's 7vh: this panel lives in the ~9vh band between the
+           grid and the gunbelt strip, and the name takes ~3vh of it. */
+        #pupMainInfo .pup-store-info-desc img {
+            display: block;
+            margin: 0.4vh auto 0;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 5vh;
+        }
+
+        /* 10. Job pack filter: the Quantity dialog with a tick list inside
+           (pup_storagebox.js, action pup_packFilter). */
+        #dialog-holder #dialog-center td .dialog-alert.pup-filter {
+            max-width: 20vw;
+        }
+        .pup-filter-sub {
+            font-size: 0.75vw;
+            color: #d8d2c4;
+            margin: 0.2vh 0 1.2vh;
+            line-height: 1.3;
+        }
+        .pup-filter-list {
+            max-height: 42vh;
+            overflow-y: auto;
+            text-align: left;
+            padding-right: 0.3vw;
+        }
+        .pup-filter-list::-webkit-scrollbar { width: 0.3vw; }
+        .pup-filter-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.35); }
+        #dialog-holder #dialog-center td .dialog-alert .pup-filter-list label {
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+            max-width: none;
+            margin: 0;
+            padding: 0.7vh 0.4vw;
+            font-size: 0.85vw;
+            color: #ffffff;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            user-select: none;
+        }
+        #dialog-holder #dialog-center td .dialog-alert .pup-filter-list label:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        #dialog-holder #dialog-center td .dialog-alert .pup-filter-list label input {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1vw;
+            height: 1vw;
+            min-width: 1vw;
+            padding: 0;
+            margin: 0;
+            border-radius: 0.2vw;
+            border: 2px solid #ece7dc;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        #dialog-holder #dialog-center td .dialog-alert .pup-filter-list label input:checked {
+            background: #ece7dc;
+        }
+        #dialog-holder #dialog-center td .dialog-alert .pup-filter-list label input:checked::after {
+            content: "";
+            position: absolute;
+            left: 0.28vw;
+            top: 0.08vw;
+            width: 0.25vw;
+            height: 0.5vw;
+            border: solid #1a1613;
+            border-width: 0 0.15vw 0.15vw 0;
+            transform: rotate(45deg);
+        }
+        .pup-filter-list label img {
+            width: 1.6vw;
+            height: 1.6vw;
+            object-fit: contain;
+        }
+        .pup-filter-list label span.pup-filter-off { color: #8f877a; }
+        .pup-filter-all {
+            display: inline-block;
+            margin-top: 1vh;
+            font-size: 0.75vw;
+            color: #d8d2c4;
+            text-decoration: underline;
+            cursor: pointer;
+            user-select: none;
+        }
+        .pup-filter-all:hover { color: #ffffff; }
+        .pup-filter-save-desc {
+            font-size: 0.7vw;
+            color: #b9b2a4;
+            margin-top: 0.8vh;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- pup: SHOW ITEM cards. Outside #inventoryHud so they draw while the
+         inventory is closed, and click-through so they never eat input. -->
+    <div id="showItemWrap"></div>
+    <div id="mainInventoryDropZone" class="main-inventory-drop-zone" role="region">
+        <div class="main-inventory-drop-zone__inner">
+            <span class="main-inventory-drop-zone__label" id="mainInventoryDropZoneLabel"></span>
+        </div>
+    </div>
+    <div id="inventoryHud">
+        <div id="disabler"></div>
+        <!-- pup: satchel info panel (see style section 9b). Lives INSIDE the hud
+             so it disappears with it; position is measured in JS. -->
+        <div id="pupMainInfo" aria-live="polite">
+            <div class="pup-store-info-name"></div>
+            <div class="pup-store-info-desc"></div>
+        </div>
+        <div class="inv-title-block" id="invTitleBlock">
+            <div id="title">Satchel</div>
+            <div class="inv-title-divider" aria-hidden="true"></div>
+        </div>
+        <div class='tooltip'
+            style='display: none; position: absolute; padding: 10px; background-color: black; color: white; border-radius: 5px;'>
+            Tooltip content</div>
+        <div class="item-groups-rail" aria-label="Item categories">
+            <div class="carouselWrapper carouselWrapper--item-groups">
+                <div class="carouselContainer" id="carousel1Container">
+                    <div class="dropdownButtonContainer mainButton1" id="carousel1"></div>
+                    <div class="item-groups-nav" aria-label="Category navigation">
+                        <button type="button" class="carousel-control carousel-control--rail item-groups-nav-btn"
+                            aria-label="Previous category"
+                            onclick="INVENTORY.MAIN.STEP_MAIN_GROUP(-1)">&#10094;</button>
+                        <div class="item-groups-nav-title" id="itemGroupsNavTitle">All</div>
+                        <button type="button" class="carousel-control carousel-control--rail item-groups-nav-btn"
+                            aria-label="Next category " onclick="INVENTORY.MAIN.STEP_MAIN_GROUP(1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="inventoryFixedSlotsStrip" class="inventory-fixed-slots-strip" aria-label="Gunbelt, cash, gold"></div>
+        <div id="inventoryGridShell" class="inventory-grid-shell">
+            <div id="inventoryElement"></div>
+        </div>
+        <div id="cash">
+            <a id="money-value"></a>
+        </div>
+        <div id="gold">
+            <a id="gold-value"></a>
+        </div>
+        <div id="rol">
+            <a id="rol-value"></a>
+        </div>
+        <div id="id">
+            <a id="id-value"></a>
+        </div>
+        <div class="mainButtonContainer">
+            <div class="mainButton-toolbar-group">
+                <button class="mainButton mainButton-toolbar mainButton-saddle" type="button" id="inventorySaddleBtn"
+                    title="Saddle" aria-label="Saddle">
+                    <span class="mainButton-saddle__icon" aria-hidden="true"></span>
+                    <span class="mainButton-saddle__label">Saddle</span>
+                </button>
+                <button class="mainButton mainButton-toolbar mainButton-attachments" type="button" style="display:none;"
+                    id="weaponAttachmentsOpenBtn" title="Attachments" aria-label="Attachments" aria-expanded="false">
+                    <span class="mainButton-attachments__icon" aria-hidden="true"></span>
+                    <span class="mainButton-attachments__label">Mods</span>
+                </button>
+                <button class="mainButton mainButton-toolbar mainButton-craft" type="button" id="handCraftingOpenBtn"
+                    title="Hand craft" aria-label="Hand craft" aria-expanded="false">
+                    <span class="mainButton-craft__icon" aria-hidden="true"></span>
+                    <span class="mainButton-craft__label">Craft</span>
+                </button>
+                <button class="mainButton mainButton-toolbar mainButton-sort" type="button" id="inventorySortBtn"
+                    title="Sort" aria-label="Sort" aria-expanded="false">
+                    <span class="mainButton-sort__icon" aria-hidden="true"></span>
+                    <span class="mainButton-sort__label">Sort</span>
+                </button>
+                <div id="sortConfirmPopup" style="display:none; position:absolute; top:3vh; right:0; z-index:20000; padding:1.2vh 1vw; text-align:center; width:6vw;">
+                    <p style="font-family:'crock',serif; font-size:0.6vw; color:#f5f0e6; margin:0 0 0.8vh;">Sort inventory?</p>
+                    <div style="display:flex; gap:0.4vw; justify-content:center;">
+                        <button type="button" id="sortConfirmYes" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;">Yes</button>
+                        <button type="button" id="sortConfirmNo" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;">No</button>
+                    </div>
+                </div>
+            </div>
+            <button class="mainButton mainButton-close" type="button" id="close" title="Close" aria-label="Close">
+                <span class="mainButton-close__icon" aria-hidden="true"></span>
+                <span class="mainButton-close__label">Close</span>
+            </button>
+        </div>
+    </div>
+    <div id="secondInventoryHud">
+        <!-- pup: title block mirrors the main satchel's - cylinder mark, title, rule.
+             #satchelTitle keeps its id because SET_TITLE writes straight into it. -->
+        <div class="inv-title-block inv-title-block--second">
+            <div class="inv-title-row">
+                <span class="inv-title-mark" aria-hidden="true">
+                    <svg viewBox="0 0 40 40">
+                        <circle cx="20" cy="20" r="15.5" />
+                        <circle cx="20" cy="20" r="4.4" />
+                        <circle cx="20" cy="8.6" r="3.5" />
+                        <circle cx="29.9" cy="14.3" r="3.5" />
+                        <circle cx="29.9" cy="25.7" r="3.5" />
+                        <circle cx="20" cy="31.4" r="3.5" />
+                        <circle cx="10.1" cy="25.7" r="3.5" />
+                        <circle cx="10.1" cy="14.3" r="3.5" />
+                    </svg>
+                </span>
+                <div id="satchelTitle"></div>
+            </div>
+            <div class="inv-title-divider inv-title-divider--second" aria-hidden="true"></div>
+        </div>
+
+        <!-- pup: the secondary panel had no way to close it - only ESC or the main
+             panel's Close worked, which is not discoverable. Inline SVG rather than
+             a text glyph, same reason as pup-ui's #app-close (the panel font has no
+             × glyph, so it rendered as an empty box). -->
+        <div id="secondInventoryClose" title="Close" aria-label="Close">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+        </div>
+
+        <!-- pup: camp storage and every other container had no sort at all - only
+             the satchel did, and that one is hidden by the customisation above.
+             Camp storage saves the new order server side; every other container
+             tidies the view only. -->
+        <!-- A to Z and Sort/Save are both appended to the controls row by
+             secondaryInvScript.js. A to Z is destructive - it throws away any
+             order arranged by hand - so it asks first, through the same dialog
+             panel the pack filter uses. -->
+        <div id="secondInventoryGridShell" class="inventory-grid-shell">
+            <div id="secondInventoryElement"></div>
+        </div>
+        <!-- rule under the grid, with the RDR2 downward notch -->
+        <div class="inv-foot-divider inv-foot-divider--second" aria-hidden="true"></div>
+
+        <!-- pup: store info footer (see style section 9) -->
+        <div id="pupStoreInfo" aria-live="polite">
+            <div class="pup-store-info-name"></div>
+            <div class="pup-store-info-desc"></div>
+        </div>
+
+        <div class="capacity">
+            <span class="inv-weight-text"><a id="current-cap-value"></a>/<a id="capacity-value"></a></span>
+        </div>
+
+        <div class="imageButtonContainer1">
+            <div class="carouselWrapper1 carouselWrapper1--secondary-groups">
+                <div class="carouselContainer1 secondary-item-groups" id="staticCarouselContainer">
+                    <div class="dropdownButtonContainer1" id="staticCarousel"></div>
+                    <div class="item-groups-nav item-groups-nav--secondary" aria-label="Category navigation">
+                        <button type="button"
+                            class="carousel-control carousel-control--rail item-groups-nav-btn secondary-item-groups-nav-btn"
+                            aria-label="Previous category"
+                            onclick="INVENTORY.SECONDARY.ITEM_GROUPS_SELECTION(-1)">&#10094;</button>
+                        <div class="item-groups-nav-title" id="itemGroupsNavTitleSecond">All</div>
+                        <button type="button"
+                            class="carousel-control carousel-control--rail item-groups-nav-btn secondary-item-groups-nav-btn"
+                            aria-label="Next category"
+                            onclick="INVENTORY.SECONDARY.ITEM_GROUPS_SELECTION(1)">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="weaponAttachmentsPanel" class="weapon-attachments-panel weapon-attachments-panel--hidden"
+        aria-hidden="true">
+        <div class="weapon-attachments-panel-inner">
+            <div class="weapon-attachments-panel-head">
+                <span class="weapon-attachments-panel-title" id="weaponAttachmentsTitle">Attachments</span>
+                <button type="button" class="weapon-attachments-panel-close" id="weaponAttachmentsClose"
+                    aria-label="Close">&times;</button>
+            </div>
+            <div id="weaponAttachmentsWeaponImg" class="weapon-attachments-weapon-wrap"></div>
+            <div class="weapon-attachments-slots-heading" id="weaponAttachmentsSlotsLabel" hidden></div>
+            <div id="weaponAttachmentsSlots" class="weapon-attachments-slots"></div>
+            <div id="weaponAttachmentsRemoveZone" class="weapon-attachments-remove-zone"></div>
+            <p class="weapon-attachments-panel-footer" id="weaponAttachmentsFooter"></p>
+        </div>
+    </div>
+
+    <div id="hotbarHud" class="hotbar-hud hotbar-hud--hidden" aria-hidden="true">
+        <div class="hotbar-strip">
+            <div class="hotbar-slot" data-hotbar-index="0"><span class="hotbar-slot-num">1</span>
+                <div class="hotbar-slot-icon" data-occupied="0"></div>
+            </div>
+            <div class="hotbar-slot" data-hotbar-index="1"><span class="hotbar-slot-num">2</span>
+                <div class="hotbar-slot-icon" data-occupied="0"></div>
+            </div>
+            <div class="hotbar-slot" data-hotbar-index="2"><span class="hotbar-slot-num">3</span>
+                <div class="hotbar-slot-icon" data-occupied="0"></div>
+            </div>
+            <div class="hotbar-slot" data-hotbar-index="3"><span class="hotbar-slot-num">4</span>
+                <div class="hotbar-slot-icon" data-occupied="0"></div>
+            </div>
+            <div class="hotbar-slot" data-hotbar-index="4"><span class="hotbar-slot-num">5</span>
+                <div class="hotbar-slot-icon" data-occupied="0"></div>
+            </div>
+        </div>
+    </div>
+    <div id="inv-controls-hint" style="display:none;">
+        <div id="inv-hint-secondary" class="inv-hint-group" style="display:none;">
+            <div class="inv-hint-row">
+                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd">Click</span>
+                <span class="inv-hint-label">Move full stack to empty slot</span>
+            </div>
+            <div class="inv-hint-row">
+                <span class="kbd">Alt</span><span class="inv-hint-sep">+</span><span class="kbd">Drag</span>
+                <span class="inv-hint-label">Move half stack</span>
+            </div>
+            <div class="inv-hint-row">
+                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd">Drag</span>
+                <span class="inv-hint-label">Move full stack to chosen slot</span>
+            </div>
+        </div>
+        <div id="inv-hint-main-only" class="inv-hint-group" style="display:none;">
+            <div class="inv-hint-row">
+                <span class="kbd">Drag</span>
+                <span class="inv-hint-label">Drag items to any slot</span>
+            </div>
+        </div>
+        <div id="inv-hint-always" class="inv-hint-group">
+            <div class="inv-hint-row">
+                <span class="kbd">Esc</span>
+                <span class="inv-hint-label">Close</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="handCraftingPanel" class="hand-crafting-panel" style="display:none;" aria-hidden="true">
+        <div class="hand-crafting-panel-inner">
+            <div class="hand-crafting-panel-head">
+                <span class="hand-crafting-panel-title" id="handCraftingPanelTitle">Hand craft</span>
+                <button type="button" class="hand-crafting-panel-close" id="handCraftingCloseBtn"
+                    aria-label="Close">&times;</button>
+            </div>
+            <div class="hand-crafting-panel-body">
+                <aside class="hand-crafting-panel-sidebar" aria-label="Recipes">
+                    <div class="hand-crafting-panel-sidebar-title" id="handCraftingRecipeFieldLabel">Recipes<br>use scroll wheel to see more</div>
+                    <div class="hand-crafting-panel-recipe-scroll-wrap">
+                        <ul class="hand-crafting-panel-recipe-list" id="handCraftingRecipeList" role="listbox"></ul>
+                    </div>
+                </aside>
+                <div class="hand-crafting-panel-detail">
+                    <div id="handCraftingSelectPrompt" class="hand-crafting-panel-select-prompt">
+                        <span class="hand-crafting-panel-select-icon" aria-hidden="true"></span>
+                        <span>Select an item to craft</span>
+                    </div>
+                    <div class="hand-crafting-panel-preview">
+                        <div class="hand-crafting-panel-reward-slot">
+                            <img id="handCraftingRewardImg" class="hand-crafting-panel-reward-img"
+                                src="img/items/placeholder.png" alt="" />
+                        </div>
+                        <p id="handCraftingDesc" class="hand-crafting-panel-desc"></p>
+                    </div>
+                    <div class="hand-crafting-panel-needed-title">Required</div>
+                    <div id="handCraftingNeeded" class="hand-crafting-panel-needed"></div>
+                    <button type="button" id="handCraftingCraftBtn" class="hand-crafting-panel-craft" disabled>
+                        Craft
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- give: pick a nearby player by server id. Hidden until GIVE_PICKER opens it. -->
+    <div id="character-selection">
+        <button class="close-btn" type="button" onclick="INVENTORY.GIVE_PICKER.close()">X</button>
+        <h1 id="character-select-title">Select Player</h1>
+        <ul id="character-list"></ul>
+    </div>
+    <script type="text/javascript" src="js/vendor/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/contextMenu.min.js"></script>
+    <script type="text/javascript" src="js/jquery.dialog.min.js"></script>
+    <script type="text/javascript" src="js/nui.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/crafting.js"></script>
+    <script type="text/javascript" src="js/hotbar.js"></script>
+    <!-- RedM caches NUI pages: bump ?v= on every edit to mainInvScript.js -->
+    <script type="text/javascript" src="js/mainInvScript.js?v=6"></script>
+    <script type="text/javascript" src="js/weaponAttachments.js"></script>
+    <script type="text/javascript" src="js/secondaryInvScript.js"></script>
+    <!-- pup: pup_StorageBox bridge. Wraps INVENTORY.SECONDARY, so it must load after it. -->
+    <script type="text/javascript" src="js/pup_storagebox.js"></script>
+    <!-- pup: shop owner tools (off-sale toggle). Wraps INVENTORY.SECONDARY after the box bridge. -->
+    <script type="text/javascript" src="js/pup_store.js"></script>
+    <!-- pup: book a searched player's items into evidence. Binds off grid refreshes. -->
+    <script type="text/javascript" src="js/pup_evidence.js"></script>
+    <script type="text/javascript" src="js/pup_showitem.js"></script>
+    <!-- pup: edit an item's description from the satchel. Needs jQuery and the main grid. -->
+    <script type="text/javascript" src="js/pup_itemdesc.js?v=4"></script>
+    <!-- pup: main-inventory footer shows occupied slots / max instead of weight.
+         A MutationObserver on the grid keeps the count exact on every add/remove/move. -->
+    <script type="text/javascript">
+        (function () {
+            function slotMax() {
+                // config.js uses `let Config` -> not a window property, so
+                // `window.Config` is undefined here. Read the binding directly.
+                if (typeof Config === "undefined") return 200;
+                return Config.MainInventoryFixedSlotCount || 200;
+            }
+            function updateSlotFooter() {
+                if (!window.jQuery) return;
+                var $t = jQuery("#check .inv-weight-text");
+                if (!$t.length) return;
+                // pup: count ITEMS, not tiles. Every item weighs 1.0, so the server's
+                // carry check (weight * count vs Config.initInvCapacity) is item count.
+                var used = 0;
+                var cells = document.querySelectorAll("#inventoryElement .item-filled");
+                for (var ci = 0; ci < cells.length; ci++) {
+                    var n = 0;
+                    try {
+                        var d = jQuery(cells[ci]).data("item");
+                        if (d && d.count != null) n = Number(d.count) || 0;
+                    } catch (e) { n = 0; }
+                    if (!n) {
+                        var badge = cells[ci].querySelector(".item-count, .count, .itemCount");
+                        if (badge) n = parseInt(String(badge.textContent).replace(/[^\d]/g, ""), 10) || 0;
+                    }
+                    used += n || 1; // a tile with no readable count is still one item
+                }
+                // items parked on the hotbar leave the grid but are still carried
+                if (typeof hotbarSlotData !== "undefined" && Array.isArray(hotbarSlotData)) {
+                    for (var hi = 0; hi < hotbarSlotData.length; hi++) {
+                        var h = hotbarSlotData[hi];
+                        if (!h) continue;
+                        var hn = (h.type === "item_weapon") ? 1 : (Number(h.count) || 1);
+                        used += hn;
+                    }
+                }
+                var max = slotMax();
+                $t.text(used + "/" + max);
+                // `const UTILS` in script.js is not a window property either
+                if (typeof UTILS !== "undefined" && UTILS.APPLY_INV_CAPACITY_WARNING) {
+                    UTILS.APPLY_INV_CAPACITY_WARNING(jQuery("#check"), used, max);
+                }
+            }
+            var pending = false;
+            function scheduleUpdate() {
+                if (pending) return;
+                pending = true;
+                requestAnimationFrame(function () { pending = false; updateSlotFooter(); });
+            }
+            window.__pupUpdateSlotFooter = updateSlotFooter;
+            (function attach() {
+                var grid = document.getElementById("inventoryElement");
+                if (!grid) { return setTimeout(attach, 200); }
+                // watch cell add/remove AND class flips (item <-> item-filled) so the count
+                // stays exact however a slot gets filled or emptied.
+                new MutationObserver(scheduleUpdate).observe(grid, {
+                    childList: true, subtree: true, attributes: true, attributeFilter: ["class"]
+                });
+                // hotbar assign/release redraws its own slots, not the grid
+                var hud = document.getElementById("hotbarHud");
+                if (hud) {
+                    new MutationObserver(scheduleUpdate).observe(hud, {
+                        childList: true, subtree: true, attributes: true, attributeFilter: ["class", "style", "data-occupied"]
+                    });
+                }
+                updateSlotFooter();
+            })();
+        })();
+    </script>
+    <!-- pup: secondary-panel capacity readout - UNIT based (a stack of 14 counts 14),
+         total = INVENTORY.SECONDARY.SLOT_COUNT, null for 'oo' stores (bare count).
+         A MutationObserver on the grid keeps it exact through every add/remove/move. -->
+    <script type="text/javascript">
+        (function () {
+            function capText(cap) {
+                var el = cap.querySelector(".pup-cap-text");
+                if (el) return el;
+                el = document.createElement("span");
+                el.className = "pup-cap-text";
+                cap.appendChild(el);
+                return el;
+            }
+
+            function slotTotal() {
+                // NOTE: script.js declares `const INVENTORY` at top level of a classic
+                // script - a const/let binding is NOT a property of window, so
+                // `window.INVENTORY` is undefined here and reading it that way silently
+                // made the total 0 (no "/limit" shown at all). Reference the binding
+                // directly, guarded with typeof.
+                if (typeof INVENTORY === "undefined" || !INVENTORY.SECONDARY) return 0;
+                var n = INVENTORY.SECONDARY.SLOT_COUNT;
+                return typeof n === "number" && isFinite(n) && n > 0 ? n : 0;
+            }
+
+            // total QUANTITY across filled cells (10000 milk + 10000 eggs = 20000),
+            // not the number of stacks
+            function itemTotal() {
+                var sum = 0;
+                var cells = document.querySelectorAll("#secondInventoryElement .item-filled");
+                for (var i = 0; i < cells.length; i++) {
+                    var n = 0;
+                    try {
+                        // the cell carries the item payload via jQuery .data("item")
+                        if (typeof $ !== "undefined") {
+                            var d = $(cells[i]).data("item");
+                            if (d && d.count != null) n = Number(d.count) || 0;
+                        }
+                    } catch (e) { n = 0; }
+                    if (!n) {
+                        // fallback: the visible count badge on the tile
+                        var badge = cells[i].querySelector(".item-count, .count, .itemCount");
+                        if (badge) n = parseInt(String(badge.textContent).replace(/[^\d]/g, ""), 10) || 0;
+                    }
+                    sum += n || 1; // a tile with no readable count is still one item
+                }
+                return sum;
+            }
+
+            function updateCapRing() {
+                var cap = document.querySelector("#secondInventoryHud .capacity");
+                if (!cap) return;
+                var label = capText(cap);
+
+                // An NPC STORE IS NOT A CONTAINER. Its capacity is the number of
+                // PRODUCTS on the shelf and every product carries a 9999 stock
+                // sentinel, so summing units there gave "39996/4". Count tiles.
+                // A PLAYER OR SOCIETY SHOP is different: pup_mercantile' `slots` is a
+                // UNIT limit (shopitemcount sums itemcount), so it counts units
+                // like any container - counting tiles there read "12/1500".
+                if (typeof INVENTORY !== "undefined" && INVENTORY.SECONDARY && INVENTORY.SECONDARY.IS_SHOP
+                    && INVENTORY.SECONDARY.SHOP_TYPE !== 2 && INVENTORY.SECONDARY.SHOP_TYPE !== 3) {
+                    var used = document.querySelectorAll("#secondInventoryElement .item-filled").length;
+                    var shelf = slotTotal();
+                    var shopText = shelf > 0
+                        ? (used + "/" + shelf)
+                        : (used + (used === 1 ? " product" : " products"));
+                    if (label.textContent !== shopText) label.textContent = shopText;
+                    label.classList.toggle("is-near-full", shelf > 0 && (used / shelf) >= 0.85);
+                    return;
+                }
+
+                var total = slotTotal();
+
+                // pup: count UNITS, not tiles - the containers are unit-bounded, and
+                // counting tiles here overwrote the correct total with "1/200".
+                var items = itemTotal();
+
+                // pup: UNLIMITED containers (train cars, ranch produce, crafting box)
+                // have no cap, so a bare number is meaningless - say what is in there.
+                var text;
+                if (total > 0) {
+                    text = items + "/" + total;
+                } else {
+                    text = items.toLocaleString() + (items === 1 ? " item" : " items");
+                }
+                if (label.textContent !== text) label.textContent = text;
+                label.classList.toggle("is-near-full", total > 0 && (items / total) >= 0.85);
+            }
+
+            var pending = false;
+            function scheduleUpdate() {
+                if (pending) return;
+                pending = true;
+                requestAnimationFrame(function () { pending = false; updateCapRing(); });
+            }
+            // name kept: secondaryInvScript.SETUP calls window.__pupUpdateCapRing()
+            window.__pupUpdateCapRing = updateCapRing;
+
+            // Secondary-panel close button. Delegated so it works whenever the
+            // panel is built, and it reuses the EXISTING close path rather than
+            // inventing a second way to shut the inventory down.
+            document.addEventListener('click', function (e) {
+                if (!e.target || !e.target.closest) return;
+                if (!e.target.closest('#secondInventoryClose')) return;
+                if (typeof INVENTORY !== 'undefined' && INVENTORY.CLOSE) {
+                    INVENTORY.CLOSE();
+                } else {
+                    var main = document.getElementById('close');
+                    if (main) main.click();
+                }
+            });
+
+            // Secondary-panel A to Z. Delegated for the same reason as the close
+            // button above: the panel is rebuilt on every open. It asks first,
+            // because it discards any order somebody arranged by hand.
+            (function () {
+                document.addEventListener('click', function (e) {
+                    if (!e.target || !e.target.closest) return;
+                    if (!e.target.closest('#secondInventorySort')) return;
+
+                    // the pack filter's panel, so the two read as the same UI. X or
+                    // Esc cancels; the one button is the action, as it is there.
+                    dialog.alert({
+                        title: 'Sort everything A to Z?',
+                        message: '<div class="pup-filter-sub">This replaces the current order for everyone.</div>',
+                        button: 'Sort',
+                        callback: function (ok) {
+                            if (ok !== true) return;
+                            if (typeof INVENTORY !== 'undefined'
+                                && INVENTORY.SECONDARY
+                                && INVENTORY.SECONDARY.SORT) {
+                                INVENTORY.SECONDARY.SORT();
+                            }
+                        }
+                    });
+                });
+            })();
+
+            (function attach() {
+                var cap = document.querySelector("#secondInventoryHud .capacity");
+                var grid = document.getElementById("secondInventoryElement");
+                if (!cap || !grid) { return setTimeout(attach, 200); }
+                capText(cap);
+                // watch cell add/remove AND class flips (item <-> item-filled). The
+                // label lives under .capacity, outside the observed node, so no loop.
+                new MutationObserver(scheduleUpdate).observe(grid, {
+                    childList: true, subtree: true, attributes: true, attributeFilter: ["class"]
+                });
+                updateCapRing();
+            })();
+        })();
+    </script>
+</body>
+
+</html>

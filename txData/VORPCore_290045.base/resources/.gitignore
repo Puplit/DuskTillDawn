@@ -1,0 +1,5 @@
+# Runtime logs and local editor files
+*.log
+.vscode/
+Thumbs.db
+desktop.ini

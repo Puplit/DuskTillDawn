@@ -1,0 +1,216 @@
+/* pup-stable menu, in pup-ui's look: the black ink-brush panel, the ornate white header frame,
+   brush-stroke rows with a red edge on the selected one, white text, gold money and key hints.
+   The art and fonts are pup-ui's own, read straight from that resource (nothing is copied here),
+   so pup-ui has to be running. Without it the page falls back to plain dark panels and Georgia. */
+
+@font-face { font-family: 'PupSerif'; src: url('nui://pup-ui/html/fonts/imfell.ttf') format('truetype'); }
+
+:root {
+    /* pup-ui's character-select skin palette (pup-ui html/style.css, --cs-*) */
+    --ink: #E8E8E8;        /* body text          */
+    --name: #F2E9D8;       /* headings, values   */
+    --row: #D8D2C6;        /* row label          */
+    --dim: #9A9184;        /* muted              */
+    --faint: #7E7669;      /* captions, hints    */
+    --coin: #C8A24A;       /* money, key letters */
+    --coin-soft: #e6cd8b;  /* gold coins         */
+    --sel: #ac0b10;        /* the focused row    */
+    --hover: #6a6152;
+    --danger: #c4473f;
+    --body-font: 'PupSerif', Georgia, 'Times New Roman', serif;
+    --sym-font: Georgia, 'Times New Roman', serif; /* arrows from a face that surely has them */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100vw; height: 100vh; overflow: hidden; background: transparent; color: var(--ink); font-family: var(--body-font); user-select: none; }
+.hidden { display: none !important; }
+
+/* ---- the darkened left of the screen, as behind pup-ui's list menu ---- */
+#shade {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 58%),
+        radial-gradient(ellipse at 62% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%);
+    transition: opacity 0.18s ease;
+}
+/* menus on the right (the player's /hud choice): the panel and its shade swap sides */
+body.menu-right #shade {
+    background:
+        linear-gradient(270deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 58%),
+        radial-gradient(ellipse at 38% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%);
+}
+body.menu-right #panel { left: auto; right: 2.4vh; }
+#panel.hidden + #shade { display: none; }
+#panel.fading + #shade { opacity: 0; }
+
+/* ---- the panel: pup-ui's ink plate ---- */
+#panel {
+    /* higher than pup-ui's list (10.4vh): a horse page carries eight rows plus a statistics card */
+    position: absolute; z-index: 1; left: 2.4vh; top: 5vh;
+    width: 50vh; max-width: 92vw; max-height: 92vh; padding: 2.6vh 0 2vh;
+    display: flex; flex-direction: column; align-items: center;
+    background: url('nui://pup-ui/html/img/western/cs_bg.png') center / cover no-repeat, rgba(8, 7, 6, 0.96);
+    box-shadow: 0 0 7vh 3.5vh rgba(8, 7, 6, 0.82);
+    transition: opacity 0.18s ease;
+    animation: panel-in 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes panel-in { from { opacity: 0; transform: translateY(1vh); } to { opacity: 1; transform: translateY(0); } }
+#panel.fading { opacity: 0; }
+#panel > * { width: 84%; flex: 0 0 auto; }
+
+/* ---- ornate header frame ---- */
+#head {
+    width: 82%; display: flex; align-items: center; justify-content: center;
+    padding: 1.5vh 0.6vh; min-height: 5.6vh;
+    background: url('nui://pup-ui/html/img/western/cs_header.png') center / 100% 100% no-repeat;
+}
+#store-title {
+    font-weight: 500; font-size: 2.1vh; line-height: 1.1; letter-spacing: 0.06em;
+    color: var(--ink); text-align: center; text-transform: uppercase;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+
+/* ---- the page name under it, like pup-ui's list subtitle ---- */
+#menu-line {
+    margin-top: 1.1vh; text-align: center;
+    font-size: 1.35vh; line-height: 1.5; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
+}
+#menu-title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- back chevron + position on the left, the purse on the right ---- */
+#meta { display: flex; align-items: center; justify-content: space-between; gap: 1vh; margin-top: 0.5vh; min-height: 2.2vh; }
+#meta .nav { display: flex; align-items: center; gap: 0.6vh; }
+#back-btn {
+    background: none; border: none; cursor: pointer; line-height: 1; padding-bottom: 0.3vh;
+    font-family: var(--sym-font); font-size: 2.2vh; color: var(--coin);
+}
+#counter { font-size: 1.2vh; letter-spacing: 0.08em; color: var(--faint); font-variant-numeric: tabular-nums; }
+#cash { display: flex; align-items: baseline; gap: 1vh; font-size: 1.45vh; letter-spacing: 0.04em; }
+#cash-money { color: var(--coin); }
+#cash-gold { color: var(--coin-soft); }
+
+/* ---- painted dividers ---- */
+.rule { height: 0.4vh; margin: 0.9vh 0 0.6vh; background: url('nui://pup-ui/html/img/western/cs_sep.png') center / 100% 100% no-repeat; }
+.rule.thin { height: 4px; margin: 0.6vh 0 0.8vh; opacity: 0.55; background-image: url('nui://pup-ui/html/img/western/divider_line.png'); }
+.scroll-hint { text-align: center; font-family: var(--sym-font); font-size: 1vh; color: var(--faint); height: 1.4vh; line-height: 1.4vh; visibility: hidden; }
+.scroll-hint.on { visibility: visible; }
+
+/* ---- the rows: one brush stroke each, the selected one edged in red ---- */
+#list { list-style: none; overflow: hidden; display: flex; flex-direction: column; gap: 0.5vh; padding: 0.2vh 0; }
+#list li {
+    display: flex; align-items: center; gap: 1vh; min-height: 3.6vh; padding: 0.7vh 1.2vh; cursor: pointer;
+    font-size: 1.55vh; letter-spacing: 0.08em; color: var(--row);
+    background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+    transition: border-color 110ms ease-out;
+}
+#list li:hover { border: 2px solid var(--hover); }
+#list li.sel { border: 2px solid var(--sel); color: #fff; }
+#list li.disabled { opacity: 0.55; cursor: default; }
+#list li.disabled:hover { border-color: transparent; }
+#list li.disabled.sel { border: 2px solid var(--sel); }
+#list li .ico { width: 2vh; height: 2vh; flex: none; fill: none; stroke: var(--row); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#list li.sel .ico { stroke: #fff; }
+#list li .pre { width: 1.6vh; height: 1.6vh; flex: none; fill: var(--coin); }
+#list li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#list li .price { color: var(--coin); font-size: 1.4vh; white-space: nowrap; font-variant-numeric: tabular-nums; }
+#list li .price.free { color: var(--dim); }
+#list li .gold { color: var(--coin-soft); font-size: 1.3vh; white-space: nowrap; }
+#list li .alt { color: var(--faint); font-size: 1.25vh; white-space: nowrap; }
+#list li .dot { width: 0.8vh; height: 0.8vh; border-radius: 50%; background: var(--coin); box-shadow: 0 0 0.6vh rgba(200, 162, 74, 0.6); flex: none; }
+#list li .arrow { color: var(--dim); font-family: var(--sym-font); font-size: 1.8vh; line-height: 1; }
+#list li.sel .arrow { color: var(--coin); }
+#list li .red { color: var(--danger); }
+#list li .goldtxt { color: var(--coin); }
+
+/* ---- detail block ---- */
+#detail { font-size: 1.35vh; }
+
+/* slider rows read as ink-menu rows: label, < value >, count */
+#sliders { display: flex; flex-direction: column; gap: 0.5vh; }
+#sliders:empty { display: none; }
+#sliders .slider {
+    display: flex; align-items: center; gap: 0.8vh; padding: 0.8vh 1.1vh;
+    background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+}
+#sliders .slider.active { border: 2px solid var(--sel); }
+#sliders .lbl { width: 30%; color: var(--row); letter-spacing: 0.08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sliders .slider.active .lbl { color: #fff; }
+#sliders .arr { background: none; border: none; color: var(--dim); font-family: var(--sym-font); font-size: 1.8vh; cursor: pointer; width: 2.2vh; line-height: 1; }
+#sliders .slider.active .arr { color: var(--coin); }
+#sliders .val { flex: 1; text-align: center; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sliders .strip { flex: 1; position: relative; height: 1.2vh; border: 1px solid rgba(255, 255, 255, 0.18); }
+#sliders .cursor { position: absolute; top: -0.45vh; width: 3px; margin-left: -1px; height: 2vh; background: #fff; box-shadow: 0 0 4px #000; }
+#sliders .num { width: 6vh; text-align: right; color: var(--faint); font-size: 1.1vh; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+
+#desc { color: var(--dim); margin: 0.7vh 0 0.4vh; line-height: 1.45; font-size: 1.3vh; }
+#desc:empty { display: none; }
+#desc h2 { font-size: 1.6vh; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--name); margin-bottom: 0.3vh; }
+#desc b, #desc strong { color: var(--ink); font-weight: normal; }
+
+/* statistics: a dark card, gold-and-white bars */
+#stats { display: flex; flex-direction: column; gap: 0.3vh; }
+#stats:not(:empty) { margin-top: 0.3vh; padding: 0.8vh 1.2vh; background: rgba(0, 0, 0, 0.42); border: 1px solid rgba(255, 255, 255, 0.07); }
+#stats .row { display: flex; align-items: center; gap: 1vh; min-height: 1.75vh; }
+#stats .k { width: 38%; font-size: 1.2vh; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#stats .v { flex: 1; color: var(--name); font-size: 1.35vh; letter-spacing: 0.04em; }
+#stats .bar { display: flex; gap: 2px; flex: 1; }
+#stats .cell { flex: 1; height: 0.9vh; background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.08); }
+#stats .cell.filled { background: var(--ink); border-color: var(--ink); }
+#stats .cell.gold { background: var(--coin); border-color: var(--coin); }
+#stats .cell.faded { background: rgba(232, 232, 232, 0.28); border-color: rgba(232, 232, 232, 0.12); }
+#stats .cell.red { background: var(--sel); border-color: var(--sel); }
+#stats .icons { display: flex; gap: 0.3vh; }
+#stats .icons svg { width: 1.6vh; height: 1.6vh; fill: var(--ink); }
+#stats .icons svg.off { opacity: 0.18; }
+#stats .frac { flex: 1; height: 0.7vh; background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.08); position: relative; }
+#stats .frac i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--coin); }
+#stats .fracnum { width: 7vh; text-align: right; color: var(--coin); font-size: 1.2vh; font-variant-numeric: tabular-nums; }
+
+/* ---- action buttons: brush-stroke plates with a gold key cap ---- */
+#panel > #actions, #panel > #hints { width: 92%; }
+#actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4vh; margin-top: 0.9vh; }
+#actions:empty { display: none; }
+.act {
+    display: flex; align-items: center; gap: 0.6vh; padding: 0.45vh 0.8vh; cursor: pointer; position: relative;
+    font-size: 1.25vh; letter-spacing: 0.05em; color: var(--row);
+    background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+}
+.act:hover { border: 2px solid var(--hover); color: #fff; }
+.key {
+    min-width: 2.1vh; height: 2.1vh; line-height: 1.9vh; padding: 0 0.45vh; position: relative; overflow: hidden;
+    text-align: center; font-size: 1.1vh; letter-spacing: 0.04em; color: var(--coin);
+    background: rgba(0, 0, 0, 0.55); border: 1px solid var(--coin);
+}
+.key .fill { position: absolute; left: 0; bottom: 0; width: 100%; height: 0; background: rgba(200, 162, 74, 0.45); }
+.act.danger { color: var(--danger); }
+.act.danger .key { border-color: var(--sel); color: var(--danger); }
+.act.danger .key .fill { background: rgba(172, 11, 16, 0.6); }
+
+/* ---- footer hint: grey line, gold keys ---- */
+#hints {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3vh 0;
+    margin-top: 1vh; font-size: 1.15vh; letter-spacing: 0.08em; color: var(--faint); text-align: center;
+}
+#hints span + span::before { content: '\00B7'; margin: 0 0.8vh; color: var(--faint); }
+#hints b { color: var(--coin); font-weight: normal; }
+#hints b.k-sym { font-family: var(--sym-font); letter-spacing: 0.02em; }
+
+/* a very short screen gets a tighter panel, as pup-ui's menus do */
+@media (max-height: 760px) {
+    #panel { width: 52vh; padding: 2.4vh 0 1.8vh; }
+    #list li { padding: 0.85vh 1vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #panel { animation: none; }
+    #list li { transition: none; }
+}
+
+/* palette strips (drawn here, not images) */
+.pal-tint_generic_clean { background: linear-gradient(90deg, #111, #6b4a2b, #b98c4f, #e9dcc0, #6d7c8c, #2c3b55, #6c1f1f, #f2f2f2); }
+.pal-tint_hair { background: linear-gradient(90deg, #0d0b09, #2e1d12, #5c3b20, #8a5a2c, #b8874d, #d9b77d, #eadfc7, #9a9a9a); }
+.pal-tint_horse { background: linear-gradient(90deg, #120d0a, #3a2416, #6d3f22, #9c5c2f, #c48a50, #e0c39a, #f3ecdf, #7d7d7d); }
+.pal-tint_horse_leather { background: linear-gradient(90deg, #1b120c, #3d2617, #6e4526, #996338, #c18b56, #dcb88c); }
+.pal-tint_leather { background: linear-gradient(90deg, #0f0f0f, #2f1f14, #5a3a22, #84552f, #a8763f, #c9a06a, #4a2f2f, #2b3b2b); }
+.pal-tint_makeup { background: linear-gradient(90deg, #2a0d12, #6e1f2c, #b13a4f, #d97a7f, #f0b9a8, #6a4ba8, #2f5d8a, #f4e7d9); }

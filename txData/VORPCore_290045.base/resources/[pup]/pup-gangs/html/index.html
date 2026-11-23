@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- pup-gangs: the gang's OWN interface (replaces the shared pup-ui app).
+         Layout: top bar with brand / tab rail / identity strip / close, then a
+         full-height page the JS renders per tab. Art is vorp_admin's western
+         set, reached cross-resource over nui:// like the item icons are. -->
+    <div id="app" class="hidden">
+        <div class="chrome">
+            <div class="topbar">
+                <div class="brand">
+                    <div class="brand-mark">&#9760;</div>
+                    <div class="brand-words">
+                        <div class="brand-title" id="brandTitle">THE GANG</div>
+                        <div class="brand-sub" id="brandSub">Unaffiliated</div>
+                    </div>
+                </div>
+                <nav class="tabs" id="tabs"></nav>
+                <div class="ident" id="ident"></div>
+                <div class="close" id="closeBtn">&#10005;</div>
+            </div>
+            <div class="rule"></div>
+            <div id="view" class="view"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

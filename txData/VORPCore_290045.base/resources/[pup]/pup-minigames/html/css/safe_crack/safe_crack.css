@@ -1,0 +1,73 @@
+.safe_crack_container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lock-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#safeCanvas {
+    position: absolute;
+}
+
+.dial {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--rdr-wood) 40%, var(--rdr-leather-light) 100%);
+    position: absolute;
+    border: 5px solid var(--rdr-gold);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.8), inset 5px 5px 50px 5px rgba(0, 0, 0, 0.8);
+}
+
+.dial-center {
+    width: 120px;
+    height: 120px;
+    background: var(--rdr-ink);
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid var(--rdr-gold);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 1);
+}
+
+.number {
+    position: absolute;
+    width: 30px;
+    top: 46%;
+    left: 44%;
+    color: var(--rdr-gold);
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Cinzel';
+}
+
+.lock_icons_container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgba(201, 168, 76, 0.15);
+}
+
+.lock_icons {
+    display: flex;
+    letter-spacing: 5px;
+    color: rgba(201, 168, 76, 0.15);
+}
+
+.lock_icons.normal {
+    color: var(--rdr-gold-dim);
+}
+
+.lock_icons.highlighted {
+    color: var(--rdr-gold);
+}

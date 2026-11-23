@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <path id="ring" d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
+  </defs>
+  <g fill="none" stroke="#1a1410" opacity="0.92">
+    <circle cx="80" cy="80" r="74" stroke-width="5"/>
+    <circle cx="80" cy="80" r="67" stroke-width="1.5"/>
+    <circle cx="80" cy="80" r="44" stroke-width="2.5"/>
+  </g>
+  <text font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="3" fill="#1a1410">
+    <textPath href="#ring" startOffset="2%">COUNTY RECORDS • OFFICIAL SEAL • ENTERED •</textPath>
+  </text>
+  <g transform="translate(80 80)" fill="#1a1410">
+    <polygon points="0,-30 8,-10 30,-10 12,4 19,26 0,13 -19,26 -12,4 -30,-10 -8,-10"/>
+    <rect x="-34" y="32" width="68" height="3"/>
+    <rect x="-34" y="-36" width="68" height="3"/>
+  </g>
+</svg>

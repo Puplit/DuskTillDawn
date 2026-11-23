@@ -1,0 +1,85 @@
+{
+  "_note": "Pure data. Fish a fishing bird can bring back (all outfit preset 0).",
+  "fish": [
+    {
+      "model": "a_c_fishbluegil_01_sm",
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "model": "a_c_fishbullheadcat_01_sm",
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "model": "a_c_fishchainpickerel_01_sm",
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "model": "a_c_fishbluegil_01_ms",
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "model": "a_c_fishrockbass_01_ms",
+      "xp": 2,
+      "xpRequired": 50
+    },
+    {
+      "model": "a_c_fishbullheadcat_01_ms",
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "model": "a_c_fishlargemouthbass_01_ms",
+      "xp": 3,
+      "xpRequired": 250
+    },
+    {
+      "model": "a_c_fishredfinpickerel_01_sm",
+      "xp": 2,
+      "xpRequired": 200
+    },
+    {
+      "model": "a_c_fishrockbass_01_sm",
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "model": "a_c_fishsmallmouthbass_01_ms",
+      "xp": 2,
+      "xpRequired": 250
+    },
+    {
+      "model": "a_c_fishperch_01_sm",
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "model": "a_c_fishchainpickerel_01_ms",
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "model": "a_c_fishperch_01_ms",
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "model": "a_c_fishrainbowtrout_01_ms",
+      "xp": 3,
+      "xpRequired": 400
+    },
+    {
+      "model": "a_c_fishredfinpickerel_01_ms",
+      "xp": 2,
+      "xpRequired": 150
+    },
+    {
+      "model": "a_c_fishsalmonsockeye_01_ms",
+      "xp": 3,
+      "xpRequired": 500
+    }
+  ]
+}

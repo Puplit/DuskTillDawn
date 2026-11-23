@@ -1,0 +1,2767 @@
+/* pup-ui: RDR2 Online visual language.
+   Sharp corners, deep blacks, parchment text, thin gold rules, slab-serif caps.
+   Fonts are free ones (licences next to them in fonts/); other resources load them by file name. */
+
+@font-face {
+    font-family: 'PupDisplay';
+    src: url('fonts/oswald.ttf') format('truetype'); /* Oswald - condensed display (SIL OFL 1.1) */
+}
+@font-face {
+    font-family: 'PupSerif';
+    src: url('fonts/imfell.ttf') format('truetype'); /* IM Fell English - serif body (SIL OFL 1.1) */
+}
+
+:root {
+    --ink: rgba(0, 0, 0, 0.82);
+    --parchment: #ffffff;
+    --parchment-dim: #9a9a9a;
+    --gold: #ffffff;
+    /* real gold leaf, for the key caps. --gold above is white and too much of
+       the UI leans on it to repoint now. */
+    --gold-leaf: #c9a227;
+    --gold-soft: #e6cd8b;
+    --blood: #a83232;
+    --serif: 'PupDisplay', Georgia, 'Times New Roman', serif;         /* headlines */
+    --body: 'PupSerif', Georgia, 'Times New Roman', serif;      /* body text */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+body { overflow: hidden; width: 100vw; height: 100vh; background: transparent; font-family: var(--serif); }
+
+/* body/description text reads better in the serif */
+.toast-sub, #banner-sub, .deck-desc, .pm-perk-desc, .pm-stat, #death-cause,
+#death-hint, #wheel-desc, #poster-crime, .poster-foot, #pm-foot, #deck-foot { font-family: var(--body); }
+.hidden { display: none !important; }
+
+/* ------------------------------------------------------------------ */
+/* Event banner (dusk, dawn, bells, red zones) - centered, cinematic   */
+/* ------------------------------------------------------------------ */
+#banner-wrap {
+    position: absolute; top: 9vh; left: 0; right: 0;
+    display: flex; justify-content: center; pointer-events: none;
+}
+#banner {
+    min-width: 34vw; max-width: 60vw;
+    padding: 1.1vh 3vw;
+    background: linear-gradient(90deg, transparent, var(--ink) 18%, var(--ink) 82%, transparent);
+    text-align: center;
+    animation: banner-in 400ms ease-out;
+}
+#banner.leaving { animation: banner-out 500ms ease-in forwards; }
+.banner-rule {
+    height: 1px; margin: 0.5vh auto; width: 72%;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+#banner.red .banner-rule { background: linear-gradient(90deg, transparent, var(--blood), transparent); }
+#banner-title {
+    color: var(--parchment);
+    font-size: 3.1vh; letter-spacing: 0.35em; text-transform: uppercase;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    padding-left: 0.35em; /* optically recenter letter-spaced caps */
+}
+#banner.red #banner-title { color: #e8c9c9; }
+#banner-sub {
+    color: var(--parchment-dim);
+    font-size: 1.5vh; letter-spacing: 0.22em; text-transform: uppercase;
+    margin-top: 0.3vh; padding-left: 0.22em;
+}
+@keyframes banner-in { from { opacity: 0; transform: translateY(-1.5vh); } to { opacity: 1; transform: none; } }
+@keyframes banner-out { to { opacity: 0; transform: translateY(-1vh); } }
+
+/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+/* Progress bar (replaces vorp_progressbar) - RDR2 segmented red style  */
+/* ------------------------------------------------------------------ */
+/* Sits BOTTOM-CENTRE, clear of the crosshair and of the bottom-left core
+   rings / minimap. Deliberately compact - it is an ambient readout, not a
+   dialog, so it should not take a quarter of the screen. */
+/* black plate, off-white label, gold leaf for the number and the fill.
+   --prog-dx/dy are the /hud editor's saved offsets. */
+#prog-wrap {
+    --prog-dx: 0px; --prog-dy: 0px;
+    position: absolute; left: 50%; bottom: 14vh;
+    transform: translateX(-50%) translate(var(--prog-dx), var(--prog-dy));
+    width: 19vw; min-width: 210px;
+    padding: 1vh 1vw 1.1vh;
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat, rgba(8, 8, 8, 0.93);
+    border: 1px solid rgba(201, 162, 77, 0.45);
+    border-radius: 0;
+    box-shadow: 0 0.4vh 2vh rgba(0, 0, 0, 0.8);
+    animation: prog-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    pointer-events: none;
+}
+@keyframes prog-in {
+    from { opacity: 0; transform: translateX(-50%) translate(var(--prog-dx), calc(var(--prog-dy) + 0.8vh)); }
+    to   { opacity: 1; transform: translateX(-50%) translate(var(--prog-dx), var(--prog-dy)); }
+}
+#prog-top {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 0.75vh;
+}
+#prog-label {
+    flex: 1 1 auto; min-width: 0;
+    font-family: 'PupSerif', Georgia, serif;
+    color: #F5F1E8;
+    font-size: 1.35vh; letter-spacing: 0.16em; text-transform: uppercase;
+    text-shadow: 0 0.15vh 0.4vh rgba(0, 0, 0, 0.95);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-right: 0.7vw;
+}
+#prog-pct {
+    flex: 0 0 auto;
+    font-family: 'PupSerif', Georgia, serif;
+    color: #C9A24D;
+    font-size: 1.35vh; letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0.15vh 0.4vh rgba(0, 0, 0, 0.95);
+}
+/* a shallow inset channel, filled with gold leaf */
+#prog-track {
+    position: relative; height: 0.5vh; overflow: hidden;
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(201, 162, 77, 0.22);
+    border-radius: 0;
+}
+#prog-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(180deg, #E6CD8B 0%, #C9A24D 55%, #A8873F 100%);
+    border-radius: 0;
+}
+/* the editor forces it on screen so there is something to grab */
+#prog-wrap.prog-edit { opacity: 0.9; animation: none; }
+
+/* ---- the two looks players pick from in /hud (Config.Progress.style is the default) ---- */
+#prog-ring { display: none; }
+
+/* LINE: no plate, a big caps label and a thin white line, straight on the screen */
+#prog-wrap.style-line {
+    width: 22vw; min-width: 240px;
+    padding: 0;
+    background: none; border: none; box-shadow: none;
+    text-align: center;
+}
+#prog-wrap.style-line #prog-top { display: block; margin-bottom: 0.8vh; }
+#prog-wrap.style-line #prog-label {
+    display: block; padding-right: 0;
+    font-family: var(--serif); font-size: 2.3vh; letter-spacing: 0.1em;
+    color: #ffffff;
+    text-shadow: 0 0.2vh 0.6vh rgba(0, 0, 0, 0.95), 0 0 1.2vh rgba(0, 0, 0, 0.7);
+}
+#prog-wrap.style-line #prog-pct { display: none; }
+#prog-wrap.style-line #prog-track {
+    height: 0.35vh;
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    box-shadow: 0 0.1vh 0.6vh rgba(0, 0, 0, 0.8);
+}
+#prog-wrap.style-line #prog-fill { background: #ffffff; }
+
+/* RING: a round fill like the health and stamina cores, the label beside it */
+#prog-wrap.style-ring {
+    width: auto; min-width: 0;
+    display: flex; align-items: center; gap: 0.8vw;
+    padding: 1vh 1.2vw 1vh 0.8vw;
+    background: rgba(8, 8, 8, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+#prog-wrap.style-ring #prog-ring {
+    display: block; flex: 0 0 auto;
+    width: 5.6vh; height: 5.6vh;
+    transform: rotate(-90deg);
+}
+#prog-ring .ring-bg { stroke: rgba(255, 255, 255, 0.15); }
+#prog-ring-fg { stroke: #F5F1E8; stroke-dasharray: 251.33; stroke-dashoffset: 251.33; }
+#prog-wrap.style-ring #prog-top { flex-direction: column; align-items: flex-start; margin-bottom: 0; }
+#prog-wrap.style-ring #prog-label {
+    max-width: 22vw; padding-right: 0;
+    font-family: var(--serif); font-size: 2vh; letter-spacing: 0.06em;
+    color: #F5F1E8;
+}
+#prog-wrap.style-ring #prog-pct { color: var(--parchment-dim); font-size: 1.3vh; letter-spacing: 0.14em; margin-top: 0.2vh; }
+#prog-wrap.style-ring #prog-track { display: none; }
+
+/* ------------------------------------------------------------------ */
+/* Survival HUD (bottom-left): compact meters above the minimap space  */
+/* ------------------------------------------------------------------ */
+#hud-wrap {
+    /* sits ABOVE the native RDR2 core rings (they own the bottom corner) */
+    position: absolute; bottom: 16vh; left: 1.2vw;
+    display: flex; flex-direction: column; gap: 0.5vh;
+    pointer-events: none;
+}
+.hud-row {
+    display: flex; align-items: center; gap: 0.4vw;
+}
+.hud-icon {
+    width: 1.9vh; height: 1.9vh; flex-shrink: 0;
+    fill: var(--parchment); color: var(--parchment);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95));
+}
+#hud-infection .hud-icon { fill: #c05050; color: #c05050; }
+#hud-noise .hud-icon { fill: #ffffff; color: #ffffff; }
+.hud-track {
+    width: 7vw; height: 0.6vh;
+    background: rgba(11, 11, 11, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+.hud-fill {
+    height: 100%; width: 100%;
+    background: linear-gradient(180deg, #d2d2d2, #afafaf);
+    transition: width 400ms ease;
+}
+#hud-infection .hud-fill { background: linear-gradient(180deg, #c05050, var(--blood)); }
+#hud-noise .hud-fill { background: linear-gradient(180deg, #ffffff, #858585); }
+.hud-row.hud-danger .hud-fill { animation: hud-throb 900ms ease-in-out infinite; }
+@keyframes hud-throb {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.45; }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Toast feed (right side) - icon square, title, subtitle              */
+/* ------------------------------------------------------------------ */
+#toasts {
+    position: absolute; top: 22vh; right: 1.4vw;
+    display: flex; flex-direction: column; gap: 0.8vh; align-items: flex-end;
+    pointer-events: none;
+}
+.toast {
+    display: flex; align-items: stretch;
+    min-width: 15vw; max-width: 22vw;
+    background: var(--ink);
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+    animation: toast-in 300ms ease-out;
+    border-left: 2px solid var(--gold);
+}
+.toast.red { border-left-color: var(--blood); }
+.toast.leaving { animation: toast-out 400ms ease-in forwards; }
+.toast-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 4.6vh; font-size: 2.2vh; color: var(--gold);
+    background: rgba(255, 255, 255, 0.04);
+}
+.toast.red .toast-icon { color: var(--blood); }
+/* inline-SVG icons (iconSVG): inherit the element's colour via currentColor */
+.pup-svg { width: 1em; height: 1em; fill: currentColor; display: inline-block; vertical-align: -0.12em; }
+.toast-icon .pup-svg { width: 2.6vh; height: 2.6vh; }
+.toast-body { padding: 1vh 1vw 1vh 0.7vw; }
+.toast-title {
+    color: var(--parchment); font-size: 1.7vh;
+    letter-spacing: 0.12em; text-transform: uppercase;
+}
+.toast-sub { color: var(--parchment-dim); font-size: 1.4vh; margin-top: 0.2vh; letter-spacing: 0.05em; }
+@keyframes toast-in { from { opacity: 0; transform: translateX(2vw); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateX(2vw); } }
+
+/* ------------------------------------------------------------------ */
+/* Item wheel - the RDR2 satchel wheel, ours: dark segments, center    */
+/* glass, serif labels. Fed by pup-vitals with real inventory counts.  */
+/* ------------------------------------------------------------------ */
+#wheel-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.55), rgba(0,0,0,0.82));
+    animation: wheel-in 200ms ease-out;
+}
+/* same size as the radial menu. min() against vw as well, so a short or narrow
+   window (ultrawide, windowed, 4:3) never pushes the ring off screen */
+#wheel-svg { width: min(72vh, 72vw); height: min(72vh, 72vw); }
+.wheel-seg {
+    fill: rgba(15, 15, 15, 0.88);
+    stroke: rgba(200, 200, 200, 0.28);
+    stroke-width: 1.2;
+    cursor: pointer;
+    transition: fill 120ms ease;
+}
+.wheel-seg:hover, .wheel-seg.focused { fill: rgba(44, 44, 44, 0.95); }
+.wheel-seg.empty { fill: rgba(10, 10, 10, 0.6); cursor: default; }
+.wheel-txt {
+    fill: #e0e0e0; font-family: var(--serif); font-size: 7.5px;
+    letter-spacing: 0.08em; text-anchor: middle; pointer-events: none;
+    text-transform: uppercase;
+}
+.wheel-count { fill: #9a9a9a; font-size: 6px; }
+#wheel-center {
+    position: absolute; width: min(26vh, 26vw); text-align: center;
+    color: var(--parchment); pointer-events: none;
+}
+#wheel-foot {
+    position: absolute; bottom: 6vh; left: 0; right: 0; text-align: center;
+    color: var(--parchment-dim); font-family: var(--body);
+    font-size: 1.25vh; letter-spacing: 0.22em; text-transform: uppercase;
+}
+.wheel-rule { height: 1px; margin: 1vh 8%; background: linear-gradient(90deg, transparent, rgba(200, 200, 200,0.5), transparent); }
+#wheel-label { font-size: 2.6vh; letter-spacing: 0.2em; text-transform: uppercase; }
+#wheel-desc { color: var(--parchment-dim); font-size: 1.5vh; margin-top: 0.6vh; letter-spacing: 0.06em; }
+@keyframes wheel-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ------------------------------------------------------------------ */
+/* Radial menu - quick actions wheel (Config.Radial.key): glyphs,      */
+/* submenus, role/job-gated entries                                     */
+/* ------------------------------------------------------------------ */
+#radial-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.55), rgba(0,0,0,0.82));
+    animation: wheel-in 200ms ease-out;
+}
+#radial-svg { width: min(72vh, 72vw); height: min(72vh, 72vw); }
+.radial-glyph {
+    font-size: 11px; text-anchor: middle; pointer-events: none;
+    fill: #e0e0e0;
+}
+#radial-center {
+    position: absolute; width: min(26vh, 26vw); text-align: center;
+    color: var(--parchment); pointer-events: none;
+}
+#radial-label { font-size: 2.6vh; letter-spacing: 0.2em; text-transform: uppercase; }
+#radial-desc {
+    color: var(--parchment-dim); font-size: 1.5vh; margin-top: 0.6vh;
+    letter-spacing: 0.06em; font-family: var(--body);
+}
+#radial-foot {
+    position: absolute; bottom: 6vh; left: 0; right: 0; text-align: center;
+    color: var(--parchment-dim); font-family: var(--body);
+    font-size: 1.25vh; letter-spacing: 0.22em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Death screen - the RDR2 Online fade: vignette, skull, the facts     */
+/* ------------------------------------------------------------------ */
+#death-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    /* a light dim so the world stays visible */
+    background: radial-gradient(circle at 50% 45%, rgba(9, 9, 9, 0.20), rgba(0, 0, 0, 0.45) 85%);
+    animation: death-in 1200ms ease-out;
+}
+/* letterbox bars are hidden */
+.death-bar { display: none; }
+.death-bar-top { top: 0; }
+.death-bar-bottom { bottom: 0; }
+#death-inner { text-align: center; color: var(--parchment); }
+/* the killer/cause lines and respawn counter carry the state; no title */
+#death-title { display: none; }
+@keyframes death-title-in { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: none; } }
+#death-killer { margin-top: 1.6vh; font-size: 2.2vh; letter-spacing: 0.15em; color: var(--parchment); }
+#death-killer .killer-role { color: var(--blood); }
+#death-cause { margin-top: 0.5vh; font-size: 1.5vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; }
+.death-rule { height: 1px; width: 26vw; margin: 2.2vh auto; background: linear-gradient(90deg, transparent, var(--blood), transparent); }
+#death-count { font-size: 2.4vh; letter-spacing: 0.2em; color: var(--parchment); }
+#death-hint { margin-top: 1vh; font-size: 1.5vh; letter-spacing: 0.18em; color: var(--parchment-dim); text-transform: uppercase; }
+@keyframes death-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ------------------------------------------------------------------ */
+/* Honor - bottom-center bar, red to blue, marker slides on change     */
+/* ------------------------------------------------------------------ */
+#honor-wrap {
+    position: absolute; bottom: 9vh; left: 50%; transform: translateX(-50%);
+    width: 24vw; text-align: center; pointer-events: none;
+    animation: banner-in 300ms ease-out;
+}
+#honor-label { font-size: 1.5vh; letter-spacing: 0.4em; padding-left: 0.4em; color: var(--parchment-dim); }
+#honor-row { display: flex; align-items: center; gap: 0.6vw; margin-top: 0.6vh; }
+.honor-end { font-size: 2vh; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
+.honor-bad { color: #a84040; }
+.honor-good { color: #d2d2d2; }
+#honor-track {
+    position: relative; flex: 1; height: 0.9vh;
+    background:
+        repeating-linear-gradient(90deg,
+            transparent 0, transparent calc(10% - 1px),
+            rgba(0, 0, 0, 0.85) calc(10% - 1px), rgba(0, 0, 0, 0.85) 10%),
+        linear-gradient(90deg, #8c2a2a, #454545 48%, #454545 52%, #c9c9c9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.honor-notch {
+    position: absolute; left: 50%; top: -0.35vh; width: 1px; height: 1.6vh;
+    background: rgba(255, 255, 255, 0.5);
+}
+#honor-marker {
+    position: absolute; top: -0.65vh; width: 0.55vh; height: 2.1vh;
+    background: linear-gradient(180deg, #efefef, #afafaf);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.95);
+    left: 50%; transform: translateX(-50%);
+    transition: left 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+#honor-delta { margin-top: 0.7vh; font-size: 1.6vh; letter-spacing: 0.15em; }
+#honor-delta.up { color: #9d9d9d; }
+#honor-delta.down { color: #c96a6a; }
+
+/* ------------------------------------------------------------------ */
+/* Shop - RDR2 catalogue: item, price, your purse, rank locks          */
+/* ------------------------------------------------------------------ */
+#shop-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-start;
+    background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.82) 34vw, transparent 60vw);
+    animation: wheel-in 180ms ease-out;
+}
+#shop-panel { width: 32vw; margin-left: 4vw; color: var(--parchment); max-height: 84vh; display: flex; flex-direction: column; }
+#shop-head { display: flex; justify-content: space-between; align-items: baseline; }
+#shop-title { font-size: 3vh; letter-spacing: 0.2em; text-transform: uppercase; }
+#shop-purse { font-family: var(--body); font-size: 1.9vh; color: #d9d9d9; letter-spacing: 0.05em; }
+#shop-cats {
+    display: flex; flex-wrap: wrap; gap: 0.3vw;
+    margin-bottom: 0.8vh;
+}
+#shop-cats.hidden { display: none; }
+.shop-cat {
+    font-size: 1.4vh; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.5vh 0.8vw; cursor: pointer;
+    color: var(--parchment-dim);
+    background: rgba(15, 15, 15, 0.85);
+    border-bottom: 2px solid transparent;
+    transition: color 120ms, border-color 120ms;
+}
+.shop-cat:hover { color: var(--parchment); }
+.shop-cat.active { color: var(--gold); border-bottom-color: var(--gold); }
+#shop-items { overflow-y: auto; padding-right: 0.4vw; }
+#shop-items::-webkit-scrollbar { width: 3px; }
+#shop-items::-webkit-scrollbar-thumb { background: var(--gold); }
+.shop-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1vh 1vw; margin-bottom: 0.4vh; cursor: pointer;
+    background: rgba(15, 15, 15, 0.85);
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+    transition: border-color 120ms, background 120ms;
+}
+.shop-item:hover { background: rgba(44, 44, 44, 0.92); border-left-color: var(--gold); }
+.shop-item.locked, .shop-item.broke { opacity: 0.5; cursor: default; }
+.shop-item.locked:hover, .shop-item.broke:hover { background: rgba(15, 15, 15,0.85); border-left-color: rgba(255, 255, 255,0.15); }
+.shop-item-name { font-size: 1.8vh; letter-spacing: 0.08em; }
+.shop-item-desc { font-family: var(--body); font-size: 1.3vh; color: var(--parchment-dim); margin-top: 0.2vh; }
+/* optional thumbnail (item.img) - flex:none so a wide image cannot squeeze
+   the text column, object-fit:contain so odd aspect ratios are not cropped */
+.shop-item-thumb {
+    width: 7vh; height: 4.4vh; flex: none;
+    margin-right: 0.8vw;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+}
+/* optional stat chips (item.stats) - headline numbers, pulled out of the desc */
+.shop-item-stats { display: flex; flex-wrap: wrap; gap: 0.3vw; margin-top: 0.45vh; }
+.shop-item-stat {
+    font-family: var(--body); font-size: 1.15vh;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.15vh 0.4vw;
+    color: var(--parchment);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    white-space: nowrap;
+}
+.shop-item-right { text-align: right; white-space: nowrap; margin-left: 1vw; }
+.shop-item-price { font-size: 1.8vh; color: #d9d9d9; }
+.shop-item.broke .shop-item-price { color: #d88f8f; }
+.shop-item-tag { font-size: 1.3vh; letter-spacing: 0.12em; color: var(--gold); }
+.shop-item.locked .shop-item-tag { color: var(--parchment-dim); }
+.shop-item-need { font-family: var(--body); font-size: 1.3vh; color: var(--blood, #a83232); margin-top: 0.2vh; letter-spacing: 0.05em; }
+.shop-item-need.met { color: var(--gold); opacity: 0.8; }
+
+/* the perk deck reuses the shop tab styling for its category strip */
+#deck-cats {
+    display: flex; flex-wrap: wrap; gap: 0.3vw;
+    justify-content: center;
+    margin: 0.6vh 0 1vh 0;
+}
+#shop-foot { margin-top: 1.4vh; font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; }
+
+/* ------------------------------------------------------------------ */
+/* Satchel - what you carry, RDR2 style (B). View + quick-use.        */
+/* ------------------------------------------------------------------ */
+#satchel-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-end;
+    background: linear-gradient(270deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.82) 34vw, transparent 60vw);
+    animation: wheel-in 180ms ease-out;
+}
+#satchel-panel { width: 30vw; margin-right: 4vw; color: var(--parchment); max-height: 84vh; display: flex; flex-direction: column; }
+#satchel-title { font-size: 3.2vh; letter-spacing: 0.3em; }
+#satchel-weight { margin-top: 0.4vh; font-family: var(--body); font-size: 1.5vh; color: var(--parchment-dim); letter-spacing: 0.12em; }
+#satchel-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5vw;
+    overflow-y: auto; padding: 0.5vh 0.2vw;
+}
+#satchel-grid::-webkit-scrollbar { width: 3px; }
+#satchel-grid::-webkit-scrollbar-thumb { background: var(--gold); }
+.sat-item {
+    background: rgba(15, 15, 15, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 1vh 0.4vw; text-align: center; position: relative;
+    min-height: 9vh; display: flex; flex-direction: column; justify-content: center;
+}
+.sat-item.usable { cursor: pointer; border-left: 2px solid var(--gold); }
+.sat-item.usable:hover { background: rgba(44, 44, 44, 0.95); }
+.sat-count {
+    position: absolute; top: 0.4vh; right: 0.4vw;
+    font-size: 1.3vh; color: var(--gold);
+}
+.sat-name { font-family: var(--body); font-size: 1.35vh; letter-spacing: 0.04em; line-height: 1.3; }
+#satchel-foot { margin-top: 1.4vh; font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; }
+
+/* ------------------------------------------------------------------ */
+/* Stash transfer - saddlebags & lockers: two ink panels side by side  */
+/* ------------------------------------------------------------------ */
+#stash-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center; gap: 3vw;
+    background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.62), rgba(0,0,0,0.88));
+    animation: wheel-in 180ms ease-out;
+}
+.stash-panel {
+    width: 26vw; max-height: 78vh; color: var(--parchment);
+    display: flex; flex-direction: column;
+    background: var(--ink);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 2px solid var(--gold);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65);
+    padding: 2vh 1.2vw;
+}
+.stash-title { font-size: 2.6vh; letter-spacing: 0.24em; text-transform: uppercase; }
+.stash-meta {
+    margin-top: 0.4vh; font-family: var(--body); font-size: 1.4vh;
+    color: var(--parchment-dim); letter-spacing: 0.1em;
+}
+.stash-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5vw;
+    overflow-y: auto; padding: 0.5vh 0.2vw;
+}
+.stash-grid::-webkit-scrollbar { width: 3px; }
+.stash-grid::-webkit-scrollbar-thumb { background: var(--gold); }
+.stash-empty { grid-column: 1 / -1; padding: 3vh 0; text-align: center; color: var(--parchment-dim); }
+#stash-foot {
+    position: absolute; bottom: 5vh; left: 0; right: 0; text-align: center;
+    color: var(--parchment-dim); font-family: var(--body);
+    font-size: 1.25vh; letter-spacing: 0.22em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Prompt - the RDR2 bottom prompt: white key square + label on ink    */
+/* ------------------------------------------------------------------ */
+/* Modelled on the game's own item prompt: no hard box, a soft scrim behind a
+   raised key cap and serif caps. */
+/* Gold is the key cap and the hairline only. The label is off-white: gold on
+   gold made the cap and the words compete, and the glow was doing the work
+   that contrast should. */
+#prompt-wrap {
+    --p-black: #080808;
+    --p-gold:  #C9A24D;
+    --p-white: #F5F1E8;
+
+    position: absolute; bottom: 4vh; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 1.1vh;
+    padding: 1.3vh 2.6vw;
+    background: radial-gradient(ellipse 60% 100% at center,
+        rgba(8, 8, 8, 0.88) 0%, rgba(8, 8, 8, 0.62) 42%, rgba(8, 8, 8, 0) 76%);
+    animation: prompt-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* square cap, double frame, no glow. Georgia is set inline by app.js as well:
+   a capital G and B are near identical in the display face at this size. */
+#prompt-key {
+    position: relative;
+    min-width: 3.3vh; height: 3.3vh; padding: 0 0.75vh;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 0.2vh;
+    background: linear-gradient(180deg, #16130d 0%, var(--p-black) 72%);
+    border: 0.17vh solid var(--p-gold);
+    color: var(--p-gold);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.95vh; font-weight: bold; line-height: 1;
+    box-shadow: 0 0.25vh 0.9vh rgba(0, 0, 0, 0.9),
+                inset 0 0 0 0.09vh rgba(245, 241, 232, 0.14);
+    animation: prompt-breathe 3.2s ease-in-out infinite;
+}
+
+/* the hairline rule between cap and label; rides the cap, so a keyless
+   prompt (app.js hides the cap) loses the divider with it */
+#prompt-key::after {
+    content: ''; position: absolute; right: -0.68vh; top: 18%;
+    width: 0.09vh; height: 64%;
+    background: linear-gradient(180deg,
+        rgba(201, 162, 77, 0) 0%, rgba(201, 162, 77, 0.55) 50%, rgba(201, 162, 77, 0) 100%);
+}
+
+#prompt-label {
+    color: var(--p-white); font-family: var(--body);
+    font-size: 2.05vh; letter-spacing: 0.18em; text-transform: uppercase;
+    text-indent: 0.18em;
+    text-shadow: 0 0.15vh 0.5vh rgba(0, 0, 0, 0.95),
+                 0 0 1.6vh rgba(0, 0, 0, 0.7);
+}
+
+@keyframes prompt-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(0.7vh); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+/* the border lifts a few percent and settles; at this amplitude it reads as
+   lamplight rather than a pulsing button */
+@keyframes prompt-breathe {
+    0%, 100% { border-color: #a8873f; }
+    50%      { border-color: var(--p-gold); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #prompt-wrap { animation: none; }
+    #prompt-key { animation: none; border-color: var(--p-gold); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Floating world key cap - sits on a door, follows it on screen       */
+/* ------------------------------------------------------------------ */
+/* Same treatment as #prompt-*: gold is the cap and the rule, the label is
+   off-white, and the halo is gone. --wk-accent / --wk-text-col still carry the
+   denied tone, so that override below keeps working untouched. */
+#wk-wrap {
+    --p-black: #080808;
+    --p-gold:  #C9A24D;
+    --p-white: #F5F1E8;
+
+    position: absolute; left: 0; top: 0;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.85vh;
+    padding: 1.6vh 2.4vh;
+    /* so the cap reads against a bright wall as well as a dark one */
+    background: radial-gradient(ellipse 70% 100% at center,
+        rgba(8, 8, 8, 0.74) 0%, rgba(8, 8, 8, 0.4) 46%, rgba(8, 8, 8, 0) 76%);
+    will-change: left, top;
+    animation: wk-in 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes wk-in {
+    from { opacity: 0; transform: translate(-50%, -44%); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* square plate, double frame, depth from black alone */
+#wk-cap {
+    min-width: 3.8vh; height: 3.8vh; padding: 0 0.8vh;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #16130d 0%, var(--p-black) 72%);
+    border: 0.17vh solid var(--wk-accent, var(--p-gold));
+    border-radius: 0.2vh;
+    color: var(--wk-accent, var(--p-gold));
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.15vh; font-weight: bold; line-height: 1;
+    box-shadow: 0 0.25vh 0.9vh rgba(0, 0, 0, 0.9),
+                inset 0 0 0 0.09vh rgba(245, 241, 232, 0.14);
+    animation: prompt-breathe 3.2s ease-in-out infinite;
+}
+/* :empty as well as the class - the box must never draw without a letter in it,
+   whatever the script did or did not set */
+#wk-cap.wk-empty, #wk-cap:empty { display: none; }
+
+/* hairline between cap and label; hidden when there is no cap */
+#wk-rule {
+    width: 4.2vh; height: 0.09vh;
+    background: linear-gradient(90deg,
+        transparent, var(--wk-accent, var(--p-gold)) 50%, transparent);
+    opacity: 0.6;
+}
+/* no cap means nothing to separate */
+#wk-rule.wk-empty, #wk-cap:empty + #wk-rule { display: none; }
+
+#wk-text {
+    color: var(--wk-text-col, var(--p-white));
+    font-family: var(--body);
+    font-size: 1.65vh; letter-spacing: 0.24em; text-transform: uppercase;
+    text-indent: 0.24em; /* balance the trailing letter-space */
+    text-shadow: 0 0.15vh 0.5vh rgba(0, 0, 0, 0.95),
+                 0 0 1.6vh rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+}
+#wk-text.wk-empty, #wk-text:empty { display: none; }
+/* the breathe is the cap's, not the world label's */
+@media (prefers-reduced-motion: reduce) {
+    #wk-wrap { animation: none; }
+    #wk-cap { animation: none; border-color: var(--wk-accent, var(--p-gold)); }
+}
+
+/* locked with no key: no cap, just the word, in weathered bone */
+#wk-wrap.wk-denied { --wk-accent: #6f6859; --wk-text-col: #a39781; }
+
+/* ------------------------------------------------------------------ */
+/* List menu - RDR2 ink list (character creator, clothing categories)  */
+/* ------------------------------------------------------------------ */
+#list-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-start;
+    background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 30vw, transparent 55vw);
+    animation: wheel-in 150ms ease-out;
+}
+#list-panel { width: 26vw; margin-left: 4vw; color: var(--parchment); max-height: 82vh; display: flex; flex-direction: column; }
+/* v-style: the title sits in its own rounded header card */
+#list-title {
+    font-size: 2.4vh; letter-spacing: 0.22em; text-transform: uppercase; text-align: center;
+    background: rgba(10, 10, 10, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.5vh 1vw 1.25vh;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+#list-sub { margin: 0.7vh 0 0.1vh; text-align: center; font-family: var(--body); font-size: 1.4vh; color: var(--parchment-dim); letter-spacing: 0.14em; }
+#list-sub .pup-svg { width: 1.6vh; height: 1.6vh; margin-right: 0.5em; opacity: 0.8; }
+#list-options { overflow-y: auto; padding: 0.9vh 0.3vw 0.4vh 0; }
+#list-options::-webkit-scrollbar { width: 3px; }
+#list-options::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.35); border-radius: 3px; }
+/* v-style: each option is its OWN rounded card, separated by a gap */
+.list-opt {
+    padding: 1.25vh 1vw; margin-bottom: 0.7vh; cursor: pointer;
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    transition: background 120ms, border-color 120ms, transform 120ms;
+}
+.list-opt:hover,
+.list-opt.sel {
+    background: rgba(40, 40, 38, 0.96);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: translateX(0.25vw);
+}
+.list-opt-label { font-size: 1.9vh; letter-spacing: 0.1em; }
+.list-opt-desc { font-family: var(--body); font-size: 1.35vh; color: var(--parchment-dim); margin-top: 0.25vh; white-space: pre-line; }
+/* right-aligned value/price on a row (option.value / option.price) */
+.list-opt.has-value { display: flex; align-items: center; justify-content: space-between; gap: 1vw; }
+/* leading icon (option.icon) - matches the hold-B target option cards */
+.list-opt.has-icon { display: flex; align-items: center; gap: 0.7vw; }
+.list-opt.has-icon.has-value { justify-content: flex-start; }
+.list-opt-icon {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+    width: 2.1vh; height: 2.1vh; color: var(--parchment);
+}
+.list-opt-icon .pup-svg { width: 2.1vh; height: 2.1vh; }
+.list-opt.has-icon .list-opt-main { flex: 1 1 auto; min-width: 0; }
+.list-opt-main { min-width: 0; }
+.list-opt-value { flex: none; font-family: var(--body); font-size: 1.55vh; color: var(--parchment-dim); white-space: nowrap; }
+.list-opt-value.price { color: var(--gold); }
+/* info/header row (option.disabled): visible, dimmed, not selectable */
+.list-opt.disabled { opacity: 0.55; cursor: default; }
+.list-opt.disabled:hover { background: rgba(10, 10, 10, 0.92); border-color: rgba(255, 255, 255, 0.06); transform: none; }
+#list-foot { margin-top: 1.2vh; text-align: center; font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; }
+
+/* ------------------------------------------------------------------ */
+/* Ink input form - the pup-ui inputDialog (admin tools, name entry)   */
+/* ------------------------------------------------------------------ */
+#input-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.72);
+    animation: wheel-in 150ms ease-out;
+}
+#input-panel {
+    width: 26vw; max-height: 82vh; display: flex; flex-direction: column;
+    color: var(--parchment);
+    background: rgba(15, 15, 15, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-left: 3px solid var(--gold);
+    padding: 2.4vh 1.6vw;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.7);
+}
+#input-title { font-size: 2.6vh; letter-spacing: 0.2em; text-transform: uppercase; }
+#input-sub { margin-top: 0.4vh; font-family: var(--body); font-size: 1.5vh; color: var(--parchment-dim); letter-spacing: 0.1em; }
+#input-fields { overflow-y: auto; padding-right: 0.4vw; }
+.input-row { display: block; margin-bottom: 1.4vh; }
+.input-label {
+    font-family: var(--body); font-size: 1.35vh; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--parchment-dim); margin-bottom: 0.4vh;
+}
+.input-field {
+    width: 100%; box-sizing: border-box;
+    /* not var(--body): the RDR face renders lowercase as small caps, so typed
+       case-sensitive text needs a real upper/lowercase serif */
+    font-family: Georgia, 'Palatino Linotype', 'Times New Roman', serif;
+    font-size: 1.8vh; color: var(--parchment);
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.9vh 0.6vw;
+    outline: none;
+    caret-color: var(--gold);
+}
+.input-field:focus { border-color: var(--gold); }
+.input-field.bad { border-color: #a83232; }
+select.input-field { appearance: none; cursor: pointer; }
+select.input-field option { background: #0d0d0d; color: #ffffff; }
+textarea.input-field { resize: vertical; min-height: 8vh; line-height: 1.35; }
+#input-actions { display: flex; gap: 0.6vw; margin-top: 0.8vh; }
+.input-btn {
+    flex: 1; text-align: center; cursor: pointer;
+    font-size: 1.7vh; letter-spacing: 0.18em;
+    padding: 1vh 0;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid var(--gold); color: var(--gold);
+    transition: background 120ms;
+}
+.input-btn:hover { background: rgba(255, 255, 255, 0.32); }
+.input-btn.ghost { background: transparent; border-color: rgba(255, 255, 255, 0.25); color: var(--parchment-dim); }
+.input-btn.ghost:hover { background: rgba(255, 255, 255, 0.08); }
+#input-foot { margin-top: 1.2vh; font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; text-align: center; }
+
+/* ------------------------------------------------------------------ */
+/* Ink menu - keyboard list with slider rows (appearance, creator)     */
+/* ------------------------------------------------------------------ */
+#ink-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-start;
+    pointer-events: none; /* game keeps the mouse; keyboard drives this */
+    background: linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 26vw, transparent 46vw);
+    animation: wheel-in 150ms ease-out;
+}
+#ink-panel { width: 24vw; margin-left: 3vw; color: var(--parchment); max-height: 84vh; display: flex; flex-direction: column; }
+/* v-style rounded header card */
+#ink-title {
+    font-size: 2.3vh; letter-spacing: 0.22em; text-transform: uppercase; text-align: center;
+    background: rgba(10, 10, 10, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.4vh 1vw 1.15vh;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+}
+/* pre-line so a subtitle can carry a second line with \n; single-line callers are unaffected */
+#ink-sub { margin: 0.7vh 0 0.1vh; text-align: center; font-family: var(--body); font-size: 1.4vh; color: var(--parchment-dim); letter-spacing: 0.14em; white-space: pre-line; line-height: 1.5; }
+#ink-options { overflow-y: auto; padding: 0.9vh 0.3vw 0.4vh 0; }
+#ink-options::-webkit-scrollbar { width: 3px; }
+#ink-options::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.35); border-radius: 3px; }
+/* v-style separated rounded row cards; â€¹ value â€º chevrons stay on sliders */
+.ink-opt {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.05vh 0.9vw; margin-bottom: 0.6vh;
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    transition: background 100ms, border-color 100ms, transform 100ms;
+}
+.ink-opt.focused {
+    background: rgba(40, 40, 38, 0.96);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(0.25vw);
+}
+.ink-opt-label { font-size: 1.8vh; letter-spacing: 0.08em; }
+.ink-opt.focused .ink-opt-label { color: #ffffff; }
+.ink-opt-desc { font-family: var(--body); font-size: 1.3vh; color: var(--parchment-dim); margin-top: 0.2vh; white-space: pre-line; }
+.ink-opt-value {
+    display: flex; align-items: baseline; gap: 0.4vw;
+    white-space: nowrap; margin-left: 1vw;
+    font-family: var(--body); font-size: 1.6vh;
+}
+.ink-arr { color: var(--parchment-dim); font-size: 1.3vh; }
+.ink-opt.focused .ink-arr { color: var(--gold); }
+.ink-val { color: var(--parchment); min-width: 2.2vw; text-align: center; }
+.ink-count { color: var(--parchment-dim); font-size: 1.15vh; letter-spacing: 0.06em; }
+
+/* ------------------------------------------------------------------ */
+/* PRICE PICKER - centred value chooser (underground drug haggle).     */
+/* Deliberately centre-screen rather than side-anchored like the ink   */
+/* menu: it is a single decision, not a list to browse.                */
+/* ------------------------------------------------------------------ */
+/* bottom-centred: the ped being haggled with stays in view above it */
+#price-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 7vh;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.55) 14vh, transparent 34vh);
+    animation: wheel-in 150ms ease-out;
+}
+/* flex items default to min-width:auto, so a long title would stretch the  */
+/* panel past its width and the whole thing reads as a band across the      */
+/* screen rather than a card in the middle of it. Pin it and let text wrap. */
+#price-panel {
+    flex: 0 0 auto; width: 27vw; max-width: 27vw; min-width: 0;
+    text-align: center; color: var(--parchment);
+}
+#price-caption {
+    font-family: var(--body); font-size: 1.15vh;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--parchment-dim); margin-bottom: 0.8vh;
+}
+#price-title {
+    font-family: var(--serif); font-size: 2.2vh;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    line-height: 1.2; margin-bottom: 1.7vh;
+    overflow-wrap: break-word;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+#price-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 0.8vh; font-family: var(--body);
+}
+#price-min, #price-max { font-size: 1.35vh; color: var(--parchment-dim); letter-spacing: 0.08em; }
+#price-cur {
+    font-size: 2vh; color: var(--gold); letter-spacing: 0.06em;
+    text-shadow: 0 0 14px rgba(0, 0, 0, 0.9);
+}
+#price-track {
+    position: relative; height: 1.1vh;
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+}
+#price-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.10);
+    transition: width 80ms linear;
+}
+#price-handle {
+    position: absolute; top: -0.35vh; width: 0.75vw; height: 1.8vh;
+    margin-left: -0.375vw;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    transition: left 80ms linear;
+}
+#price-foot {
+    margin-top: 1.3vh; font-family: var(--body); font-size: 1.15vh;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--parchment-dim);
+}
+#price-foot b {
+    display: inline-block; min-width: 1.3vw; padding: 0.15vh 0.35vw;
+    margin: 0 0.25vw; color: var(--parchment); font-weight: normal;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* opt-in slider track (row flagged `slider`). The row wraps so the bar sits
+   on its own line under the label and the value readout. */
+.ink-opt.has-slider { flex-wrap: wrap; }
+.ink-slider {
+    flex: 0 0 100%;
+    height: 0.62vh;
+    margin-top: 0.85vh;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 99px;
+    overflow: hidden;
+}
+.ink-slider-fill {
+    height: 100%;
+    background: var(--parchment-dim);
+    border-radius: 99px;
+    transition: width 90ms linear;
+}
+.ink-opt.focused .ink-slider-fill { background: var(--gold); }
+
+/* click-to-copy, only on cells that opted in with `copy` */
+.app-table td.app-td-copy { cursor: pointer; }
+.app-table td.app-td-copy:hover { background: rgba(255, 255, 255, 0.05); }
+.app-table td.app-td-copied { color: #7dd87d; }
+
+/* cells flagged `copy` show the value plus an explicit copy icon */
+.app-table td.app-td-copy { white-space: nowrap; }
+.app-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6vh; height: 1.6vh;
+    margin-left: 0.45vw;
+    vertical-align: middle;
+    opacity: 0.55;
+    transition: opacity 120ms;
+}
+.app-copy-btn svg {
+    width: 100%; height: 100%;
+    fill: none; stroke: currentColor;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.app-table td.app-td-copy:hover .app-copy-btn { opacity: 1; }
+
+#ink-foot {
+    margin-top: 1.2vh; font-family: var(--body); font-size: 1.2vh;
+    letter-spacing: 0.18em; color: var(--parchment-dim); text-transform: uppercase;
+}
+
+/* key chips under the list, for menus that fold their own prompts in */
+.ink-hints {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 0.35vh 0.8vw; margin-bottom: 0.8vh;
+}
+.ink-hint { display: inline-flex; align-items: center; gap: 0.25vw; }
+.ink-key {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 1.9vh; height: 1.9vh; padding: 0 0.35vh;
+    font-family: var(--body); font-size: 1.05vh; letter-spacing: 0.04em;
+    color: var(--parchment);
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+}
+.ink-hint-sep { color: var(--parchment-dim); font-size: 1.05vh; }
+.ink-hint-label { color: var(--parchment-dim); font-size: 1.1vh; letter-spacing: 0.12em; }
+.ink-foot-nav { opacity: 0.72; }
+
+/* per-menu right anchor. Mirrors body.menu-right but scoped to the ink wrap,
+   so one menu can sit on the right without moving the player's other menus. */
+#ink-wrap.side-right { align-items: flex-end; background: linear-gradient(270deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 26vw, transparent 46vw); }
+#ink-wrap.side-right #ink-panel { margin-left: 0; margin-right: 3vw; }
+#ink-wrap.side-right #ink-img   { margin-left: 0; margin-right: 3vw; }
+
+/* ------------------------------------------------------------------ */
+/* Ability card deck - RDR2 Online loadout cards                       */
+/* ------------------------------------------------------------------ */
+#deck-wrap {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 40%, rgba(18, 18, 18, 0.88), rgba(0, 0, 0, 0.95));
+    animation: wheel-in 200ms ease-out;
+}
+#deck-title {
+    color: var(--parchment); font-size: 3.4vh;
+    letter-spacing: 0.5em; padding-left: 0.5em; text-align: center;
+}
+#deck-sub {
+    margin-top: 0.6vh; text-align: center;
+    color: var(--parchment-dim); font-size: 1.6vh; letter-spacing: 0.2em;
+}
+#deck-sub .gold { color: var(--gold); }
+#deck-cards {
+    margin-top: 4vh; display: flex; gap: 1.2vw;
+    max-width: 92vw; overflow-x: auto; padding: 1.5vh 1vw;
+}
+#deck-cards::-webkit-scrollbar { height: 4px; }
+#deck-cards::-webkit-scrollbar-thumb { background: var(--gold); }
+.deck-card {
+    flex: 0 0 auto; width: 11.5vw; height: 34vh;
+    background: linear-gradient(170deg, #191919, #0c0c0c 70%);
+    border: 1px solid #333333;
+    box-shadow: inset 0 0 0 3px #050505, inset 0 0 0 4px #3f3f3f, 0 6px 20px rgba(0, 0, 0, 0.7);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 2.2vh 0.8vw 1.6vh; cursor: pointer; position: relative;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.deck-card:hover { transform: translateY(-1vh); }
+.deck-card.equipped {
+    border-color: var(--gold);
+    box-shadow: inset 0 0 0 3px #050505, inset 0 0 0 4px var(--gold), 0 6px 24px rgba(255, 255, 255, 0.25);
+}
+.deck-card.locked { cursor: default; filter: grayscale(0.9) brightness(0.6); }
+.deck-card.locked:hover { transform: none; }
+.deck-cat {
+    font-size: 1.1vh; letter-spacing: 0.3em; color: var(--parchment-dim);
+}
+.deck-card.cat-instinct .deck-cat { color: var(--blood); }
+.deck-card.cat-frontier .deck-cat { color: var(--gold); }
+/* pup-perks tracks */
+.deck-card.cat-civ   .deck-cat { color: var(--gold); }
+.deck-card.cat-crime .deck-cat { color: var(--blood); }
+.deck-glyph {
+    margin-top: 1.6vh; font-size: 6.4vh; color: var(--gold);
+    text-shadow: 0 0 3vh rgba(255, 255, 255, 0.35);
+}
+.deck-card.locked .deck-glyph { color: var(--parchment-dim); text-shadow: none; }
+.deck-name {
+    margin-top: 2.4vh; color: var(--parchment); text-align: center;
+    font-size: 1.8vh; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0 0.4vw;
+}
+.deck-desc {
+    margin-top: 1vh; color: var(--parchment-dim); text-align: center;
+    font-size: 1.3vh; letter-spacing: 0.04em; line-height: 1.5; padding: 0 0.6vw;
+}
+.deck-tag {
+    position: absolute; bottom: 1.4vh; left: 0; right: 0; text-align: center;
+    font-size: 1.3vh; letter-spacing: 0.25em; color: var(--gold);
+}
+.deck-card.locked .deck-tag { color: var(--parchment-dim); }
+#deck-foot {
+    margin-top: 3.5vh; color: var(--parchment-dim);
+    font-size: 1.3vh; letter-spacing: 0.22em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Player menu - the 'L' menu: who you are on this frontier           */
+/* ------------------------------------------------------------------ */
+#pm-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-start;
+    background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.85) 34vw, transparent 60vw);
+    animation: wheel-in 200ms ease-out;
+}
+#pm-panel { width: 30vw; margin-left: 4vw; color: var(--parchment); max-height: 84vh; overflow-y: auto; }
+#pm-panel::-webkit-scrollbar { width: 3px; }
+#pm-panel::-webkit-scrollbar-thumb { background: var(--gold); }
+#pm-name { font-size: 3.4vh; letter-spacing: 0.14em; text-transform: uppercase; }
+#pm-sub { margin-top: 0.4vh; font-size: 1.6vh; letter-spacing: 0.18em; color: var(--parchment-dim); text-transform: uppercase; }
+#pm-sub .pm-role-outlaw { color: #c86464; }
+#pm-sub .pm-role-law { color: #9d9d9d; }
+#pm-sub .pm-role-bounty { color: var(--gold); }
+.pm-rule { height: 1px; margin: 1.6vh 0; background: linear-gradient(90deg, var(--gold), transparent); }
+.pm-stat { display: flex; justify-content: space-between; padding: 0.45vh 0; font-size: 1.7vh; letter-spacing: 0.1em; }
+.pm-stat .k { color: var(--parchment-dim); text-transform: uppercase; font-size: 1.4vh; letter-spacing: 0.2em; }
+.pm-bar { height: 0.7vh; background: rgba(0, 0, 0,0.8); border: 1px solid rgba(255, 255, 255,0.25); margin: 0.4vh 0 1vh; }
+.pm-bar > div { height: 100%; background: linear-gradient(180deg, #ffffff, var(--gold)); }
+.pm-section-title { font-size: 1.5vh; letter-spacing: 0.35em; color: var(--parchment-dim); margin-bottom: 1vh; }
+.pm-perk {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1vh 1vw; margin-bottom: 0.6vh; cursor: pointer;
+    background: rgba(15, 15, 15, 0.85); border-left: 2px solid rgba(255, 255, 255, 0.2);
+    transition: border-color 150ms, background 150ms;
+}
+.pm-perk:hover { background: rgba(44, 44, 44, 0.9); }
+.pm-perk.equipped { border-left-color: var(--gold); }
+.pm-perk.locked { opacity: 0.45; cursor: default; }
+.pm-perk-name { font-size: 1.7vh; letter-spacing: 0.1em; }
+.pm-perk-desc { font-size: 1.35vh; color: var(--parchment-dim); margin-top: 0.2vh; }
+.pm-perk-tag { font-size: 1.3vh; letter-spacing: 0.15em; color: var(--gold); white-space: nowrap; margin-left: 1vw; }
+.pm-perk.locked .pm-perk-tag { color: var(--parchment-dim); }
+#pm-foot { margin-top: 1.6vh; font-size: 1.3vh; letter-spacing: 0.2em; color: var(--parchment-dim); }
+
+/* ------------------------------------------------------------------ */
+/* Wanted poster - aged parchment, no image assets                     */
+/* ------------------------------------------------------------------ */
+#poster-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+}
+#poster {
+    width: 21vw; padding: 3vh 2vw 2.4vh;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(90, 90, 90, 0.14), transparent 60%),
+        radial-gradient(ellipse at 75% 80%, rgba(60, 60, 60, 0.18), transparent 55%),
+        linear-gradient(160deg, #c5c5c5, #b3b3b3 55%, #a3a3a3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75), inset 0 0 5vh rgba(54, 54, 54, 0.35);
+    text-align: center; color: #2c2c2c;
+    clip-path: polygon(0 1.5%, 4% 0, 12% 1%, 22% 0, 34% 1.2%, 47% 0, 60% 1%, 74% 0, 86% 1.2%, 96% 0, 100% 2%,
+        99.2% 15%, 100% 30%, 99% 47%, 100% 63%, 99.2% 80%, 100% 97%,
+        95% 100%, 84% 99%, 70% 100%, 55% 99%, 41% 100%, 27% 99%, 13% 100%, 4% 99%, 0 98%);
+    animation: poster-in 350ms ease-out;
+}
+#poster-wrap.leaving #poster { animation: poster-out 400ms ease-in forwards; }
+.poster-head {
+    font-size: 5vh; letter-spacing: 0.45em; padding-left: 0.45em;
+    font-weight: bold; color: #373737;
+}
+#poster-name {
+    margin-top: 1.2vh; font-size: 2.8vh; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #212121;
+}
+.poster-line { height: 2px; background: #454545; opacity: 0.6; margin: 1.2vh 15%; }
+#poster-crime { font-size: 1.5vh; letter-spacing: 0.15em; text-transform: uppercase; color: #464646; }
+#poster-reward {
+    margin-top: 1.4vh; font-size: 3.4vh; font-weight: bold;
+    color: #6d1d1d; letter-spacing: 0.08em;
+}
+.poster-foot { margin-top: 1.4vh; font-size: 1.2vh; letter-spacing: 0.24em; color: #464646; }
+@keyframes poster-in { from { opacity: 0; transform: scale(0.92) rotate(-1.5deg); } to { opacity: 1; transform: none; } }
+@keyframes poster-out { to { opacity: 0; transform: scale(0.95); } }
+
+/* ------------------------------------------------------------------ */
+/* Wardrobe: left panel with category tabs and one slider row per     */
+/* clothing category; the ped stays visible on the right.             */
+/* ------------------------------------------------------------------ */
+#ward-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: flex-start;
+    background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.8) 30vw, transparent 55vw);
+    animation: wheel-in 180ms ease-out;
+}
+#ward-panel { width: 30vw; margin-left: 4vw; color: var(--parchment); max-height: 86vh; display: flex; flex-direction: column; }
+#ward-title { font-size: 3vh; letter-spacing: 0.2em; text-transform: uppercase; }
+#ward-sub { font-family: var(--body); font-size: 1.5vh; color: var(--parchment-dim); letter-spacing: 0.08em; margin-top: 0.2vh; }
+#ward-cats { display: flex; flex-wrap: wrap; gap: 0.3vw; margin: 0.8vh 0; }
+#ward-items { overflow-y: auto; padding-right: 0.4vw; }
+#ward-items::-webkit-scrollbar { width: 3px; }
+#ward-items::-webkit-scrollbar-thumb { background: var(--gold); }
+.ward-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.9vh 1vw; margin-bottom: 0.35vh;
+    background: rgba(15, 15, 15, 0.85);
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+}
+.ward-row.on { border-left-color: var(--gold); }
+.ward-row.variant { margin-top: -0.35vh; margin-left: 1.4vw; padding: 0.55vh 1vw; background: rgba(22, 22, 22, 0.85); }
+.ward-row-label { font-size: 1.7vh; letter-spacing: 0.08em; }
+.ward-row.variant .ward-row-label { font-size: 1.35vh; color: var(--parchment-dim); }
+.ward-ctl { display: flex; align-items: center; gap: 0.4vw; white-space: nowrap; }
+.ward-arr { cursor: pointer; color: var(--gold); font-size: 1.9vh; padding: 0 0.35vw; }
+.ward-arr:hover { color: var(--parchment); }
+.ward-val { font-family: var(--body); font-size: 1.5vh; min-width: 4.6vw; text-align: center; color: #d9d9d9; }
+.ward-val.none { color: var(--parchment-dim); }
+#ward-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 1.2vh; }
+.ward-btn {
+    padding: 0.9vh 1.6vw; cursor: pointer;
+    background: rgba(255, 255, 255, 0.16); border: 1px solid var(--gold);
+    color: var(--gold); letter-spacing: 0.18em; font-size: 1.5vh;
+}
+.ward-btn:hover { background: rgba(255, 255, 255, 0.3); color: var(--parchment); }
+.ward-rotate { display: flex; align-items: center; gap: 0.4vw; color: var(--parchment-dim); }
+.ward-rot { cursor: pointer; color: var(--gold); font-size: 2vh; padding: 0 0.4vw; }
+.ward-rot:hover { color: var(--parchment); }
+.ward-rot-label { font-size: 1.25vh; letter-spacing: 0.2em; }
+#ward-foot { margin-top: 1vh; font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.2em; color: var(--parchment-dim); text-transform: uppercase; }
+
+/* ------------------------------------------------------------------ */
+/* App / dashboard: reusable data-driven management panel             */
+/* (OpenApp/UpdateApp), a window floating over a dimmed world.         */
+/* ------------------------------------------------------------------ */
+/* the wrap is the window; height follows the content (max 88vh, then
+   the content column scrolls) */
+#app-wrap {
+    position: absolute;
+    left: 6vw; right: 6vw; top: 6vh; bottom: auto;
+    max-height: 88vh;
+    display: flex; flex-direction: column;
+    padding: 1.8vh 1.6vw 2vh;
+    background: #131110;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+    color: var(--parchment);
+    animation: wheel-in 180ms ease-out;
+}
+/* dim the world behind the window without covering it in black */
+#app-wrap::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -1;
+    background: rgba(10, 8, 6, 0.45);
+}
+/* --- top bar --- */
+#app-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5vw; }
+#app-titles { min-width: 0; }
+#app-title {
+    font-family: Georgia, 'Palatino Linotype', 'Times New Roman', serif;
+    font-size: 2.8vh; font-weight: bold; letter-spacing: 0.01em;
+    text-transform: none;
+    color: var(--parchment); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+    line-height: 1.15;
+}
+#app-subtitle {
+    margin-top: 0.3vh;
+    font-family: Georgia, 'Palatino Linotype', serif; font-style: italic;
+    font-size: 1.4vh; letter-spacing: 0.02em; text-transform: none;
+    color: var(--parchment-dim);
+}
+#app-topright { display: flex; align-items: center; gap: 1vw; flex: none; }
+#app-badge {
+    padding: 0.55vh 1vw; border-radius: 100px;
+    background: #23201d;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    color: var(--parchment); font-size: 1.3vh; letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap;
+}
+#app-close {
+    width: 4vh; height: 4vh; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.8vh; line-height: 1; cursor: pointer;
+    color: var(--parchment-dim);
+    background: rgba(22, 21, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.6vh;
+    transition: color 120ms, border-color 120ms, background 120ms;
+}
+#app-close svg {
+    width: 55%; height: 55%;
+    fill: none;
+    stroke: currentColor;      /* inherits the colour + hover transition below */
+    stroke-width: 2.4;
+    stroke-linecap: round;
+}
+#app-close:hover { color: var(--parchment); border-color: var(--blood); background: rgba(58, 28, 28, 0.65); }
+#app-rule {
+    height: 1px; margin-top: 1.4vh; flex: none;
+    background: rgba(239, 230, 213, 0.08);
+}
+/* --- body: nav rail + content --- */
+/* content-height window: the body grows with its content instead of being
+   stretched to the bottom of the screen */
+#app-body { display: flex; gap: 1.4vw; min-height: 0; padding-top: 1.6vh; }
+#app-nav {
+    width: 11vw; min-width: 160px; max-width: 210px; flex: none;
+    display: flex; flex-direction: column; gap: 0.7vh;
+    overflow-y: auto; padding-right: 0.3vw;
+}
+#app-nav::-webkit-scrollbar { width: 3px; }
+#app-nav::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+.app-nav-item {
+    display: flex; align-items: center; gap: 0.6vw;
+    padding: 1vh 0.8vw; cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 9px;
+    color: var(--parchment-dim);
+    transition: background 120ms, color 120ms;
+}
+.app-nav-item:hover { background: #1b1917; color: var(--parchment); }
+.app-nav-item.active {
+    background: #23201d;
+    color: var(--parchment);
+}
+/* sidebar section header (nav entries with { section: 'NAME' }) */
+.app-nav-section {
+    font-family: Georgia, serif;
+    font-size: 1.15vh; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--parchment-dim);
+    margin: 1.1vh 0 0.3vh 0.5vw;
+}
+.app-nav-section:first-child { margin-top: 0; }
+.app-nav-icon { width: 2.4vh; height: 2.4vh; flex: none; display: flex; align-items: center; justify-content: center; }
+.app-nav-icon .pup-svg { width: 2.2vh; height: 2.2vh; }
+.app-nav-label {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 1.5vh; letter-spacing: 0.02em; text-transform: none;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#app-content { flex: 1; min-width: 0; overflow-y: auto; padding-right: 0.7vw; }
+#app-content::-webkit-scrollbar { width: 4px; }
+#app-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); }
+
+/* --- shared card --- */
+.app-card {
+    background: #1b1917;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 14px;
+    padding: 1.6vh 1.2vw;
+    margin-bottom: 1.2vh;
+}
+.app-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1vw; margin-bottom: 1.4vh; }
+.app-card-title { font-family: Georgia, serif; font-size: 1.35vh; letter-spacing: 0.1em; text-transform: uppercase; color: var(--parchment-dim); }
+.app-link { font-family: var(--body); font-size: 1.35vh; letter-spacing: 0.06em; color: var(--parchment-dim); cursor: pointer; white-space: nowrap; }
+.app-link:hover { color: var(--parchment); text-decoration: underline; }
+
+/* --- heading block --- */
+.app-heading { margin-bottom: 1.6vh; }
+.app-heading-text { font-family: Georgia, 'Palatino Linotype', serif; font-size: 2vh; letter-spacing: 0.01em; text-transform: none; color: var(--parchment); }
+.app-heading-sub { margin-top: 0.5vh; font-family: var(--body); font-size: 1.4vh; letter-spacing: 0.05em; color: var(--parchment-dim); }
+
+/* --- stats block: the four big cards --- */
+.app-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vw; margin-bottom: 1.6vh; }
+.app-stat-card {
+    background: #1b1917;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 14px; padding: 1.6vh 1.1vw;
+}
+.app-stat-value {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 2.6vh; letter-spacing: 0.01em; color: var(--parchment); line-height: 1.05;
+}
+.app-stat-label { margin-top: 0.5vh; font-family: Georgia, serif; font-size: 1.2vh; letter-spacing: 0.06em; text-transform: none; color: var(--parchment-dim); }
+
+/* --- glance block --- */
+.app-glance-cols { display: flex; gap: 2.4vw; flex-wrap: wrap; }
+.app-glance-col { min-width: 0; }
+.app-glance-value { font-size: 2.4vh; color: var(--parchment); line-height: 1.05; }
+.app-glance-label { margin-top: 0.5vh; font-family: var(--body); font-size: 1.2vh; letter-spacing: 0.16em; text-transform: uppercase; color: var(--parchment-dim); }
+.app-spark { display: block; width: 100%; height: 6vh; margin-top: 1.4vh; }
+.app-spark path { fill: none; stroke: var(--parchment); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+.app-spark .app-spark-fill { fill: rgba(239, 230, 213, 0.12); stroke: none; }
+
+/* --- table block --- */
+.app-table { width: 100%; border-collapse: collapse; }
+.app-table th {
+    text-align: left; font-family: Georgia, serif; font-size: 1.15vh;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--parchment-dim);
+    padding: 0.6vh 0.8vw; border-bottom: 1px solid rgba(239, 230, 213, 0.08);
+    white-space: nowrap;
+}
+.app-table td {
+    font-family: Georgia, 'Palatino Linotype', serif; font-size: 1.5vh; color: var(--parchment);
+    padding: 0.9vh 0.8vw; border-bottom: 1px solid rgba(239, 230, 213, 0.05);
+    letter-spacing: 0.01em;
+}
+.app-table tbody tr:last-child td, .app-table tr:last-child td { border-bottom: none; }
+.app-table td.tone-pos { color: #7dc98f; }
+.app-table td.tone-neg { color: #d98a7f; }
+.app-table td.tone-muted { color: var(--parchment-dim); }
+.app-pill {
+    display: inline-block; padding: 0.3vh 0.7vw; border-radius: 100px;
+    font-family: Georgia, serif;
+    font-size: 1.15vh; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.app-pill.pill-green { background: rgba(125, 201, 143, 0.08); color: #7dc98f; box-shadow: inset 0 0 0 1px rgba(125, 201, 143, 0.35); }
+.app-pill.pill-red { background: rgba(217, 138, 127, 0.08); color: #d98a7f; box-shadow: inset 0 0 0 1px rgba(217, 138, 127, 0.3); }
+.app-pill.pill-neutral { background: #23201d; color: var(--parchment-dim); box-shadow: inset 0 0 0 1px rgba(239, 230, 213, 0.08); }
+
+/* --- ranks block --- */
+.app-rank-head { display: flex; align-items: center; justify-content: space-between; gap: 1.2vw; margin-bottom: 1.3vh; }
+.app-rank-titles { min-width: 0; }
+.app-rank-title { font-size: 1.9vh; letter-spacing: 0.13em; text-transform: uppercase; color: var(--parchment); }
+.app-rank-note { margin-top: 0.35vh; font-family: var(--body); font-size: 1.3vh; letter-spacing: 0.04em; color: var(--parchment-dim); }
+.app-rank-salary { display: flex; align-items: center; gap: 0.7vw; flex: none; }
+.app-rank-salary-label { font-family: var(--body); font-size: 1.15vh; letter-spacing: 0.2em; color: var(--parchment-dim); }
+.app-salary-input {
+    width: 6vw; min-width: 74px; text-align: right;
+    font-family: Georgia, 'Palatino Linotype', serif; font-size: 1.5vh; color: var(--parchment);
+    background: #131110; border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 8px; padding: 0.5vh 0.5vw; outline: none;
+    caret-color: var(--parchment);
+}
+.app-salary-input:focus { border-color: rgba(239, 230, 213, 0.28); }
+.app-salary-input:disabled { opacity: 0.45; cursor: not-allowed; }
+.app-salary-input::-webkit-outer-spin-button, .app-salary-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* label | input | button, so SALARY/TAX inputs share a column and SAVE sits
+   directly above the period button. The third column is sized by its widest
+   cell, which keeps SAVE and WEEKLY the same width and edge-aligned. */
+.app-rank-fields {
+    display: grid;
+    grid-template-columns: auto auto minmax(6vw, auto);
+    align-items: center;
+    gap: 0.7vh 0.7vw;
+}
+.app-rank-fields .app-rank-salary-label { text-align: right; white-space: nowrap; }
+.app-rank-fields .app-rank-save,
+.app-rank-fields .app-period-btn { width: 100%; text-align: center; }
+.app-period-btn {
+    min-width: 5.5vw; text-align: center;
+    font-size: 1.2vh; letter-spacing: 0.16em; padding: 0.55vh 0.7vw;
+}
+.app-period-btn.is-off { opacity: 0.45; cursor: default; }
+
+/* table paging */
+.app-pager {
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 0.8vw; margin-top: 1.1vh; padding-top: 1.1vh;
+    border-top: 1px solid rgba(239, 230, 213, 0.07);
+}
+.app-pager-label {
+    font-family: var(--body); font-size: 1.2vh; letter-spacing: 0.14em;
+    color: var(--parchment-dim); min-width: 7vw; text-align: center;
+}
+.app-pager-btn { font-size: 1.15vh; letter-spacing: 0.16em; padding: 0.5vh 0.9vw; }
+.app-pager-btn.is-off { opacity: 0.3; cursor: default; pointer-events: none; }
+
+.app-perms { display: flex; flex-wrap: wrap; gap: 0.5vw; }
+.app-perm {
+    display: flex; align-items: center; gap: 0.4vw;
+    padding: 0.5vh 0.85vw; border-radius: 100px; cursor: pointer;
+    font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--parchment-dim);
+    background: transparent; border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: background 120ms, border-color 120ms, color 120ms;
+}
+.app-perm:hover { border-color: rgba(255, 255, 255, 0.42); color: var(--parchment); }
+.app-perm.on {
+    background: linear-gradient(180deg, #bb3d3d, var(--blood));
+    border-color: var(--blood); color: #f6e6e6;
+}
+.app-perm-mark { display: inline-flex; align-items: center; justify-content: center; width: 1.5vh; height: 1.5vh; font-size: 1.5vh; line-height: 1; }
+.app-perm-mark .pup-svg { width: 1.3vh; height: 1.3vh; }
+
+/* --- buttons (list actions / actions block / rank Save) --- */
+/* flat chips; red/green tones show as coloured text */
+.app-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.7vh 0.9vw; cursor: pointer; white-space: nowrap;
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 1.35vh; letter-spacing: 0.02em; text-transform: none;
+    color: var(--parchment);
+    background: #23201d; border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 9px;
+    transition: background 120ms, border-color 120ms, color 120ms;
+}
+.app-btn:hover { background: #2c2926; }
+.app-btn.tone-red { background: #23201d; border-color: rgba(217, 138, 127, 0.3); color: #d98a7f; }
+.app-btn.tone-red:hover { background: #2c2926; }
+.app-btn.tone-green { background: #23201d; border-color: rgba(125, 201, 143, 0.3); color: #7dc98f; }
+.app-btn.tone-green:hover { background: #2c2926; }
+.app-btn.tone-ghost { background: transparent; border-color: transparent; color: var(--parchment-dim); }
+.app-btn.tone-ghost:hover { background: #1b1917; color: var(--parchment); }
+
+/* --- list block (employees / bills rows) --- */
+.app-list-row { display: flex; align-items: center; justify-content: space-between; gap: 1vw; }
+.app-list-img {
+    width: 4.6vh; height: 4.6vh; flex: 0 0 auto;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+    padding: 0.3vh;
+    margin-right: 0.55vw;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
+}
+.app-list-main { min-width: 0; }
+.app-list-title { font-size: 1.7vh; letter-spacing: 0.07em; color: var(--parchment); }
+.app-list-sub { margin-top: 0.3vh; font-family: var(--body); font-size: 1.3vh; letter-spacing: 0.03em; color: var(--parchment-dim); }
+/* wraps rather than clips, so every action button stays clickable */
+.app-list-actions { display: flex; gap: 0.5vw; flex: none; flex-wrap: wrap; justify-content: flex-end; }
+
+/* --- requirements strip (it.mats); wraps rather than scrolls --- */
+.app-list-mats {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 0.35vw; margin-top: 0.6vh;
+}
+.app-list-mat {
+    display: flex; align-items: center; gap: 0.18vw;
+    padding: 0.25vh 0.35vw;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 3px;
+}
+.app-list-mat-img {
+    width: 2.6vh; height: 2.6vh;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+/* --- app map block: vorp_admin's world map over nui://, influence circles
+   and tag labels; drag to pan --- */
+.app-map-frame {
+    position: relative;
+    height: 42vh;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    cursor: grab;
+    background: #100d0b;
+}
+.app-map-frame.tall { height: 64vh; }
+.app-map-frame:active { cursor: grabbing; }
+.app-map-world {
+    position: absolute;
+    left: 0; top: 0;
+    transform-origin: 0 0;
+    /* kibook/webmap's rdr3 map from its public URL (not shipped: no licence); plain dark if it fails */
+    background: #151210 url('https://raw.githubusercontent.com/kibook/webmap/master/http/rdr3/map.jpg') 0 0 / 1000px 750px no-repeat;
+}
+/* filled turf circle in faction colour */
+.app-map-circle {
+    position: absolute;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    pointer-events: none;
+}
+.app-map-circle.mine { box-shadow: 0 0 14px rgba(255, 255, 255, 0.35) inset; }
+/* centred badge: TAG / points / faction (counter-scaled so it stays readable) */
+.app-map-badge {
+    position: absolute;
+    transform: translate(-50%, -50%) scale(var(--inv, 1));
+    text-align: center;
+    pointer-events: none;
+    background: rgba(12, 10, 8, 0.88);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    padding: .45vh .6vw;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+.app-map-badge.mine { outline: 1.5px solid rgba(255, 255, 255, 0.55); }
+.app-map-badge-name { font-family: var(--body); font-size: 1.7vh; font-weight: 700; letter-spacing: .09em; color: #f3ead9; }
+.app-map-badge-sub  { font-family: var(--body); font-size: 1.15vh; color: #cfc4ad; letter-spacing: .05em; }
+.app-map-badge-foot { font-family: var(--body); font-size: 0.95vh; color: #948a75; letter-spacing: .08em; }
+/* zoom buttons */
+.app-map-zoom {
+    position: absolute;
+    right: .6vw; top: .6vw;
+    display: flex; flex-direction: column; gap: .3vh;
+    z-index: 5;
+}
+.app-map-zbtn {
+    width: 2.2vw; height: 2.2vw;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(12, 10, 8, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    color: #f3ead9;
+    font-size: 1.1vw;
+    cursor: pointer;
+    user-select: none;
+}
+.app-map-zbtn:hover { background: rgba(40, 34, 28, 0.95); }
+
+/* the item NAME beside each material icon (always shown; also the fallback
+   when the item has no art). Reads "6x Egg" like the food menu. */
+.app-list-mat-label {
+    font-family: var(--body); font-size: 1.2vh;
+    letter-spacing: 0.03em; color: var(--parchment);
+    max-width: 11vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.app-list-mat-qty {
+    font-family: var(--body); font-size: 1.2vh; font-weight: 700;
+    letter-spacing: 0.02em; color: var(--parchment);
+}
+
+/* --- actions block --- */
+.app-actions { display: flex; flex-wrap: wrap; gap: 0.7vw; margin-bottom: 1.6vh; }
+
+/* inline filter field for the app panel (block type "search") */
+.app-search { margin-bottom: 1.4vh; }
+.app-search-input {
+    width: 100%; box-sizing: border-box;
+    padding: 1.1vh 1.1vw;
+    font-family: var(--body); font-size: 1.5vh; letter-spacing: 0.03em;
+    color: var(--parchment);
+    background: #1c1a17; border: 1px solid rgba(239, 230, 213, 0.10);
+    border-radius: 9px; outline: none;
+    transition: border-color 120ms, background 120ms;
+}
+.app-search-input::placeholder { color: var(--parchment-dim); font-style: italic; }
+.app-search-input:focus { border-color: var(--gold); background: #23201d; }
+.app-actions .app-btn { padding: 1vh 1.4vw; font-size: 1.5vh; }
+
+/* ------------------------------------------------------------------ */
+/* v-style (v_library look) finishing overrides: rounded input dialog, */
+/* no hairline dividers inside the card-based panels                   */
+/* ------------------------------------------------------------------ */
+#list-panel .pm-rule, #ink-panel .pm-rule, #input-panel .pm-rule { display: none; }
+#input-panel {
+    background: rgba(10, 10, 10, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
+}
+#input-title { text-align: center; font-size: 2.3vh; letter-spacing: 0.22em; }
+#input-sub { text-align: center; }
+.input-field { border-radius: 10px; }
+.input-btn { border-radius: 999px; }
+
+/* ------------------------------------------------------------------ */
+/* 3D world labels: floating monochrome pills at world->screen coords  */
+/* ------------------------------------------------------------------ */
+#world3d-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.w3d-pill {
+    position: absolute; left: 0; top: 0;
+    display: flex; align-items: center; gap: 0.45vw;
+    padding: 0.7vh 0.9vw;
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    color: var(--parchment);
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+    will-change: transform, opacity; /* repositioned every frame */
+}
+.w3d-icon {
+    width: 1.8vh; height: 1.8vh; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4vh; color: var(--parchment);
+}
+.w3d-icon:empty { display: none; }
+.w3d-icon .pup-svg { width: 1.6vh; height: 1.6vh; }
+.w3d-text { font-size: 1.45vh; letter-spacing: 0.1em; text-transform: uppercase; }
+.w3d-text:empty { display: none; }
+
+.w3d-body { display: flex; align-items: center; gap: 0.45vw; }
+
+/* a locked door: a parchment shop tag hanging from a nail on a string */
+.w3d-pill.w3d-lock {
+    display: block;
+    padding: 1.1vh 0 0;
+    background: none; border: none; border-radius: 0; box-shadow: none;
+}
+.w3d-pill.w3d-lock::before { /* the string */
+    content: ''; position: absolute; left: 50%; top: 0.3vh;
+    width: 3.2vh; height: 1.3vh; margin-left: -1.6vh;
+    border-top: 1px solid #b9a77f; border-radius: 50% 50% 0 0;
+}
+.w3d-pill.w3d-lock::after { /* the nail */
+    content: ''; position: absolute; left: 50%; top: 0;
+    width: 0.55vh; height: 0.55vh; margin-left: -0.27vh; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #d9c59a, #6d5a37);
+    box-shadow: 0 1px 2px #000;
+}
+.w3d-lock .w3d-body {
+    gap: 0.45vh;
+    padding: 0.45vh 0.9vh 0.4vh 0.7vh;
+    transform: rotate(-4deg); transform-origin: 50% -1vh;
+    background: linear-gradient(170deg, #efe2c4, #d9c59c);
+    border-radius: 0.35vh;
+    color: #3a2a17;
+    box-shadow: 0 0.3vh 0.8vh rgba(0, 0, 0, 0.55), inset 0 0 0.6vh rgba(120, 90, 40, 0.35);
+}
+.w3d-lock .w3d-body::before { /* the hole the string runs through */
+    content: ''; width: 0.45vh; height: 0.45vh; border-radius: 50%;
+    background: #6d5a37; margin-right: 0.1vh; box-shadow: inset 0 0 1px #000;
+}
+.w3d-lock .w3d-icon { width: 1.3vh; height: 1.3vh; color: #3a2a17; }
+.w3d-lock .w3d-icon .pup-svg { width: 1.3vh; height: 1.3vh; }
+.w3d-lock .w3d-text { font-family: var(--serif); font-size: 1.25vh; letter-spacing: 0.12em; color: #3a2a17; }
+
+/* scene labels: multi-line free text at world->screen coords. The game fonts come first and the system symbol fonts
+   fill in every glyph they lack, so decorative Unicode renders instead of boxes. */
+#scene-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.scene-label {
+    position: absolute; left: 0; top: 0;
+    padding: 0.4vh 0.8vw;
+    border-radius: 0.4vh;
+    text-align: center;
+    white-space: pre-wrap;
+    line-height: 1.25;
+    text-shadow: 0 0 0.3vh rgba(0, 0, 0, 0.95), 0 0.15vh 0.4vh rgba(0, 0, 0, 0.8);
+    will-change: transform, opacity;
+}
+.scene-label span { white-space: pre-wrap; }
+.scene-label.sf0, .scene-label.sf5 { font-family: 'PupDisplay', 'Segoe UI Symbol', 'Segoe UI Emoji', 'Ebrima', 'Segoe UI Historic', 'Nirmala UI', 'Noto Sans Symbols', sans-serif; letter-spacing: 0.04em; }
+.scene-label.sf1, .scene-label.sf2, .scene-label.sf4 { font-family: 'PupSerif', 'Segoe UI Symbol', 'Segoe UI Emoji', 'Ebrima', 'Segoe UI Historic', 'Nirmala UI', 'Noto Sans Symbols', Georgia, serif; }
+
+
+
+/* ================================================================== */
+/* WESTERN SKIN: classic RDR2 menu art from img/western/ (ink-roller  */
+/* plates, header flourish, dividers, selection boxes). An override   */
+/* layer: removing this block restores the flat style.                */
+/* ================================================================== */
+
+/* the shared thin gold rule everywhere becomes the engraved divider  */
+.pm-rule {
+    height: 5px;
+    background: url('img/western/divider_line.png') center / 100% 100% no-repeat;
+    opacity: 0.95;
+}
+
+/* ---------------- LIST MENU: the full classic treatment ----------- */
+#list-panel {
+    background: url('img/western/inkroller_1a.png') center / 100% 100% no-repeat;
+    padding: 3.4vh 1.6vw 2.8vh;
+    width: 27vw;
+}
+#list-title {
+    background: url('img/western/menu_header_1a.png') center / contain no-repeat;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 3vh 1vw 2.8vh;
+    font-size: 2.7vh;
+}
+.list-opt {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0.5vh;
+    padding: 1.2vh 1.3vw;
+}
+/* search + category filter, opt-in per menu via data.search / data.filters */
+#list-tools { display: flex; gap: 0.6vw; margin-bottom: 0.9vh; flex: 0 0 auto; }
+#list-search,
+#list-filter {
+    font-family: var(--body);
+    font-size: 1.4vh;
+    color: var(--parchment);
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    padding: 0.9vh 0.7vw;
+    outline: none;
+}
+#list-search { flex: 1 1 auto; min-width: 0; }
+#list-search::placeholder { color: var(--parchment-dim); font-style: italic; }
+#list-search:focus,
+#list-filter:focus { border-color: var(--gold); }
+#list-filter { flex: 0 0 auto; cursor: pointer; }
+#list-filter option { background: #15120f; color: var(--parchment); }
+.list-opt:hover,
+.list-opt.sel {
+    background:
+        url('img/western/selsected.png') center / 100% 100% no-repeat,
+        url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    transform: none;
+}
+.list-opt.disabled,
+.list-opt.disabled:hover {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    transform: none;
+}
+
+/* ---------------- INK MENU: same family --------------------------- */
+#ink-panel {
+    background: url('img/western/inkroller_1a.png') center / 100% 100% no-repeat;
+    padding: 3.2vh 1.5vw 2.6vh;
+    width: 25vw;
+}
+#ink-title {
+    background: url('img/western/menu_header_1a.png') center / contain no-repeat;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 3vh 1vw 2.8vh;
+}
+.ink-opt {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0.5vh;
+}
+.ink-opt.focused {
+    background:
+        url('img/western/selsected.png') center / 100% 100% no-repeat,
+        url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+}
+
+/* ---------------- INPUT DIALOG: engraved double frame ------------- */
+#input-panel {
+    background-color: rgba(12, 10, 8, 0.94);
+    background-image: url('img/western/double_border.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 4.2vh 2.2vw 3.6vh;
+}
+.input-field {
+    background: url('img/western/selection_box.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+    color: var(--parchment);
+}
+.input-btn,
+.input-btn.ghost {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+    color: var(--parchment);
+}
+.input-btn:hover,
+.input-btn.ghost:hover {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    transform: scale(0.96);
+}
+
+/* ---------------- APP PANEL (bank/society/admin): restrained ------ */
+#app-rule {
+    height: 5px;
+    background: url('img/western/divider_line.png') center / 100% 100% no-repeat;
+    opacity: 0.95;
+}
+.app-nav-item.active {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    color: var(--parchment);
+}
+/* ---- western skin: app panels ---- */
+/* <br> descs arrive as newlines; honour them everywhere */
+.ink-opt-desc, .shop-item-desc, .pm-perk-desc { white-space: pre-line; }
+
+/* stat cards (bank balance, store ledger, dashboard tiles) on plates */
+.app-stat-card {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+
+/* section headings sit on an engraved underline */
+.app-heading {
+    background: url('img/western/divider_line.png') left bottom / 100% 4px no-repeat;
+    padding-bottom: 1.1vh;
+}
+
+/* nav rail: plates on hover too, not just the active row */
+.app-nav-item:hover {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    color: var(--parchment);
+}
+
+/* buttons (deposit/withdraw/etc) on the engraved plate; tone colors stay */
+.app-btn,
+.app-btn.tone-red,
+.app-btn.tone-green {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+.app-btn:hover,
+.app-btn.tone-red:hover,
+.app-btn.tone-green:hover {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    transform: scale(0.97);
+}
+
+/* table headers underlined with the divider art */
+.app-table th {
+    background: url('img/western/divider_line.png') left bottom / 100% 3px no-repeat;
+    border-bottom: none;
+}
+
+/* ================================================================== */
+/* TOP-LEFT ANCHORING: the left-column menus sit in the top-left      */
+/* corner; modal things (wheel, death screen, input, deck, posters)   */
+/* stay centred. Remove this block to centre every menu again;        */
+/* change --menu-top to nudge them.                                   */
+/* ================================================================== */
+
+:root { --menu-top: 8vh; }
+
+#ink-wrap,
+#list-wrap,
+#shop-wrap,
+#pm-wrap,
+#ward-wrap {
+    align-items: flex-start;
+    padding-top: var(--menu-top);
+}
+
+/* max-height has to come down by the same amount or a long list runs
+   off the bottom of the screen instead of scrolling inside itself */
+#ink-panel,
+#list-panel,
+#shop-panel,
+#pm-panel,
+#ward-panel {
+    max-height: calc(92vh - var(--menu-top));
+}
+
+/* ------------------------------------------------------------------ */
+/* Ink menu reference art: the picture for the focused row, shown only */
+/* when a row supplies `image`. It stacks under the menu in the same   */
+/* left-hand column and never intercepts input.                        */
+/* ------------------------------------------------------------------ */
+#ink-wrap { flex-direction: column; }
+
+/* let the panel give up height to the picture instead of overflowing  */
+/* the screen: #ink-options already scrolls inside itself.             */
+#ink-panel { min-height: 0; }
+
+/* ------------------------------------------------------------------ */
+/* Menu side. body.menu-right mirrors every left-anchored panel (list, */
+/* ink, player menu) to the right edge: same widths, same gradients,   */
+/* flipped. Set per player from fred_hud's /hud ("Menus").             */
+/* #list-wrap and #pm-wrap are rows (justify = horizontal); #ink-wrap  */
+/* is a column (align = horizontal), so both axes are set explicitly.  */
+/* ------------------------------------------------------------------ */
+body.menu-right #list-wrap, body.menu-right #pm-wrap {
+    justify-content: flex-end;
+}
+body.menu-right #ink-wrap {
+    align-items: flex-end;
+}
+body.menu-right #list-wrap { background: linear-gradient(270deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 30vw, transparent 55vw); }
+body.menu-right #ink-wrap  { background: linear-gradient(270deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 26vw, transparent 46vw); }
+body.menu-right #pm-wrap   { background: linear-gradient(270deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.85) 34vw, transparent 60vw); }
+body.menu-right #list-panel { margin-left: 0; margin-right: 4vw; }
+body.menu-right #ink-panel  { margin-left: 0; margin-right: 3vw; }
+body.menu-right #ink-img    { margin-left: 0; margin-right: 3vw; }
+body.menu-right #pm-panel   { margin-left: 0; margin-right: 4vw; }
+
+#ink-img {
+    flex: 0 0 auto;
+    margin-left: 3vw; /* matches #ink-panel's margin-left */
+    margin-top: 1vh;
+    max-width: 25vw;  /* matches #ink-panel's width */
+    max-height: 34vh;
+    object-fit: contain;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(10, 10, 10, 0.72);
+    padding: 0.5vh 0.4vw;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.65);
+    pointer-events: none;
+}
+
+
+/* ==========================================================================
+   theme-creator - vorp_character's menus only (creator + clothing store).
+   Applied when a caller passes theme = 'creator'; every other ink menu keeps
+   the western skin above. Art is vorp_character's own set, so the creator now
+   matches the character select screen and the face & body page.
+   Deliberately restyles ART AND COLOUR ONLY - no widths or margins - so
+   body.menu-right still mirrors the panel correctly.
+   ========================================================================== */
+#ink-wrap.theme-creator {
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0) 56%),
+        radial-gradient(ellipse at 64% 50%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.5) 100%);
+}
+body.menu-right #ink-wrap.theme-creator {
+    background:
+        linear-gradient(270deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0) 56%),
+        radial-gradient(ellipse at 36% 50%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.5) 100%);
+}
+
+#ink-wrap.theme-creator #ink-panel {
+    background: url('nui://vorp_character/ui/img/bg.png') center / 100% 100% no-repeat;
+}
+
+#ink-wrap.theme-creator #ink-title {
+    background: url('nui://vorp_character/ui/img/menu_header.png') center / 100% 100% no-repeat;
+    font-family: var(--serif);
+    font-size: 2.1vh; letter-spacing: 0.07em; color: #E8E8E8;
+    padding: 2.2vh 1vw 2vh;
+}
+
+#ink-wrap.theme-creator #ink-sub {
+    color: #BDB4A3; letter-spacing: 0.1em; margin-top: 0.9vh;
+}
+
+#ink-wrap.theme-creator .ink-opt {
+    background: url('nui://vorp_character/ui/img/bg_btn.png') center / 100% 100% no-repeat;
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+#ink-wrap.theme-creator .ink-opt.focused {
+    background: url('nui://vorp_character/ui/img/bg_btn.png') center / 100% 100% no-repeat;
+    border: 2px solid #ac0b10;
+    border-radius: 5px;
+    transform: none;
+}
+
+#ink-wrap.theme-creator .ink-opt-label { font-family: var(--serif); color: #EDE7DA; }
+#ink-wrap.theme-creator .ink-opt.focused .ink-opt-label { color: #ffffff; }
+#ink-wrap.theme-creator .ink-opt-desc { color: #ADA595; }
+
+#ink-wrap.theme-creator .ink-val   { color: #C8A24A; }
+#ink-wrap.theme-creator .ink-count { color: #9A9184; }
+#ink-wrap.theme-creator .ink-arr   { color: #8a8172; }
+#ink-wrap.theme-creator .ink-opt.focused .ink-arr { color: #C8A24A; }
+
+#ink-wrap.theme-creator .ink-slider      { background: rgba(0,0,0,0.45); }
+#ink-wrap.theme-creator .ink-slider-fill { background: #ac0b10; }
+
+#ink-wrap.theme-creator #ink-foot { color: #A79E8D; letter-spacing: 0.06em; }
+#ink-wrap.theme-creator #ink-options::-webkit-scrollbar-thumb { background: #6a6152; }
+
+/* ==========================================================================
+   theme-blackgold - kept, but nothing opts into it: the gunsmith was the only
+   caller and now uses the default black and white skin. Pass theme='blackgold'
+   to OpenInkMenu to bring it back.
+   ========================================================================== */
+#ink-wrap.theme-blackgold {
+    --bg-gold:     #b8863b;
+    --bg-gold-dim: #8a6530;
+    --bg-text:     #EDE4D2;
+    --bg-text-dim: #9b927f;
+}
+
+#ink-wrap.theme-blackgold #ink-title {
+    background: rgba(6, 6, 6, 0.96);
+    border: 1px solid var(--bg-gold-dim);
+    color: var(--bg-gold);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75);
+}
+#ink-wrap.theme-blackgold #ink-sub { color: var(--bg-text-dim); }
+#ink-wrap.theme-blackgold .pm-rule { background: linear-gradient(90deg, transparent, var(--bg-gold), transparent); }
+
+#ink-wrap.theme-blackgold .ink-opt {
+    background: rgba(6, 6, 6, 0.94);
+    border: 1px solid rgba(184, 134, 59, 0.22);
+}
+#ink-wrap.theme-blackgold .ink-opt.focused {
+    background: rgba(26, 21, 12, 0.97);
+    border-color: var(--bg-gold);
+}
+#ink-wrap.theme-blackgold .ink-opt-label { color: var(--bg-text); }
+#ink-wrap.theme-blackgold .ink-opt.focused .ink-opt-label { color: var(--bg-gold); }
+#ink-wrap.theme-blackgold .ink-opt-desc { color: var(--bg-text-dim); }
+
+#ink-wrap.theme-blackgold .ink-val   { color: var(--bg-text); }
+#ink-wrap.theme-blackgold .ink-count { color: var(--bg-text-dim); }
+#ink-wrap.theme-blackgold .ink-arr   { color: var(--bg-gold-dim); }
+#ink-wrap.theme-blackgold .ink-opt.focused .ink-arr { color: var(--bg-gold); }
+
+#ink-wrap.theme-blackgold .ink-slider      { background: rgba(0, 0, 0, 0.55); border-color: rgba(184, 134, 59, 0.28); }
+#ink-wrap.theme-blackgold .ink-slider-fill { background: var(--bg-gold-dim); }
+#ink-wrap.theme-blackgold .ink-opt.focused .ink-slider-fill { background: var(--bg-gold); }
+
+#ink-wrap.theme-blackgold #ink-foot { color: var(--bg-text-dim); }
+#ink-wrap.theme-blackgold .ink-key {
+    color: var(--bg-gold);
+    background: rgba(184, 134, 59, 0.14);
+    border-color: var(--bg-gold-dim);
+}
+#ink-wrap.theme-blackgold .ink-hint-sep   { color: var(--bg-gold-dim); }
+#ink-wrap.theme-blackgold .ink-hint-label { color: var(--bg-text-dim); }
+#ink-wrap.theme-blackgold #ink-options::-webkit-scrollbar-thumb { background: var(--bg-gold-dim); }
+
+/* ==========================================================================
+   CHARACTER SELECT SKIN - the look of vorp_character's select screen, applied
+   to BOTH menu systems: the ink menu (#ink-*) and the list menu (#list-*).
+   Last in the file on purpose, so it overrides the skins above without having
+   to unpick them. Delete this block to go back.
+
+   EVERY SIZE IS IN vh. vw-based type (which the original select screen uses)
+   grows on ultrawide and shrinks on 4:3; vh is the same physical size at any
+   aspect ratio, so one panel fits 16:9, 16:10, 21:9 and 4:3 alike.
+   ========================================================================== */
+:root {
+    --cs-ink:      #E8E8E8;  /* body text          */
+    --cs-name:     #F2E9D8;  /* the big name       */
+    --cs-row:      #D8D2C6;  /* row label          */
+    --cs-dim:      #9A9184;  /* keys, muted values */
+    --cs-faint:    #7E7669;  /* captions, hints    */
+    --cs-coin:     #C8A24A;  /* money, key letters */
+    --cs-sel:      #ac0b10;  /* the focused row    */
+    --cs-hover:    #6a6152;
+}
+
+/* ---- the panel ---- */
+#ink-wrap, #list-wrap {
+    align-items: flex-start; justify-content: flex-start;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 58%),
+        radial-gradient(ellipse at 62% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%);
+}
+#ink-panel, #list-panel {
+    width: 40vh; max-width: 92vw; margin: 2.4vh 0 0 2.4vh;
+    max-height: 92vh; padding: 3vh 0 2.2vh;
+    background: url(img/western/cs_bg.png) center / 100% 100% no-repeat;
+    display: flex; flex-direction: column; align-items: center;
+    color: var(--cs-ink); overflow: hidden;
+}
+/* the ink menu carries a value column as well as a label, so it needs more
+   room than a plain list - "Blade Engraving Material" plus "< None > 1/14"
+   does not fit the list width */
+#ink-panel { width: 54vh; }
+/* the ink menu can be asked to sit on the right instead */
+#ink-wrap.side-right { align-items: flex-end; background:
+    linear-gradient(270deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 58%),
+    radial-gradient(ellipse at 38% 50%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%); }
+#ink-wrap.side-right #ink-panel { margin-left: 0; margin-right: 2.4vh; }
+
+/* ---- ornate header card ---- */
+#ink-title, #list-title {
+    width: 82%; padding: 1.5vh 0.6vh; margin: 0;
+    background: url(img/western/cs_header.png) center / 100% 100% no-repeat;
+    border: none; border-radius: 0; box-shadow: none;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--body); font-weight: 500;
+    font-size: 2.1vh; line-height: 1.1; letter-spacing: 0.06em;
+    color: var(--cs-ink); text-align: center; text-transform: uppercase;
+}
+
+/* ---- subtitle, with the hairline under it ---- */
+#ink-sub, #list-sub {
+    width: 84%; margin: 1.1vh 0 0;
+    padding-bottom: 1.1vh;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+    font-family: var(--body); font-size: 1.35vh; line-height: 1.5;
+    color: var(--cs-dim); text-align: center;
+    letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ---- the rows ---- */
+#ink-options, #list-options {
+    width: 84%; margin-top: 1.1vh;
+    flex: 1 1 auto; min-height: 0;
+    overflow-y: auto; overflow-x: hidden; /* never a sideways scrollbar */
+    display: flex; flex-direction: column; gap: 0.5vh;
+    /* the trailing space lets the last row clear the panel edge instead of
+       being sliced in half by it */
+    padding: 0 0.5vh 1vh 0;
+}
+/* The older skin sets `border: none` on these at the same specificity, so every
+   rule below uses the border SHORTHAND. Setting border-color alone left
+   border-style at none and nothing drew - which is why the selected row had no
+   red edge. Backgrounds are restated for the same reason. */
+.ink-opt, .list-opt {
+    padding: 0.95vh 1.1vh; margin: 0;
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+    transform: none; cursor: pointer;
+    /* hold the height: a shrinking flex item squashes instead of scrolling */
+    flex: 0 0 auto;
+}
+/* the ink row always wraps its text in .ink-opt-left, so a row is always safe.
+   min-width:0 lets the row itself shrink: a flex item defaults to min-width
+   auto, which refuses to go below its content and pushes the value out. */
+.ink-opt {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.2vh;
+    min-width: 0; overflow: hidden;
+}
+/* a LIST row only wraps its text when it has a right-hand value. Without that
+   wrapper the label and its description are siblings, and a flex row puts the
+   description beside the label instead of under it. */
+.list-opt { display: block; }
+.list-opt.has-value {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.2vh;
+}
+
+.ink-opt:hover, .list-opt:hover {
+    border: 2px solid var(--cs-hover);
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    transform: none;
+}
+.ink-opt.focused, .list-opt.sel {
+    border: 2px solid var(--cs-sel);
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    transform: none;
+}
+.ink-opt.disabled, .list-opt.disabled,
+.ink-opt.disabled:hover, .list-opt.disabled:hover {
+    opacity: 0.55; cursor: default;
+    border: 2px solid transparent;
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    transform: none;
+}
+
+/* the text side has to be allowed to shrink, or a long label such as "Frame
+   Engraving Material" shoves the value and its arrows off the row */
+.ink-opt-left, .list-opt-main { flex: 1 1 auto; min-width: 0; }
+
+.ink-opt-label, .list-opt-label {
+    font-family: var(--body); font-size: 1.55vh;
+    color: var(--cs-row); letter-spacing: 0.08em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0;
+}
+.ink-opt.focused .ink-opt-label, .list-opt.sel .list-opt-label { color: #fff; }
+.ink-opt-desc, .list-opt-desc {
+    font-family: var(--body); font-size: 1.2vh; line-height: 1.45;
+    color: var(--cs-faint); margin-top: 0.3vh; white-space: pre-line;
+    min-width: 0; overflow-wrap: anywhere;
+}
+
+/* right-hand value: white normally, gold when it is money */
+.ink-opt-value, .list-opt-value {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 0.7vh;
+    font-family: var(--body); font-size: 1.4vh; color: var(--cs-ink);
+    white-space: nowrap; text-align: right;
+    margin-left: 0; /* the row's own gap does the spacing */
+}
+.list-opt-value.price, .ink-opt-value.price { color: var(--cs-coin); }
+.ink-val   { color: var(--cs-ink); min-width: 4vh; text-align: center; }
+.ink-count { color: var(--cs-faint); font-size: 1.1vh; letter-spacing: 0.06em; }
+.ink-arr   { color: var(--cs-dim); font-size: 1.25vh; }
+.ink-opt.focused .ink-arr { color: var(--cs-coin); }
+
+.ink-slider { background: rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.18); }
+.ink-slider-fill { background: var(--cs-dim); }
+.ink-opt.focused .ink-slider-fill { background: var(--cs-sel); }
+
+/* ---- footer hint: grey line, gold keys ---- */
+#ink-foot, #list-foot {
+    width: 84%; margin-top: 1.2vh; flex: 0 0 auto;
+    font-family: var(--body); font-size: 1.15vh;
+    color: var(--cs-faint); letter-spacing: 0.08em;
+    text-align: center; text-transform: none;
+}
+#ink-foot b, #list-foot b { color: var(--cs-coin); font-weight: normal; }
+/* the body serif may lack arrow glyphs for these codepoints,
+   so the arrows get a face that actually has them */
+#ink-foot b.k-sym, #list-foot b.k-sym {
+    font-family: Georgia, 'Times New Roman', serif;
+    letter-spacing: 0.02em;
+}
+
+/* the A/E, SHIFT/ALT chips read as plain gold letters, like the select screen */
+.ink-hints { justify-content: center; gap: 0.4vh 1.4vh; margin-bottom: 0.7vh; }
+.ink-key {
+    min-width: 0; height: auto; padding: 0;
+    background: none; border: none; border-radius: 0;
+    font-family: var(--body); font-size: 1.15vh; letter-spacing: 0.08em;
+    color: var(--cs-coin);
+}
+.ink-hint-sep   { color: var(--cs-faint); font-size: 1.1vh; }
+.ink-hint-label { color: var(--cs-faint); font-size: 1.15vh; letter-spacing: 0.1em; }
+
+/* ---- scrollbar ---- */
+#ink-options::-webkit-scrollbar, #list-options::-webkit-scrollbar { width: 0.5vh; }
+#ink-options::-webkit-scrollbar-track, #list-options::-webkit-scrollbar-track { background: transparent; }
+#ink-options::-webkit-scrollbar-thumb, #list-options::-webkit-scrollbar-thumb { background: var(--cs-hover); border-radius: 0; }
+
+/* search/filter row on the list menu keeps the same bar treatment */
+#list-tools { width: 84%; gap: 0.8vh; margin-bottom: 0.8vh; }
+#list-search, #list-filter {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 5px;
+    font-family: var(--body); font-size: 1.3vh; color: var(--cs-ink);
+}
+#list-search:focus, #list-filter:focus { border-color: var(--cs-sel); }
+
+/* a very short viewport (4:3 at low height) gets a tighter panel rather than
+   a scrollbar on the whole screen */
+@media (max-height: 760px) {
+    #ink-panel, #list-panel { width: 44vh; padding: 2.4vh 0 1.8vh; }
+    .ink-opt, .list-opt { padding: 0.85vh 1vh; }
+}
+
+/* ==========================================================================
+   APP BLOCKS added for the crafting rebuild: item grid, progress rows, filter
+   chips, quantity stepper and the ingredient bill. Sized in vh like the rest
+   of the skin, so they hold their proportions at any aspect ratio.
+   ========================================================================== */
+
+/* ---- item grid ---- */
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11vh, 1fr));
+    gap: 1.1vh;
+    margin: 1.2vh 0;
+}
+.app-grid-cell {
+    background: rgba(18, 18, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.8vh;
+    padding: 1vh 0.8vh;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+    min-width: 0;
+}
+.app-grid-cell.is-clickable { cursor: pointer; }
+.app-grid-cell.is-clickable:hover { border-color: var(--gold-leaf); }
+.app-grid-cell.is-dim { opacity: 0.45; }
+/* the tile the side panel is describing */
+.app-grid-cell.is-sel {
+    border-color: var(--gold-leaf);
+    background: rgba(201, 162, 39, 0.1);
+}
+.app-grid-art {
+    position: relative;
+    width: 100%; height: 6vh;
+    display: flex; align-items: center; justify-content: center;
+}
+.app-grid-art img { max-width: 100%; max-height: 100%; object-fit: contain; }
+/* no picture: a plain plate rather than a broken-image glyph */
+.app-grid-art.no-art::after {
+    content: ''; width: 3.4vh; height: 3.4vh; border-radius: 0.5vh;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.app-grid-count {
+    position: absolute; right: 0; bottom: 0;
+    padding: 0.1vh 0.6vh; border-radius: 0.4vh;
+    background: rgba(0, 0, 0, 0.82);
+    border: 1px solid var(--gold-leaf);
+    color: var(--gold-soft);
+    font-family: var(--body); font-size: 1.1vh; line-height: 1.5;
+}
+.app-grid-label {
+    font-family: var(--body); font-size: 1.25vh; color: var(--cs-row, #D8D2C6);
+    text-align: center; line-height: 1.3;
+    width: 100%; overflow-wrap: anywhere;
+}
+.app-grid-sub {
+    font-family: var(--body); font-size: 1.05vh; color: var(--cs-faint, #7E7669);
+    text-align: center;
+}
+
+/* ---- progress rows ----
+   capped: stretched across the full panel the bar became a hairline with the
+   label and the countdown a screen apart */
+.app-progress {
+    display: flex; flex-direction: column; gap: 0.8vh; margin: 1.2vh 0;
+    max-width: 88vh;
+}
+.app-prog-row {
+    display: flex; align-items: center; gap: 1.2vh;
+    background: rgba(18, 18, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.8vh; padding: 1.1vh 1.3vh;
+}
+.app-prog-row.is-done { border-color: var(--gold-leaf); }
+.app-prog-art {
+    flex: 0 0 auto; width: 4.4vh; height: 4.4vh;
+    display: flex; align-items: center; justify-content: center;
+}
+.app-prog-art img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.app-prog-art.no-art::after {
+    content: ''; width: 2.6vh; height: 2.6vh; border-radius: 0.4vh;
+    background: rgba(255, 255, 255, 0.06);
+}
+.app-prog-main { flex: 1 1 auto; min-width: 0; }
+.app-prog-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1vh; }
+.app-prog-label {
+    font-family: var(--body); font-size: 1.5vh; color: var(--cs-ink, #E8E8E8);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.app-prog-right {
+    flex: 0 0 auto;
+    font-family: var(--body); font-size: 1.3vh; color: var(--gold-soft);
+    font-variant-numeric: tabular-nums;
+}
+.app-prog-track {
+    margin-top: 0.7vh; height: 0.7vh; border-radius: 99px;
+    background: rgba(255, 255, 255, 0.08); overflow: hidden;
+}
+.app-prog-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--gold-leaf), var(--gold-soft));
+    transition: width 400ms linear;
+}
+.app-prog-row.is-done .app-prog-fill { background: var(--gold-soft); }
+.app-prog-sub {
+    margin-top: 0.5vh;
+    font-family: var(--body); font-size: 1.1vh; color: var(--cs-faint, #7E7669);
+}
+.app-prog-actions { flex: 0 0 auto; display: flex; gap: 0.6vh; }
+
+/* ---- filter chips ---- */
+.app-chips { display: flex; flex-wrap: wrap; gap: 0.6vh; margin: 1vh 0 0.4vh; }
+.app-chip {
+    display: inline-flex; align-items: center; gap: 0.5vh;
+    padding: 0.5vh 1.1vh; border-radius: 99px; cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: var(--body); font-size: 1.2vh; letter-spacing: 0.06em;
+    color: var(--cs-dim, #9A9184);
+}
+.app-chip:hover { border-color: rgba(255, 255, 255, 0.3); color: var(--cs-ink, #E8E8E8); }
+.app-chip.is-active {
+    background: rgba(201, 162, 39, 0.14);
+    border-color: var(--gold-leaf);
+    color: var(--gold-soft);
+}
+.app-chip-count {
+    font-size: 1.05vh; opacity: 0.75;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- quantity stepper ---- */
+.app-stepper {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 1vh;
+    margin: 1.2vh 0;
+}
+.app-stepper-label {
+    font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--cs-faint, #7E7669);
+}
+.app-stepper-box {
+    display: inline-flex; align-items: stretch;
+    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 0.6vh;
+    overflow: hidden;
+}
+.app-stepper-btn {
+    width: 3.2vh; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none;
+    background: rgba(255, 255, 255, 0.05);
+    font-family: Georgia, 'Times New Roman', serif; font-size: 1.8vh;
+    color: var(--cs-ink, #E8E8E8);
+}
+.app-stepper-btn:hover { background: rgba(201, 162, 39, 0.18); color: var(--gold-soft); }
+.app-stepper-value {
+    min-width: 4.4vh; padding: 0.6vh 0.8vh; text-align: center;
+    font-family: var(--body); font-size: 1.5vh; color: var(--cs-ink, #E8E8E8);
+    font-variant-numeric: tabular-nums;
+}
+.app-stepper-actions { display: flex; gap: 0.6vh; }
+
+/* ---- ingredient bill ---- */
+.app-bill { display: flex; flex-direction: column; gap: 0.4vh; margin: 1vh 0; }
+.app-bill-row {
+    display: flex; align-items: center; gap: 0.9vh;
+    padding: 0.7vh 1.1vh; border-radius: 0.6vh;
+    background: rgba(18, 18, 18, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: var(--body); font-size: 1.3vh;
+}
+.app-bill-art { flex: 0 0 auto; width: 2.6vh; height: 2.6vh; display: flex; align-items: center; justify-content: center; }
+.app-bill-art img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.app-bill-dot {
+    flex: 0 0 auto; width: 0.8vh; height: 0.8vh; border-radius: 99px;
+    background: #8d8275;
+}
+.app-bill-row.is-ok .app-bill-dot { background: #4f9d69; }
+.app-bill-row.is-short .app-bill-dot { background: var(--blood); }
+.app-bill-label { flex: 1 1 auto; min-width: 0; color: var(--cs-row, #D8D2C6); overflow-wrap: anywhere; }
+.app-bill-count {
+    flex: 0 0 auto; color: var(--cs-dim, #9A9184);
+    font-variant-numeric: tabular-nums;
+}
+.app-bill-row.is-ok .app-bill-count { color: #7fbf95; }
+.app-bill-row.is-short .app-bill-count { color: #d08a8a; }
+/* a tool line carries no number: one covers the batch and is never spent */
+.app-bill-row.is-tool .app-bill-dot { background: var(--gold-leaf); }
+.app-bill-row.is-tool .app-bill-count { color: var(--gold-soft); }
+
+/* ---- split: only #app-content scrolls; the side panel sticks inside it ---- */
+.app-split { display: flex; align-items: flex-start; gap: 1.4vh; margin: 1vh 0; }
+.app-split-main { flex: 1 1 auto; min-width: 0; }
+.app-split-side {
+    flex: 0 0 26vh; width: 26vh;
+    position: sticky; top: 0;
+}
+.app-split.side-wide .app-split-side { flex-basis: 32vh; width: 32vh; }
+/* smaller buttons here so two still fit on one line */
+.app-split-side > * + * { margin-top: 0.9vh; }
+.app-split-side .app-bill,
+.app-split-side .app-stepper,
+.app-split-side .app-note { margin: 0; }
+.app-split-side .app-actions { margin-bottom: 0; }
+.app-split-side .app-actions .app-btn,
+.app-split-side .app-stepper-actions .app-btn { font-size: 1.3vh; padding: 0.9vh 1vw; }
+.app-stepper-actions { flex-wrap: wrap; }
+/* a panel too narrow for two columns stacks them instead of squeezing the grid */
+@media (max-aspect-ratio: 5/4) {
+    .app-split { flex-direction: column; }
+    .app-split-side { flex: 0 0 auto; width: 100%; position: static; }
+}
+
+/* ---- hero: the item being inspected ---- */
+.app-hero {
+    background: rgba(18, 18, 18, 0.92);
+    border: 1px solid var(--gold-leaf);
+    border-radius: 0.8vh;
+    padding: 1.4vh 1.2vh;
+    display: flex; flex-direction: column; align-items: center; gap: 0.6vh;
+}
+.app-hero-art {
+    width: 100%; height: 9vh;
+    display: flex; align-items: center; justify-content: center;
+}
+.app-hero-art img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.app-hero-art.no-art::after {
+    content: ''; width: 5vh; height: 5vh; border-radius: 0.6vh;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.app-hero-title {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 1.7vh; line-height: 1.25; text-align: center;
+    color: var(--parchment);
+    width: 100%; overflow-wrap: anywhere;
+}
+.app-hero-sub {
+    font-family: var(--body); font-size: 1.25vh; line-height: 1.45;
+    text-align: center; color: var(--cs-dim, #9A9184);
+    width: 100%; overflow-wrap: anywhere;
+}
+.app-hero-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5vh; }
+.app-hero-tag {
+    padding: 0.2vh 0.7vh; border-radius: 0.4vh;
+    background: rgba(201, 162, 39, 0.12);
+    border: 1px solid rgba(201, 162, 39, 0.4);
+    color: var(--gold-soft);
+    font-family: var(--body); font-size: 1.05vh; letter-spacing: 0.04em;
+}
+
+/* ---- note: the line shown where a list would be empty ---- */
+.app-note {
+    font-family: var(--body); font-size: 1.3vh; line-height: 1.5;
+    color: var(--cs-dim, #9A9184);
+    padding: 1.2vh 0;
+}
+
+/* ==========================================================================
+   INK / LIST PANEL POLISH - the society menu, the gunsmith, every PupMenu.
+   ========================================================================== */
+
+/* cs_bg.png is 521x799 portrait; at 100% 100% on a tall narrow panel its brush
+   edges smeared. `cover` crops instead, and the shadow bleeds the ink outward
+   so the panel fades into the world rather than ending on a rectangle. */
+#ink-panel, #list-panel {
+    background: url(img/western/cs_bg.png) center / cover no-repeat, rgba(8, 7, 6, 0.96);
+    box-shadow: 0 0 7vh 3.5vh rgba(8, 7, 6, 0.82);
+    animation: panel-in 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes panel-in {
+    from { opacity: 0; transform: translateY(1vh); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* the painted divider, not a web hairline */
+#ink-sub, #list-sub {
+    border-bottom: none;
+    background: url(img/western/cs_sep.png) center bottom / 100% 0.4vh no-repeat;
+    padding-bottom: 1.4vh;
+}
+
+/* the cursor glides between rows instead of snapping */
+.ink-opt, .list-opt {
+    transition: border-color 110ms ease-out, background-color 110ms ease-out;
+}
+
+/* a touch more air between rows; dense lists were the main "cluttered" tell */
+#ink-options, #list-options { gap: 0.62vh; }
+.ink-opt, .list-opt { padding: 1.05vh 1.2vh; }
+.list-opt-desc { opacity: 0.9; }
+
+/* restated: the small-screen rules sit earlier in the file, so the padding
+   above would have undone their tightening */
+@media (max-aspect-ratio: 5/4) {
+    .ink-opt, .list-opt { padding: 0.85vh 1vh; }
+    #ink-options, #list-options { gap: 0.5vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #ink-panel, #list-panel { animation: none; }
+    .ink-opt, .list-opt { transition: none; }
+}
+
+/* ==========================================================================
+   RDR2 SKIN FOR THE APP PANEL - same art and palette as the ink/list menus.
+   Skin only, no geometry: square corners, painted edges, never a radius.
+   ========================================================================== */
+
+/* ---- the window: an inked slab, not a card ---- */
+#app-wrap {
+    padding: 2.6vh 2.2vw 2.4vh;
+    background: none;
+    border: none; border-radius: 0; box-shadow: none;
+    color: var(--cs-ink);
+}
+/* on ::after so the edge fade never touches the text; cover, never stretched */
+#app-wrap::after {
+    content: '';
+    position: absolute; inset: -2.5vh -2vw;
+    z-index: -1; pointer-events: none;
+    background:
+        url(img/western/cs_bg.png) center / cover no-repeat,
+        rgba(8, 7, 6, 0.97);
+    -webkit-mask-image: radial-gradient(ellipse 118% 112% at 50% 50%,
+        #000 56%, rgba(0, 0, 0, 0.72) 80%, rgba(0, 0, 0, 0) 100%);
+            mask-image: radial-gradient(ellipse 118% 112% at 50% 50%,
+        #000 56%, rgba(0, 0, 0, 0.72) 80%, rgba(0, 0, 0, 0) 100%);
+}
+#app-wrap::before {
+    background:
+        radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.30) 25%, rgba(0, 0, 0, 0.78) 100%);
+}
+
+/* ---- title block ---- */
+#app-title {
+    font-family: var(--body);
+    font-size: 2.5vh; font-weight: 500; letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--cs-name);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+#app-subtitle {
+    font-family: var(--body); font-style: normal;
+    font-size: 1.3vh; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--cs-dim);
+}
+/* the badge is stamped, not a pill */
+#app-badge {
+    padding: 0.5vh 0.9vw; border-radius: 0;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--cs-coin);
+    color: var(--cs-coin);
+    font-family: var(--body); font-size: 1.25vh; letter-spacing: 0.14em;
+}
+#app-close {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--cs-dim);
+}
+#app-close:hover { color: var(--cs-name); border-color: var(--cs-sel); background: rgba(0, 0, 0, 0.7); }
+/* the hairline under the header becomes the painted divider */
+#app-rule {
+    height: 4px; margin-top: 1.5vh;
+    background: url(img/western/divider_line.png) center / 100% 100% no-repeat;
+}
+
+/* ---- nav rail: the same rows the ink menu uses ---- */
+.app-nav-item {
+    border-radius: 0;
+    border: 2px solid transparent;
+    color: var(--cs-row);
+    font-family: var(--body);
+}
+.app-nav-item:hover {
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid var(--cs-hover);
+    color: var(--cs-name);
+}
+.app-nav-item.active {
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid var(--cs-sel);
+    color: var(--cs-name);
+}
+.app-nav-item.active .app-nav-icon .pup-svg { fill: var(--cs-coin); }
+.app-nav-label { font-family: var(--body); letter-spacing: 0.05em; }
+.app-nav-section {
+    font-family: var(--body); color: var(--cs-faint);
+    letter-spacing: 0.18em;
+}
+
+/* cs_btn.png is one horizontal brush stroke: wide short things only. */
+.app-card {
+    background: rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0;
+}
+.app-stat-card {
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0;
+}
+.app-card-title { font-family: var(--body); color: var(--cs-faint); letter-spacing: 0.16em; }
+.app-stat-value { font-family: var(--body); color: var(--cs-name); }
+.app-stat-label { font-family: var(--body); color: var(--cs-faint); letter-spacing: 0.14em; }
+.app-heading-text {
+    font-family: var(--body); text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--cs-name);
+}
+.app-heading-sub { font-family: var(--body); color: var(--cs-dim); letter-spacing: 0.08em; }
+
+/* the long rows already read as rows; square them and repaint the edges */
+.app-list-row,
+.app-prog-row,
+.app-bill-row {
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: url(img/western/cs_btn.png) center / 100% 100% no-repeat;
+}
+.app-prog-row.is-done { border: 1px solid var(--cs-coin); }
+/* the filling bar is gold leaf, and gone to white-gold when it is done */
+.app-prog-track { border-radius: 0; background: rgba(0, 0, 0, 0.55); height: 0.55vh; }
+/* 1000ms to match the tab's own tick, so the bar is always mid-glide */
+.app-prog-fill { border-radius: 0; background: var(--cs-coin); transition: width 1000ms linear; }
+.app-prog-row.is-done .app-prog-fill { background: var(--gold-soft); }
+.app-prog-label { font-family: var(--body); color: var(--cs-row); }
+.app-prog-right { font-family: var(--body); color: var(--cs-coin); }
+
+/* ---- the recipe grid: square tiles, the selected one stamped ---- */
+.app-grid-cell {
+    border-radius: 0;
+    border: 2px solid transparent;
+    background: rgba(0, 0, 0, 0.42);
+}
+.app-grid-cell.is-clickable:hover { border: 2px solid var(--cs-hover); background: rgba(0, 0, 0, 0.6); }
+/* the hand-drawn red box IS the frame, so no CSS border on top of it */
+.app-grid-cell.is-sel {
+    border: 2px solid transparent;
+    background:
+        url(img/western/selected-item-box.png) center / 100% 100% no-repeat,
+        rgba(0, 0, 0, 0.6);
+}
+.app-grid-count {
+    border-radius: 0;
+    border: 1px solid var(--cs-coin);
+    color: var(--cs-coin);
+    font-family: var(--body);
+}
+.app-grid-label { font-family: var(--body); color: var(--cs-row); letter-spacing: 0.03em; }
+.app-grid-sub { font-family: var(--body); color: var(--cs-faint); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ---- the side panel: the item under inspection ---- */
+.app-hero {
+    border-radius: 0;
+    border: 1px solid var(--cs-coin);
+    background: rgba(0, 0, 0, 0.5);
+}
+.app-hero-title { font-family: var(--body); text-transform: uppercase; letter-spacing: 0.05em; color: var(--cs-name); }
+.app-hero-sub { font-family: var(--body); color: var(--cs-dim); }
+.app-hero-tag {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(200, 162, 74, 0.55);
+    color: var(--cs-coin);
+    font-family: var(--body); letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ---- chips: the bench switches ---- */
+.app-chip {
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.45);
+    color: var(--cs-dim);
+    font-family: var(--body); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.app-chip:hover { border-color: var(--cs-hover); color: var(--cs-row); }
+.app-chip.is-active { border-color: var(--cs-sel); background: rgba(0, 0, 0, 0.7); color: var(--cs-name); }
+
+/* ---- stepper: the quantity dial ---- */
+.app-stepper { border-radius: 0; }
+.app-stepper-label { font-family: var(--body); color: var(--cs-faint); letter-spacing: 0.14em; text-transform: uppercase; }
+.app-stepper-box {
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.5);
+}
+.app-stepper-btn { border-radius: 0; color: var(--cs-dim); font-family: var(--body); }
+.app-stepper-btn:hover { background: rgba(200, 162, 74, 0.18); color: var(--cs-coin); }
+.app-stepper-value { font-family: var(--body); color: var(--cs-name); }
+
+/* ---- the search field ---- */
+.app-search-input {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--cs-ink); font-family: var(--body); letter-spacing: 0.06em;
+}
+.app-search-input:focus { border-color: var(--cs-coin); }
+
+/* ---- tables, where an app still uses one ---- */
+.app-table th { font-family: var(--body); color: var(--cs-faint); letter-spacing: 0.14em; }
+.app-table td { font-family: var(--body); color: var(--cs-row); }
+
+/* ---- scrollbars match the menus ---- */
+#app-content::-webkit-scrollbar, #app-nav::-webkit-scrollbar { width: 0.5vh; }
+#app-content::-webkit-scrollbar-thumb, #app-nav::-webkit-scrollbar-thumb {
+    background: var(--cs-hover); border-radius: 0;
+}
+
+/* a tall narrow screen gets the window closer to the edges, same as the menus */
+@media (max-aspect-ratio: 5/4) {
+    #app-wrap { left: 3vw; right: 3vw; padding: 2.2vh 1.6vw 2vh; }
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="418" height="5" viewBox="0 0 418 5">
+  <!-- pup-ui divider: a pale ink line that thins out toward both ends.
+       Drawn for pup-ui (GPL-3.0). Rendered to cs_sep.png at 418x5. -->
+  <defs>
+    <linearGradient id="fade" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.12"/>
+      <stop offset="0.12" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0.62"/>
+      <stop offset="0.88" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0.12"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="1.6" width="418" height="1.8" fill="url(#fade)"/>
+  <rect x="0" y="1" width="418" height="3" fill="url(#fade)" opacity="0.25"/>
+</svg>

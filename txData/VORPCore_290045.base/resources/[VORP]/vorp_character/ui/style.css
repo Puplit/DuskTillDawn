@@ -1,0 +1,135 @@
+/* vorp_character - face & body page: parchment panel on bg.png, ink rows on
+   bg_btn.png, red selection strokes. Camera stays on the game's own WASD/zoom
+   prompts, so this is a single left panel. */
+
+/* Roboto Slab (Apache 2.0, licence in fonts/) and pup-ui's IM Fell English (SIL OFL 1.1) */
+@font-face { font-family: 'PupSlab';  src: url('fonts/robotoslab.ttf') format('truetype'); }
+@font-face { font-family: 'PupSerif'; src: url('nui://pup-ui/html/fonts/imfell.ttf') format('truetype'); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 100vw; height: 100vh; overflow: hidden; background: transparent; font-family: 'PupSlab', Georgia, serif; }
+a { text-decoration: none; }
+.hidden { display: none !important; }
+.unselectable { user-select: none; }
+
+#MenuContent {
+    position: absolute; left: 0.781vw; top: 1.852vh;
+    width: 26.042vw; height: 92vh;
+    padding: 4.167vh 0 3.241vh;
+    background: url(img/bg.png) center / 100% 100% no-repeat;
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    overflow: hidden;
+}
+
+#title {
+    width: 80%; padding: 2.407vh 0;
+    background: url(img/menu_header.png) center / 100% 100% no-repeat;
+    display: flex; justify-content: center;
+}
+#title h1 { font-family: 'PupSerif'; font-size: 1.563vw; font-weight: 500; color: #E8E8E8; letter-spacing: 0.04em; }
+
+.separator { width: 80%; margin: 1.111vh 0; }
+
+/* category chips - more groups than fit as big circles, so a wrapping strip */
+#Categories { width: 86%; margin-top: 0.556vh; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.313vw; }
+#Categories a {
+    padding: 0.648vh 0.677vw; border-radius: 99px;
+    background: #1F1F1F; border: 2px solid transparent;
+    font-family: 'PupSlab'; font-size: 0.677vw; color: #C9C9C9;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+}
+#Categories a:hover, #Categories a.selected { border-color: red; color: #fff; }
+
+/* camera framing + randomise/reset; sits between the chips and the rows */
+#FaceTools {
+    width: 86%; margin-top: 0.926vh;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.417vw;
+}
+.ft-group { display: flex; align-items: center; gap: 0.26vw; }
+.ft-lbl {
+    font-family: 'PupSlab'; font-size: 0.521vw; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #7E7669; margin-right: 0.104vw;
+}
+.ft-btn {
+    padding: 0.463vh 0.521vw; border-radius: 4px;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent;
+    font-family: 'PupSerif'; font-size: 0.625vw; color: #C9C9C9;
+    letter-spacing: 0.04em; cursor: pointer; white-space: nowrap;
+}
+.ft-btn:hover { border-color: #6a6152; color: #fff; }
+.ft-btn.on { border-color: #ac0b10; color: #fff; }
+.ft-btn.wide { padding: 0.463vh 0.625vw; color: #C8A24A; }
+
+/* flex: 1 + min-height: 0 is what lets the list SCROLL instead of being clipped */
+#StyleProperties { width: 80%; margin-top: 1.111vh; flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.313vw; padding-right: 0.208vw; }
+
+.styleElem {
+    width: 100%; padding: 0.463vh 0.26vw 0.463vh 0.833vw;
+    display: flex; justify-content: space-between; align-items: center;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px;
+}
+.styleElem:hover { border-color: red; }
+.styleElem.on .elemTitle { color: #ffffff; }
+.elemTitle { font-family: 'PupSerif'; font-size: 0.833vw; color: #C9C9C9; width: 9.115vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Remove rows: a button, not a slider */
+.styleElem.action { cursor: pointer; padding-right: 0.833vw; }
+.styleElem.action:hover { border-color: #ac0b10; }
+.styleElem.action .elemTitle { color: #B9B2A5; }
+.actionGo {
+    font-family: 'PupSlab'; font-size: 0.573vw; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #ac0b10;
+}
+.styleElem.action:hover .actionGo { color: #ff8080; }
+
+.sliderDiv { display: flex; flex-direction: column; align-items: center; }
+.sliderDiv p { font-family: 'PupSlab'; font-size: 0.625vw; color: #E8E8E8; margin-bottom: -0.37vh; }
+.sliderElem { display: flex; align-items: center; margin-top: -0.185vh; }
+
+.arrow { display: flex; align-items: center; padding: 0.556vh; margin: 0 0.208vw; border-radius: 99px; cursor: pointer; }
+.arrow:hover { background: #444; }
+.arrow img { width: 0.573vw; height: 1.019vh; }
+.arrow.right img { transform: rotate(180deg); }
+
+.slider {
+    -webkit-appearance: none; width: 6.25vw; height: 0.556vh; outline: none; border-radius: 5px;
+    background: linear-gradient(to right, red 0%, red var(--pct, 0%), #ddd var(--pct, 0%), #ddd 100%);
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 0.938vw; height: 1.667vh; border-radius: 50%; cursor: pointer;
+    background: url(img/slider/handler.png) center / 100% 100% no-repeat;
+}
+
+/* camera controls, shown in the panel itself. The game's own prompt group is
+   registered and driven every frame (verified) but does not render here, and it
+   competes with every other resource's prompts - the panel always draws, so the
+   hints live where they can be relied on. */
+#CamHint {
+    width: 84%; margin: 0.185vh 0 0.741vh;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 0.208vw 0.729vw;
+    font-family: 'PupSlab'; font-size: 0.573vw; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #7E7669;
+}
+#CamHint b {
+    font-family: 'PupSerif'; font-weight: normal; font-size: 0.625vw;
+    color: #C8A24A; letter-spacing: 0.02em;
+}
+
+.button {
+    width: 80%; padding: 1.296vh 0; text-align: center;
+    font-family: 'PupSerif'; font-size: 0.885vw; color: #E8E8E8;
+    background: url(img/bg_btn.png) center / 100% 100% no-repeat;
+    border: 2px solid transparent; border-radius: 5px; cursor: pointer;
+}
+.button:hover { border-color: #ac0b10; }
+#MenuInteraction { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.417vw; }
+
+/* ---------- menu side: /hud "Menus" swaps the panel over ---------- */
+body.menu-right #MenuContent { left: auto; right: 0.781vw; }
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar { width: 0.26vw; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #888; }
+::-webkit-scrollbar-thumb:hover { background: #555; }

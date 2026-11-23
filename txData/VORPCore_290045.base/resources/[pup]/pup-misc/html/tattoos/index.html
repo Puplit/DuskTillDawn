@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+
+    <!-- left: the menu -->
+    <div id="Menu" class="hidden">
+        <div id="MenuContent">
+            <div id="MenuList">
+                <div id="title"><h1 id="menuTitle">MAKE UP</h1></div>
+                <div id="Categories"></div>
+                <img src="img/separator.png" alt="" class="separator">
+                <div id="StyleProperties"></div>
+            </div>
+            <div id="MenuInteraction">
+                <div class="btnRow">
+                    <a href="#" id="SaveBtn" class="button">Save - $0</a>
+                    <a href="#" id="ResetBtn" class="button">Remove All</a>
+                </div>
+                <a href="#" id="BodyBtn" class="button">Body Adjustments</a>
+                <a href="#" id="CancelBtn" class="button">Cancel</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- right top: variation / colour of the selected layer -->
+    <div id="VariationSettings" class="hidden">
+        <div id="ContextTitle">
+            <img src="img/icons/variation_icon.png" alt="">
+            <h2 id="ContextName">Variation settings</h2>
+        </div>
+        <img src="img/separator.png" alt="" class="separator">
+        <div class="ContextSettings" id="varSlider"></div>
+        <img src="img/separator_down.png" alt="" class="separator" id="separator_var">
+        <div class="ContextSettings" id="ContextSettingsAdvanced"></div>
+        <img src="img/separator_down.png" alt="" class="separator" id="separator_colour">
+        <div class="ContextSettings" id="TintList"></div>
+    </div>
+
+    <!-- bottom centre: camera key hint -->
+    <div id="CamKeys" class="hidden">
+        <b>A/D</b> TURN <b>W/S</b> CAMERA <b>SHIFT/CTRL</b> ZOOM
+    </div>
+
+</body>
+</html>

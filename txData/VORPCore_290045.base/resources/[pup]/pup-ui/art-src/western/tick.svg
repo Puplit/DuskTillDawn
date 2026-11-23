@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- pup-ui check mark: a quill tick, thick at the heel and thin at the tail.
+       Drawn for pup-ui (GPL-3.0). Rendered to tick.png at 80x80. -->
+  <path fill="#FBFAF7"
+    d="M12 43 C15 40 18 39 21 41 L33 54 C42 38 53 25 68 13 C70 12 72 13 71 15 C57 29 45 45 37 63 C36 66 32 66 30 64 Z"/>
+</svg>

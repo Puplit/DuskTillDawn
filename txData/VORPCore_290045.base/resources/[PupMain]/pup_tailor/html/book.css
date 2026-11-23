@@ -1,0 +1,181 @@
+/* pup_tailor dye book, in pup-ui's ink-menu look (as the Tailor Menu and the clothing store): the black
+   ink-brush plate, the ornate white title frame, brush-stroke rows with a red edge, gold key hints.
+   The art is pup-ui's own, read straight from that resource (a dependency); colours and fonts come from
+   pup-ui's theme when it is running. */
+:root {
+  --bg: #0b0a09;
+  --text: #efe8da;
+  --row: #d8d2c6;
+  --dim: #9a9184;
+  --accent: #c8a24a;
+  --sel: #ac0b10;
+  --hover: #6a6152;
+  --danger: #a8362a;
+  --good: #5e8a3c;
+  --border: rgba(239, 232, 218, 0.22);
+  --title-font: Georgia, 'Times New Roman', serif;
+  --body-font: Georgia, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  background: transparent; overflow: hidden;
+  font-family: var(--body-font); color: var(--text);
+  user-select: none;
+}
+.hidden { display: none !important; }
+
+/* ---- the panel: pup-ui's ink plate ---- */
+.book {
+  position: absolute; left: 2.4vw; top: 6vh; width: 31rem; max-height: 88vh;
+  display: flex; flex-direction: column;
+  padding: 2rem 2rem 1.4rem;
+  background: url('nui://pup-ui/html/img/western/cs_bg.png') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.55));
+}
+
+/* menus on the right (the player's /hud choice): the book and its notices swap sides */
+body.menu-right .book { left: auto; right: 2.4vw; }
+body.menu-right .toast { left: auto; right: calc(2.4vw + 32rem); }
+
+/* ---- the title in the ornate frame, the subtitle under it ---- */
+.bk-head { position: relative; display: flex; flex-direction: column; align-items: stretch; padding-bottom: 0.3rem; }
+.bk-mark { display: none; }
+.bk-titles { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.bk-titles h1 {
+  align-self: stretch; margin: 0 0.2rem; min-height: 4.4rem; padding: 0.8rem 2.6rem;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  background: url('nui://pup-ui/html/img/western/cs_header.png') center / 100% 100% no-repeat;
+  font-family: var(--title-font); font-weight: normal; font-size: 1.6rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text);
+}
+.bk-sub {
+  margin-top: 0.55rem; max-width: 100%;
+  color: var(--dim); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bk-sub:empty { display: none; }
+.bk-x {
+  position: absolute; top: -1.35rem; right: -1.3rem;
+  width: 1.9rem; height: 1.9rem; padding: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(0, 0, 0, 0.6); border: 1px solid var(--border); color: var(--row);
+  font-size: 1.15rem; line-height: 1;
+}
+.bk-x:hover { border-color: var(--sel); color: #fff; }
+
+/* painted divider under the head and above the footer */
+.scr {
+  overflow-y: auto; padding: 0.9rem 0.15rem 0.5rem;
+  background: url('nui://pup-ui/html/img/western/cs_sep.png') top center / 100% 4px no-repeat;
+}
+.muted { color: var(--dim); font-style: italic; text-align: center; margin: 1.2rem 0; letter-spacing: 0.03em; }
+
+/* ---- the outfit list: one brush stroke each ---- */
+.list-items { display: flex; flex-direction: column; gap: 0.45rem; }
+.item-btn {
+  text-align: left; cursor: pointer;
+  min-height: 3.4rem; padding: 0.55rem 1rem;
+  background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+  border: 2px solid transparent; border-radius: 5px;
+  color: var(--row); font-family: var(--body-font);
+  transition: border-color 110ms ease-out;
+}
+.item-btn:hover { border-color: var(--sel); color: #fff; }
+.item-btn .lbl { display: block; font-family: var(--title-font); font-size: 1.1rem; letter-spacing: 0.06em; }
+.item-btn .dsc { display: block; font-size: 0.8rem; color: var(--dim); margin-top: 0.15rem; letter-spacing: 0.04em; }
+
+/* ---- buttons: brush-stroke plates ---- */
+.btn {
+  cursor: pointer;
+  padding: 0.4rem 0.9rem;
+  background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+  border: 2px solid transparent; border-radius: 5px;
+  color: var(--row); font-family: var(--title-font); letter-spacing: 0.05em;
+  transition: border-color 110ms ease-out;
+}
+.btn:hover { border-color: var(--hover); color: #fff; }
+.btn.small { font-size: 0.82rem; padding: 0.3rem 0.65rem; }
+.btn.link {
+  background: none; border: none; padding: 0 0 0.5rem; color: var(--accent);
+  text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;
+}
+.btn.link:hover { color: #fff; }
+.btn.primary {
+  width: 100%; margin-top: 0.6rem; min-height: 3rem;
+  font-size: 1.15rem; letter-spacing: 0.08em; color: #fff;
+  border-color: rgba(172, 11, 16, 0.75);
+}
+.btn.primary:hover { border-color: var(--sel); box-shadow: 0 0 10px rgba(172, 11, 16, 0.45); }
+
+/* ---- the editor: garments on the left, palette and channels on the right ---- */
+.ed-cols { display: flex; gap: 0.8rem; }
+.garments {
+  list-style: none; margin: 0; padding: 0 0.4rem 0 0; width: 10rem; flex: none; max-height: 20rem; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+.garments li {
+  display: flex; align-items: center; gap: 0.45rem; cursor: pointer;
+  padding: 0.4rem 0.55rem; font-size: 0.9rem; color: var(--row);
+  background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat;
+  border: 2px solid transparent; border-radius: 5px;
+}
+.garments li:hover { border-color: var(--hover); }
+.garments li.sel { border-color: var(--sel); color: #fff; }
+.garments .dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; flex: none; background: transparent; border: 1px solid var(--dim); }
+.garments li.edited .dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px rgba(200, 162, 74, 0.6); }
+
+.ed-tools { flex: 1; min-width: 0; }
+.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.3rem; }
+.grid button {
+  height: 2rem; cursor: pointer;
+  font-family: var(--title-font); font-size: 0.85rem; color: var(--row);
+  background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); border-radius: 3px;
+}
+.grid button:hover { border-color: var(--hover); color: #fff; }
+.grid button.on { border: 2px solid var(--sel); color: #fff; background: rgba(172, 11, 16, 0.3); }
+
+.pal-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.4rem; margin: 0.6rem 0; }
+.pal-name { flex: 1 1 100%; min-width: 0; font-size: 0.85rem; color: var(--accent); letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pal-line input {
+  flex: 1; min-width: 0; padding: 0.3rem 0.45rem; border-radius: 3px; user-select: text;
+  background: rgba(0, 0, 0, 0.5); color: var(--text); border: 1px solid var(--border);
+  font-family: var(--body-font); font-size: 0.8rem; outline: none;
+}
+.pal-line input:focus { border-color: var(--sel); }
+
+/* channel sliders: a thin track with a round handle, the filled part in red */
+.sliders { display: flex; flex-direction: column; gap: 0.35rem; }
+.sl { display: grid; grid-template-columns: 4.5rem 1fr 2.4rem; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--row); }
+.sl input[type=range] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; outline: none;
+  background: rgba(239, 232, 218, 0.22); accent-color: var(--sel);
+}
+.sl input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: #ece7de; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.6); cursor: pointer;
+}
+.sl .val { text-align: right; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+.row-btns { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.6rem; }
+.cost { margin-top: 0.6rem; min-height: 1.1rem; font-size: 0.85rem; color: var(--accent); letter-spacing: 0.03em; }
+
+/* ---- the key hint along the bottom, as under the Tailor Menu ---- */
+.bk-keys {
+  margin-top: 0.5rem; padding-top: 0.8rem;
+  background: url('nui://pup-ui/html/img/western/cs_sep.png') top center / 100% 4px no-repeat;
+  font-size: 0.72rem; letter-spacing: 0.05em; line-height: 1.5; text-transform: uppercase; text-align: center; color: var(--dim);
+}
+
+/* ---- notices: a small ink card beside the book ---- */
+.toast {
+  position: absolute; left: calc(2.4vw + 32rem); top: 8vh; max-width: 22rem;
+  padding: 0.8rem 1rem; border-radius: 5px;
+  background: url('nui://pup-ui/html/img/western/cs_btn.png') center / 100% 100% no-repeat, rgba(8, 7, 6, 0.92);
+  border: 2px solid transparent; color: var(--text); font-size: 0.95rem; letter-spacing: 0.03em;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+}
+.toast.bad { border-color: var(--sel); color: #fff; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }

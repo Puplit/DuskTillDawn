@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+  Example objectloader map. objectloader (kibook/redm-objectloader) is installed separately, see the README.
+
+  How to make your own:
+    1. Copy this file and give it a new name, e.g. my_camp.xml.
+    2. List it in fxmanifest.lua with both lines:  file 'my_camp.xml'  and  objectloader_map 'my_camp.xml'
+    3. Add one <Object> per prop:
+         Hash        the prop's model hash (joaat of the model name, e.g. p_campfire01x)
+         Position_*  world position in metres; stand on the spot in game and copy your coordinates
+         Rotation_*  pitch, roll and heading in degrees
+         Collision   "true" to make it solid
+         Visible     "true" to show it
+    4. Restart this resource (ensure mymap) after objectloader.
+
+  Map editors such as Spooner export this same format, so you can also build a map in game and save it here.
+  The three props below are a small campsite just outside Valentine. Move or delete them.
+-->
+<Map>
+    <MapMeta Creator="Dusk Till Dawn example"/>
+
+    <!-- p_campfire01x -->
+    <Object Hash="-1390341619" Position_x="-290.0" Position_y="805.0" Position_z="118.4" Rotation_x="0.0" Rotation_y="0.0" Rotation_z="0.0" Collision="true" Visible="true"/>
+    <!-- p_chair05x -->
+    <Object Hash="-289651159" Position_x="-291.6" Position_y="805.2" Position_z="118.4" Rotation_x="0.0" Rotation_y="0.0" Rotation_z="90.0" Collision="true" Visible="true"/>
+    <!-- p_barrel01x -->
+    <Object Hash="-595468470" Position_x="-289.0" Position_y="806.6" Position_z="118.4" Rotation_x="0.0" Rotation_y="0.0" Rotation_z="0.0" Collision="true" Visible="true"/>
+</Map>

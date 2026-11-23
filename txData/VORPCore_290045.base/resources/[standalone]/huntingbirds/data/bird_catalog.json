@@ -1,0 +1,384 @@
+{
+  "_note": "Pure data. Models are game model names; hash them with joaat at load. price is the base price before shop tax.",
+  "categories": [
+    {
+      "name": "Hawks",
+      "variants": [
+        {
+          "name": "Ferruginous Hawk",
+          "model": "a_c_hawk_01",
+          "preset": 0,
+          "price": 1000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Rough-legged Hawk",
+          "model": "a_c_hawk_01",
+          "preset": 1,
+          "price": 1000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Red-tailed Hawk",
+          "model": "a_c_hawk_01",
+          "preset": 2,
+          "price": 1000,
+          "startXp": 0,
+          "type": "Hunting"
+        }
+      ]
+    },
+    {
+      "name": "Owls",
+      "variants": [
+        {
+          "name": "Great Horned Owl",
+          "model": "a_c_owl_01",
+          "preset": 0,
+          "price": 1500,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Californian Horned Owl",
+          "model": "a_c_owl_01",
+          "preset": 1,
+          "price": 1500,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Coastal Horned Owl",
+          "model": "a_c_owl_01",
+          "preset": 2,
+          "price": 1500,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Legendary Owl",
+          "model": "mp_a_c_owl_01",
+          "preset": 0,
+          "price": 10000,
+          "startXp": 0,
+          "type": "Hunting"
+        }
+      ]
+    },
+    {
+      "name": "Eagles",
+      "variants": [
+        {
+          "name": "Bald Eagle",
+          "model": "a_c_eagle_01",
+          "preset": 0,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Golden Eagle",
+          "model": "a_c_eagle_01",
+          "preset": 1,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Eagle",
+          "model": "a_c_eagle_01",
+          "preset": 2,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        }
+      ]
+    },
+    {
+      "name": "Condors",
+      "variants": [
+        {
+          "name": "Californian Condor",
+          "model": "a_c_californiacondor_01",
+          "preset": 0,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Condor - Grey",
+          "model": "a_c_californiacondor_01",
+          "preset": 1,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        },
+        {
+          "name": "Condor - Brown",
+          "model": "a_c_californiacondor_01",
+          "preset": 2,
+          "price": 2000,
+          "startXp": 0,
+          "type": "Hunting"
+        }
+      ]
+    },
+    {
+      "name": "Crows",
+      "variants": [
+        {
+          "name": "Crow",
+          "model": "a_c_crow_01",
+          "preset": 0,
+          "price": 500,
+          "startXp": 0,
+          "type": "Scav"
+        }
+      ]
+    },
+    {
+      "name": "Ravens",
+      "variants": [
+        {
+          "name": "Western Raven",
+          "model": "a_c_raven_01",
+          "preset": 0,
+          "price": 5000,
+          "startXp": 0,
+          "type": "Scav"
+        }
+      ]
+    },
+    {
+      "name": "Seagulls",
+      "variants": [
+        {
+          "name": "Herring Seagull",
+          "model": "a_c_seagull_01",
+          "preset": 0,
+          "price": 1300,
+          "startXp": 0,
+          "type": "Scav"
+        },
+        {
+          "name": "Laughing Seagull",
+          "model": "a_c_seagull_01",
+          "preset": 1,
+          "price": 1300,
+          "startXp": 0,
+          "type": "Scav"
+        },
+        {
+          "name": "Ring-Billed Seagull",
+          "model": "a_c_seagull_01",
+          "preset": 2,
+          "price": 1300,
+          "startXp": 0,
+          "type": "Scav"
+        }
+      ]
+    },
+    {
+      "name": "Parrots",
+      "variants": [
+        {
+          "name": "Blue/Yellow Macaw",
+          "model": "a_c_parrot_01",
+          "preset": 0,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Scav"
+        },
+        {
+          "name": "Great Green Macaw",
+          "model": "a_c_parrot_01",
+          "preset": 1,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Scav"
+        },
+        {
+          "name": "Scarlet Macaw",
+          "model": "a_c_parrot_01",
+          "preset": 2,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Scav"
+        }
+      ]
+    },
+    {
+      "name": "Parakeets",
+      "variants": [
+        {
+          "name": "Carolina Parakeet",
+          "model": "a_c_carolinaparakeet_01",
+          "preset": 0,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Scav"
+        }
+      ]
+    },
+    {
+      "name": "Red Footed Boobies",
+      "variants": [
+        {
+          "name": "Red Footed Booby",
+          "model": "a_c_redfootedbooby_01",
+          "preset": 0,
+          "price": 800,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Booby - Borwn",
+          "model": "a_c_redfootedbooby_01",
+          "preset": 1,
+          "price": 800,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Booby - Dark",
+          "model": "a_c_redfootedbooby_01",
+          "preset": 2,
+          "price": 800,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    },
+    {
+      "name": "Cormorants",
+      "variants": [
+        {
+          "name": "Neotropic Cormorant",
+          "model": "a_c_cormorant_01",
+          "preset": 0,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Double-Crested Cormorant",
+          "model": "a_c_cormorant_01",
+          "preset": 1,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    },
+    {
+      "name": "Cranes",
+      "variants": [
+        {
+          "name": "Whooping Crane",
+          "model": "a_c_cranewhooping_01",
+          "preset": 0,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Sandhill Crane",
+          "model": "a_c_cranewhooping_01",
+          "preset": 1,
+          "price": 6000,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    },
+    {
+      "name": "Herons",
+      "variants": [
+        {
+          "name": "Great Blue Heron",
+          "model": "a_c_heron_01",
+          "preset": 0,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Great Heron",
+          "model": "a_c_heron_01",
+          "preset": 1,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Tricolored Heron",
+          "model": "a_c_heron_01",
+          "preset": 2,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    },
+    {
+      "name": "Pelicans",
+      "variants": [
+        {
+          "name": "American Pelican",
+          "model": "a_c_pelican_01",
+          "preset": 0,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Brown Pelican",
+          "model": "a_c_pelican_01",
+          "preset": 1,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "White Pelican",
+          "model": "a_c_pelican_01",
+          "preset": 2,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    },
+    {
+      "name": "Roseate Spoonbills",
+      "variants": [
+        {
+          "name": "Roseate Spoonbill",
+          "model": "a_c_roseatespoonbill_01",
+          "preset": 0,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Spoonbill - Pink",
+          "model": "a_c_roseatespoonbill_01",
+          "preset": 1,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        },
+        {
+          "name": "Spoonbill - White",
+          "model": "a_c_roseatespoonbill_01",
+          "preset": 2,
+          "price": 7000,
+          "startXp": 0,
+          "type": "Fishing"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,390 @@
+/* black and gold over the server's own map tiles */
+
+@font-face {
+    font-family: 'PupDisplay';
+    src: url('nui://pup-ui/html/fonts/oswald.ttf') format('truetype'); /* Oswald, SIL OFL 1.1 */
+}
+
+:root {
+    --gold: #c9a227;
+    --gold-dim: rgba(201, 162, 39, 0.35);
+    --parchment: #f2eee6;
+    --parchment-dim: #9d9589;
+    --plate: rgba(10, 9, 7, 0.88);
+    --serif: 'PupDisplay', Georgia, 'Times New Roman', serif;
+    --body: Georgia, 'Times New Roman', serif;
+
+    /* sampled from the game's own map */
+    --canvas: #dec29b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--serif);
+    color: var(--parchment);
+}
+
+.hidden { display: none !important; }
+
+/* paper, not black: the map cannot fill a wide window, and matching the page
+   to the sheet is what hides the leftover space instead of banding it */
+#wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--canvas);
+    animation: fade 400ms ease both;
+}
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ------------------------------------------------------------------- map */
+
+/* the map is the whole screen; the panel floats over its empty western side */
+#mapwrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+/* a warm falloff, not a black one: it has to read as the paper darkening at
+   the edges, not as a frame laid over it */
+#mapwrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 670;
+    pointer-events: none;
+    box-shadow: inset 0 0 14vh 5vh rgba(120, 95, 55, 0.3);
+}
+
+/* absolute on purpose: sizing #map must never feed back into #mapwrap, or the
+   resize observer and the sizer chase each other and the box runs away */
+#map {
+    position: absolute;
+    inset: 0;
+    background: var(--canvas);
+    /* bright, high contrast, mostly drained of its orange - closer to the
+       atlas look than the sepia the tiles ship with */
+    filter: saturate(0.5) brightness(1.08) contrast(1.14);
+    animation: mapIn 800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes mapIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* paper grain: the game's map is a printed sheet, not a screen */
+#map::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 450;
+    pointer-events: none;
+    opacity: 0.1;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* no frame: a light touch so the sheet settles into the black without the
+   vignette eating the edges of the territory */
+#map::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    z-index: 660;
+    box-shadow: inset 0 0 7vh 1.5vh rgba(0, 0, 0, 0.55);
+}
+
+/* Canvas, not black: any hairline between tiles shows the map's own colour
+   instead of a dark grid line. */
+.leaflet-container { background: var(--canvas); outline: none; cursor: crosshair; }
+
+/* and the tiles overlap by 2px, which survives leaflet's pane scaling.
+   Leaflet 1.9's own css draws tiles with mix-blend-mode: plus-lighter, which ADDS
+   overlapping pixels together - with this overlap that painted a white line along
+   every seam. Normal blending lets the overlap simply cover the seam. */
+.leaflet-container .leaflet-tile,
+.leaflet-container img.leaflet-tile {
+    width: 258px !important;
+    height: 258px !important;
+    mix-blend-mode: normal !important;
+}
+
+/* ------------------------------------------------------------------ pins */
+
+/* NEVER animate transform on .pin: leaflet positions the marker with transform
+   and the animation would win, stacking every pin at the corner. */
+.pin {
+    background: none;
+    border: none;
+    cursor: pointer;
+    animation: pinIn 380ms ease both;
+}
+
+@keyframes pinIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.pin:hover, .pin.selected { z-index: 600 !important; }
+
+/* a generous invisible target so the bead does not have to be hit exactly */
+.pin::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.7rem;
+    height: 1.7rem;
+    margin: -0.85rem 0 0 -0.85rem;
+    border-radius: 50%;
+}
+
+.pin-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.4rem;
+    height: 0.4rem;
+    margin: -0.2rem 0 0 -0.2rem;
+    border-radius: 50%;
+    background: #15120c;
+    box-shadow: 0 0 0 2px rgba(255, 252, 244, 0.9);
+    transition: background 150ms ease, transform 150ms ease;
+    pointer-events: none;
+}
+
+/* the hairline out to the plate, drawn from the point itself */
+.pin-lead {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--len, 44px);
+    height: 1px;
+    background: rgba(21, 18, 12, 0.75);
+    transform-origin: 0 50%;
+    transform: rotate(var(--ang, -45deg));
+    pointer-events: none;
+    transition: background 150ms ease, opacity 160ms ease;
+}
+
+/* a plate on the end of the line, the way the game labels its own map */
+/* the plate is a click target too, not just a caption */
+.pin-name {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(calc(-50% + var(--lx, 0px)), calc(-50% + var(--ly, 0px)));
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 0.2rem 0.55rem;
+    background: var(--plate);
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    font-family: var(--serif);
+    font-size: 0.66rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    transition: color 150ms ease, border-color 150ms ease, background 150ms ease,
+        opacity 160ms ease;
+}
+
+.pin.tagged .pin-dot { background: var(--gold); }
+.pin.tagged .pin-name { border-color: var(--gold-dim); color: var(--gold); }
+
+/* plates stay out on long leaders, clear of the names printed on the map */
+
+.pin:hover .pin-dot { transform: scale(1.35); }
+.pin:hover .pin-name { border-color: var(--gold-dim); color: #fff; }
+.pin:hover .pin-lead { background: var(--gold); }
+
+.pin.selected .pin-dot {
+    background: var(--gold);
+    animation: beat 2.2s ease-in-out infinite;
+}
+
+@keyframes beat {
+    0%, 100% { box-shadow: 0 0 0 2px rgba(255, 252, 244, 0.9), 0 0 0 4px rgba(201, 162, 39, 0.45); }
+    50%      { box-shadow: 0 0 0 2px rgba(255, 252, 244, 0.9), 0 0 0 11px rgba(201, 162, 39, 0); }
+}
+
+.pin.selected .pin-lead { background: var(--gold); }
+
+.pin.selected .pin-name {
+    background: #000;
+    border-color: var(--gold);
+    color: var(--gold);
+    font-size: 0.76rem;
+    padding: 0.28rem 0.75rem;
+}
+
+/* ----------------------------------------------------------------- panel */
+
+#panel {
+    position: absolute;
+    top: 4vh;
+    left: 3vw;
+    width: clamp(16rem, 21vw, 24rem);
+    max-height: 78vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 1.5rem 1.4rem 1.3rem;
+    background: linear-gradient(180deg, rgba(12, 10, 8, 0.95), rgba(6, 5, 4, 0.92));
+    border: 1px solid var(--gold-dim);
+    box-shadow: 0 1.5vh 5vh rgba(0, 0, 0, 0.85);
+    z-index: 800;
+    opacity: 0;
+    transform: translateY(0.6rem);
+    transition: opacity 280ms ease, transform 280ms ease;
+}
+
+#panel.show { opacity: 1; transform: translateY(0); }
+#panel::-webkit-scrollbar { display: none; }
+
+/* optional photograph of the place; stays out of the way when none is set */
+#panel-img {
+    height: 9.5rem;
+    margin: -1.5rem -1.4rem 1.1rem;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--gold-dim);
+}
+
+#panel-area {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+#panel-name {
+    margin-top: 0.45rem;
+    font-size: clamp(1.3rem, 2.6vh, 1.9rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+#panel-name::after {
+    content: "";
+    display: block;
+    width: 2.6rem;
+    height: 1px;
+    margin-top: 0.7rem;
+    background: var(--gold);
+}
+
+#panel-blurb {
+    margin-top: 0.8rem;
+    font-family: var(--body);
+    font-size: clamp(0.76rem, 1.25vh, 0.92rem);
+    line-height: 1.6;
+    text-align: justify;
+    hyphens: auto;
+    color: #cdc6ba;
+    min-height: 2.4rem;
+}
+
+/* light plate with dark lettering, the way the reference sets its action */
+#confirm {
+    display: block;
+    width: 100%;
+    margin-top: 1.3rem;
+    font-family: var(--serif);
+    font-size: clamp(0.8rem, 1.5vh, 1.02rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #15120c;
+    background: var(--parchment);
+    border: 1px solid var(--parchment);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+#confirm:hover:not(:disabled) {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #15120c;
+}
+
+#confirm:disabled {
+    background: transparent;
+    border-color: var(--gold-dim);
+    color: var(--parchment-dim);
+    cursor: default;
+}
+
+/* ----------------------------------------------------------------- chrome */
+
+/* no scrim: the bottom chrome is ink on paper now, so it needs no ground */
+
+/* ink on paper now, not parchment on black */
+#brand {
+    position: absolute;
+    right: 2.6vw;
+    bottom: 3vh;
+    text-align: right;
+    z-index: 800;
+    pointer-events: none;
+    color: #2b2314;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+#title {
+    display: block;
+    font-size: clamp(1.1rem, 2.2vh, 1.7rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+#subtitle {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: var(--body);
+    font-size: clamp(0.72rem, 1.2vh, 0.88rem);
+    font-style: italic;
+    color: #6b5b3e;
+}
+
+#hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.6vh;
+    text-align: center;
+    z-index: 800;
+    pointer-events: none;
+    font-family: var(--body);
+    font-style: italic;
+    font-size: clamp(0.78rem, 1.3vh, 0.95rem);
+    letter-spacing: 0.04em;
+    color: #3a2f1c;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+#timer {
+    position: absolute;
+    top: 3.2vh;
+    right: 2.6vw;
+    z-index: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: #7a5f1f;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pin, #map, .pin.selected .pin-dot { animation: none !important; }
+}

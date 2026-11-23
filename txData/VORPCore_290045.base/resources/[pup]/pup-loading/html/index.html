@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- two layers so a slideshow can cross-fade -->
+    <div class="banner" id="banner-a"></div>
+    <div class="banner" id="banner-b"></div>
+    <div id="scrim"></div>
+    <div id="vignette"></div>
+
+    <audio id="theme" preload="auto"></audio>
+
+    <div id="center">
+        <img id="logo" alt="">
+        <div id="title"></div>
+        <div class="rule" id="rule"></div>
+        <div id="subtitle"></div>
+    </div>
+
+    <div class="panel" id="guide">
+        <div class="panel-head" id="guide-label"></div>
+        <div class="panel-rule"></div>
+        <div id="guide-page"></div>
+        <div id="guide-nav">
+            <button class="guide-arrow" id="guide-prev" type="button" title="Previous (left arrow)">&#8249;</button>
+            <div id="guide-dots"></div>
+            <button class="guide-arrow" id="guide-next" type="button" title="Next (right arrow)">&#8250;</button>
+        </div>
+    </div>
+
+    <div class="panel" id="team">
+        <div class="panel-head" id="team-label"></div>
+        <div class="panel-rule"></div>
+        <div id="team-list"></div>
+    </div>
+
+    <div id="bottom">
+        <div id="tips">
+            <div id="tip-label"></div>
+            <div id="tip"></div>
+        </div>
+        <div id="progress">
+            <div id="bar-track"><div id="bar-fill"></div></div>
+            <div id="status-row">
+                <div id="status"></div>
+                <div id="percent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="links"></div>
+
+    <!-- mouse works because the manifest sets loadscreen_cursor; the key hints
+         cover players whose cursor arrives late on a first download -->
+    <div id="audio-ctl">
+        <button id="ac-toggle" type="button" title="Pause the music (P)">
+            <span id="ac-icon">&#10074;&#10074;</span>
+            <span id="ac-word">MUSIC</span>
+        </button>
+        <div id="ac-vol">
+            <button class="ac-step" id="ac-down" type="button" title="Quieter (down arrow)">&minus;</button>
+            <div id="ac-bars"></div>
+            <button class="ac-step" id="ac-up" type="button" title="Louder (up arrow)">+</button>
+        </div>
+        <div id="ac-hint">P PAUSE &middot; M MUTE &middot; &#8593;&#8595; VOLUME</div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

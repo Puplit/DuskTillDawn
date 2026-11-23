@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Notice Board</title>
+    <link rel="stylesheet" href="css/board.css">
+</head>
+<body>
+
+<div id="board" class="board hidden">
+    <div class="board__frame">
+        <header class="board__head">
+            <div class="board__plate" id="board-title"></div>
+            <input type="text" class="search" id="search" spellcheck="false" autocomplete="off" maxlength="60">
+            <div class="board__actions">
+                <button type="button" class="btn btn--gold" id="btn-pin"></button>
+                <button type="button" class="btn eco" id="btn-eco" disabled>
+                    <span class="eco__title"></span>
+                    <span class="eco__state"></span>
+                </button>
+                <button type="button" class="btn" id="btn-leave" title="Esc"></button>
+            </div>
+        </header>
+        <nav class="tabs" id="tabs"></nav>
+        <main class="board__cork" id="cork">
+            <div class="notices" id="notices"></div>
+            <div class="board__empty hidden" id="empty">
+                <div class="board__empty-text" id="empty-text"></div>
+                <button type="button" class="btn btn--gold hidden" id="empty-pin"></button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script type="module" src="js/board.js"></script>
+</body>
+</html>

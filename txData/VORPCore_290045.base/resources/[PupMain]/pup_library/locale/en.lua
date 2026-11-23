@@ -1,0 +1,178 @@
+-- pup_library | player-facing wording. %s / %d placeholders are filled in by T().
+
+Locale = {
+    -- prompt and top menu
+    menu_title          = 'Library',
+    prompt_label        = 'Library',
+    nothing_here        = 'Nothing here yet.',
+
+    -- creation
+    creation            = 'Creation',
+    creation_desc       = 'Start a new title of your own',
+    create_kind         = 'Create %s',
+    create_kind_desc    = 'Begin a new %s',
+    name_row            = 'Name: %s',
+    name_prompt         = 'What is this %s called?',
+    author_row          = 'Author: %s',
+    author_prompt       = 'Author of the title',
+    editable            = 'Editable',
+    editable_desc       = 'Who may write in it',
+    rule_author         = 'Author',
+    rule_job            = 'My job: %s',
+    rule_any            = 'Anyone',
+    rule_job_missing    = 'You have no job, so it cannot be limited to one.',
+    confirm             = 'Confirm',
+    create_cost         = 'Cost of creation: %s',
+    free                = 'Free',
+    total               = 'Total: %s',
+
+    -- print
+    print               = 'Print',
+    print_desc          = 'Run off copies of a work you carry',
+    select              = 'Choose one',
+    print_subtitle      = 'Price per copy: %s',
+    copies              = 'Copies',
+    copies_desc         = 'How many copies should the press make?',
+
+    -- publish
+    publish             = 'Publish',
+    publish_desc        = 'Offer one of your titles for sale',
+    application_price   = 'Application fee: %s',
+    sale_price          = 'Sale price per copy',
+
+    -- shelf
+    published_titles    = 'Published titles',
+    published_desc      = 'Browse the titles on sale',
+    shelf_row_desc      = 'Price: %s - Copies sold: %d',
+    copies_sold         = 'Copies sold: %d',
+    copies_sold_desc    = 'Copies of this title sold so far',
+    kind_desc           = 'Kind of title',
+    buy_copy            = 'Buy copy - %s',
+    buy_copy_desc       = 'Take home a copy of this title',
+    remove              = 'Remove',
+    remove_desc         = 'Take this title off the publishing list',
+
+    -- queue
+    applications        = 'Publish applications',
+    applications_desc   = 'Titles waiting for a decision',
+    pending             = 'Waiting for review',
+    get_copy            = 'Get copy',
+    get_copy_desc       = 'A free reading copy of this title',
+    approve             = 'Approve',
+    approve_desc        = 'Publish this title',
+    reject              = 'Reject',
+    reject_desc         = 'Turn this application down',
+    reason              = 'Reason',
+
+    -- royalties
+    royalties           = 'Royalties: %s',
+    royalties_desc      = 'Collect what your titles have earned',
+
+    -- notifications
+    no_job              = 'You don\'t have the job needed for this library.',
+    no_cash             = 'You don\'t have enough cash.',
+    no_space            = 'There is no room in your inventory.',
+    created             = 'Your new title is ready.',
+    printed             = 'The copies are printed.',
+    already_applied     = 'A title with that name has already been put forward for publishing.',
+    invalid_amount      = 'That amount is not valid.',
+    price_cap           = 'The highest price per copy is %s.',
+    applied             = 'Your title has been put forward for publishing.',
+    removed             = 'The title has been taken off the list.',
+    approved            = 'Application approved. The title is now on sale.',
+    got_copy            = 'You received a reading copy.',
+    collected           = 'You collected %s in royalties.',
+    bought              = 'You bought a copy.',
+    no_answer           = 'The librarian is not answering.',
+    unstuck             = 'Book closed. Nothing was saved.',
+    blank_pages         = 'The pages are blank.',
+    author_only_print   = 'Only the author may print this.',
+    not_at_library      = 'You need to be at a library.',
+    staff_only          = 'Only library staff can do that.',
+    not_saved           = 'Your changes were not saved.',
+    too_large           = 'This book is too large to save. Remove some pictures or pages.',
+    too_many_pages      = 'This book has too many pages to save.',
+    saved               = 'Saved.',
+    locked              = 'This title is published, so its text is locked.',
+    wait                = 'Please wait a moment.',
+    must_carry          = 'You need to carry a copy of that work.',
+
+    -- Discord
+    log_application     = 'Publishing application',
+    log_published       = 'Title published',
+    log_rejected        = 'Application rejected',
+    log_removed         = 'Listing removed',
+    log_rejected_reason = 'Application rejected: %s',
+    log_title           = 'Title',
+    log_author          = 'Author',
+    log_applicant       = 'Applicant',
+    log_price           = 'Asking price per copy',
+    log_by              = 'By',
+
+    -- book screen
+    book = {
+        placeholder   = 'Start your writings',
+        keepEditing   = 'Keep editing',
+        closeNoSave   = 'Close without saving',
+        tooMany       = 'This book has too many pages to save.',
+        tooLarge      = 'This book is too large to save. Remove some pictures or pages.',
+        close         = 'Close',
+        closeSave     = 'Save and close',
+        turnHint      = 'Turn the page',
+        toolEdit      = 'Write on this page',
+        toolAdd       = 'Add a page after this one',
+        toolForward   = 'Move this page forward',
+        toolBack      = 'Move this page back',
+        toolDelete    = 'Delete this page',
+        undo          = 'Undo',
+        redo          = 'Redo',
+        style         = 'Style',
+        styleP        = 'Paragraph',
+        styleH1       = 'Large heading',
+        styleH2       = 'Medium heading',
+        styleH3       = 'Small heading',
+        font          = 'Font',
+        size          = 'Size',
+        bold          = 'Bold',
+        italic        = 'Italic',
+        underline     = 'Underline',
+        strike        = 'Crossed out',
+        ink           = 'Ink colour',
+        highlight     = 'Highlight',
+        none          = 'None',
+        alignLeft     = 'Align left',
+        alignCenter   = 'Centre',
+        alignRight    = 'Align right',
+        alignJustify  = 'Justify',
+        bullets       = 'Bulleted list',
+        numbers       = 'Numbered list',
+        outdent       = 'Less indent',
+        indent        = 'More indent',
+        quote         = 'Quote',
+        link          = 'Link',
+        unlink        = 'Remove link',
+        picture       = 'Picture',
+        rule          = 'Dividing line',
+        clear         = 'Clear formatting',
+        settings      = 'Page settings',
+        done          = 'Done',
+        ok            = 'OK',
+        cancel        = 'Cancel',
+        linkPrompt    = 'Link address',
+        picturePrompt = 'Picture address',
+        badAddress    = 'That address cannot be used.',
+        bgLabel       = 'Background picture (address)',
+        pageColour    = 'Page colour',
+        textColour    = 'Text colour',
+    },
+}
+
+function T(key, ...)
+    local s = Locale[key]
+    if type(s) ~= 'string' then return tostring(key) end
+    if select('#', ...) > 0 then
+        local ok, out = pcall(string.format, s, ...)
+        if ok then return out end
+    end
+    return s
+end

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- pup-ui list marker: a white dot with a thin ring.
+       Drawn for pup-ui (GPL-3.0). Rendered to menu_icon_circle.png at 32x32. -->
+  <circle cx="16" cy="16" r="7.5" fill="#FBFAF7"/>
+  <circle cx="16" cy="16" r="11" fill="none" stroke="#FBFAF7" stroke-width="1.6" opacity="0.8"/>
+</svg>

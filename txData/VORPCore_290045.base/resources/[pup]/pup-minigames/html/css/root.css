@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+/* Share Tech Mono (SIL OFL 1.1, licence in assets/fonts) */
+@font-face {
+    font-family: 'Digital';
+    src: url('../assets/fonts/sharetechmono.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --rdr-parchment: #d4b896;
+    --rdr-parchment-dark: #b8956a;
+    --rdr-leather: #5c3a1e;
+    --rdr-leather-light: #8b5e3c;
+    --rdr-wood: #3e2415;
+    --rdr-wood-light: #6b4226;
+    --rdr-gold: #c9a84c;
+    --rdr-gold-dim: rgba(201, 168, 76, 0.5);
+    --rdr-ink: #1a0f07;
+    --rdr-ink-light: #3d2b1f;
+    --rdr-red: #8b1a1a;
+    --rdr-red-light: #b22222;
+    --rdr-green: #2d5a27;
+    --rdr-cream: #f0e6d3;
+    --rdr-text: #e8d5b7;
+    --rdr-text-dim: rgba(232, 213, 183, 0.5);
+    --rdr-border: #6b4226;
+    --rdr-shadow: rgba(0, 0, 0, 0.6);
+}
+
+/* ==================================================================
+   Retheme: every minigame to the pup-ui look (black / white / blood-red).
+   The whole pack draws from the variables above, so this block restyles
+   all 10 games at once; delete it to restore the stock brown-leather palette.
+   ================================================================== */
+
+/* pup-ui's bundled free faces (Oswald and IM Fell English, SIL OFL 1.1), loaded
+   straight from the pup-ui resource (its html/fonts/* are declared in files{},
+   so nui:// resolves). No external font requests - the Google imports above
+   may not load in NUI. The family names are only local aliases. */
+@font-face {
+    font-family: 'PupRDR';
+    src: url('nui://pup-ui/html/fonts/oswald.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'PupRDRLino';
+    src: url('nui://pup-ui/html/fonts/imfell.ttf') format('truetype');
+}
+
+:root {
+    /* surfaces: near-black cards like pup-ui panels */
+    --rdr-wood:            #0a0a0a;
+    --rdr-wood-light:      #1e1e1e;
+    --rdr-leather:         #141414;
+    --rdr-leather-light:   #242424;
+    --rdr-ink:             #050505;
+    --rdr-ink-light:       #141414;
+
+    /* text + accents: white / dim grey */
+    --rdr-parchment:       #ffffff;
+    --rdr-parchment-dark:  #9a9a9a;
+    --rdr-gold:            #ffffff;
+    --rdr-gold-dim:        rgba(255, 255, 255, 0.30);
+    --rdr-cream:           #ffffff;
+    --rdr-text:            #ffffff;
+    --rdr-text-dim:        rgba(255, 255, 255, 0.55);
+
+    /* borders / shadows match the v-style cards */
+    --rdr-border:          rgba(255, 255, 255, 0.10);
+    --rdr-shadow:          rgba(0, 0, 0, 0.65);
+
+    /* the only colour left: pup-ui's danger red + the success green
+       used by the dashboards */
+    --rdr-red:             #a83232;
+    --rdr-red-light:       #c23a3a;
+    --rdr-green:           #3f9b52;
+}
+
+/* rounded, flat-black containers instead of the wood gradient + gold rim */
+.skill_bar_container {
+    background: rgba(10, 10, 10, 0.92) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65) !important;
+}
+.skill_bar_target_area {
+    background-color: rgba(255, 255, 255, 0.16) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+.skill_bar_perfect_area {
+    background-color: rgba(168, 50, 50, 0.85) !important; /* --blood */
+}
+.skill_bar_icon { color: #ffffff !important; }
+
+/* shared type: pup-ui's display face for headings, serif for body */
+body, .minigame_title, .minigame_header {
+    font-family: 'PupRDR', Georgia, 'Times New Roman', serif;
+}

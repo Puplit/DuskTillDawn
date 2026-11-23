@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="419" height="104" viewBox="0 0 419 104">
+  <!-- pup-ui title card: a bone-white double rule with notched corners and a
+       small diamond stud in each notch. Drawn for pup-ui (GPL-3.0).
+       Rendered to cs_header.png at 419x104. -->
+  <g fill="none" stroke="#F4EFE4" stroke-linejoin="miter">
+    <!-- outer rule, each corner cut in a concave quarter circle -->
+    <path stroke-width="3.2"
+      d="M22 5 H397 A17 17 0 0 0 414 22 V82 A17 17 0 0 0 397 99 H22 A17 17 0 0 0 5 82 V22 A17 17 0 0 0 22 5 Z"/>
+    <!-- inner rule, notched to follow the outer one -->
+    <path stroke-width="1.4"
+      d="M27 11 H392 A11 11 0 0 0 403 22 L408 22 V82 L403 82 A11 11 0 0 0 392 93 H27 A11 11 0 0 0 16 82 L11 82 V22 L16 22 A11 11 0 0 0 27 11 Z"/>
+  </g>
+  <g fill="#F4EFE4">
+    <!-- a diamond stud in each corner notch -->
+    <path d="M11 3 L15 7 L11 11 L7 7 Z" transform="translate(-1 -1)"/>
+    <path d="M408 3 L412 7 L408 11 L404 7 Z" transform="translate(1 -1)"/>
+    <path d="M11 93 L15 97 L11 101 L7 97 Z" transform="translate(-1 1)"/>
+    <path d="M408 93 L412 97 L408 101 L404 97 Z" transform="translate(1 1)"/>
+    <!-- a tick mark at the middle of the long sides -->
+    <rect x="207" y="1.5" width="5" height="5" transform="rotate(45 209.5 4)"/>
+    <rect x="207" y="97.5" width="5" height="5" transform="rotate(45 209.5 100)"/>
+  </g>
+</svg>

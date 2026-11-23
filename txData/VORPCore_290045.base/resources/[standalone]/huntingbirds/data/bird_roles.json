@@ -1,0 +1,26 @@
+{
+  "_note": "Pure data. Which bird model does which job when sent out.",
+  "hunting": [
+    "a_c_hawk_01",
+    "a_c_owl_01",
+    "mp_a_c_owl_01",
+    "a_c_eagle_01",
+    "a_c_vulture_01",
+    "a_c_californiacondor_01"
+  ],
+  "scavenging": [
+    "a_c_crow_01",
+    "a_c_raven_01",
+    "a_c_seagull_01",
+    "a_c_parrot_01",
+    "a_c_carolinaparakeet_01"
+  ],
+  "fishing": [
+    "a_c_cormorant_01",
+    "a_c_cranewhooping_01",
+    "a_c_heron_01",
+    "a_c_pelican_01",
+    "a_c_roseatespoonbill_01",
+    "a_c_redfootedbooby_01"
+  ]
+}

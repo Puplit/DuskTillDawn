@@ -1,0 +1,167 @@
+{
+  "_note": "Pure data. Items a scavenging bird can bring back. ammorepeaternormal is listed twice, which doubles its odds.",
+  "items": [
+    {
+      "item": "goldnugget",
+      "amount": 1,
+      "xp": 3,
+      "xpRequired": 700
+    },
+    {
+      "item": "sap",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 50
+    },
+    {
+      "item": "iron",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 500
+    },
+    {
+      "item": "Black_Berry_Seed",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "item": "Red_Sage_Seed",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "item": "pulp",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 0
+    },
+    {
+      "item": "dynamite",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 1000
+    },
+    {
+      "item": "Wild_Carrot",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 10
+    },
+    {
+      "item": "egg",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 10
+    },
+    {
+      "item": "hop_seed",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 0
+    },
+    {
+      "item": "cigarette",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 10
+    },
+    {
+      "item": "cigar",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "cocoa",
+      "amount": 5,
+      "xp": 1,
+      "xpRequired": 10
+    },
+    {
+      "item": "ammorevolvernormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "ammoriflenormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "ammorepeaternormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "ammorepeaternormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "ammoarrmownormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 10
+    },
+    {
+      "item": "ammoshotgunnormal",
+      "amount": 1,
+      "xp": 1,
+      "xpRequired": 25
+    },
+    {
+      "item": "emerald",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 100
+    },
+    {
+      "item": "diamond",
+      "amount": 1,
+      "xp": 2,
+      "xpRequired": 250
+    },
+    {
+      "item": "copper",
+      "amount": 2,
+      "xp": 2,
+      "xpRequired": 50
+    },
+    {
+      "item": "pocket_watch",
+      "amount": 1,
+      "xp": 5,
+      "xpRequired": 100
+    },
+    {
+      "item": "pipe",
+      "amount": 1,
+      "xp": 5,
+      "xpRequired": 100
+    },
+    {
+      "item": "tylenol",
+      "amount": 5,
+      "xp": 5,
+      "xpRequired": 100
+    },
+    {
+      "item": "opium",
+      "amount": 1,
+      "xp": 5,
+      "xpRequired": 250
+    },
+    {
+      "item": "ironbar",
+      "amount": 2,
+      "xp": 2,
+      "xpRequired": 1500
+    }
+  ]
+}

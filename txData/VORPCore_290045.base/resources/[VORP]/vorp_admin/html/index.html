@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="vendor/leaflet.css">
+    <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+    <div id="panel" class="hidden">
+        <aside class="side">
+            <div class="brand">
+                <div class="brand-name" id="serverName">ADMIN</div>
+                <div class="brand-sub">Admin Panel</div>
+            </div>
+            <div class="nav-scroll">
+            <div class="nav-group">Overview</div>
+            <nav class="nav">
+                <button class="nav-item active" data-page="dashboard"><span class="ico">&#9638;</span> Dashboard</button>
+                <button class="nav-item" data-page="players" data-perm="check_player_inventory"><span class="ico">&#9823;&#65038;</span> Players</button>
+                <button class="nav-item" data-page="map" data-perm="live_map"><span class="ico">&#9873;</span> Live Map</button>
+                <button class="nav-item" data-page="security" data-perm="anticheat_panel"><span class="ico">&#9888;&#65038;</span> Anti-Cheat</button>
+            </nav>
+            <div class="nav-group">Server</div>
+            <nav class="nav">
+                <button class="nav-item" data-page="tools" data-perm="devtools_menu"><span class="ico">&#10022;</span> Tools</button>
+                <button class="nav-item" data-page="teleports" data-perm="tp_to_coords"><span class="ico">&#10148;</span> Teleports</button>
+                <button class="nav-item" data-page="items" data-perm="give_item"><span class="ico">&#9635;</span> Items DB</button>
+                <button class="nav-item" data-page="consumables" data-perm="manage_crafting"><span class="ico">&#9879;&#65038;</span> Consumables</button>
+                <button class="nav-item" data-page="smokes" data-perm="manage_crafting"><span class="ico">&#9729;&#65038;</span> Smokes</button>
+                <button class="nav-item" data-page="crafting" data-perm="manage_crafting"><span class="ico">&#9874;&#65038;</span> Crafting</button>
+                <button class="nav-item" data-page="weaponcraft" data-perm="manage_crafting"><span class="ico">&#9876;&#65038;</span> Weapon Crafting</button>
+                <button class="nav-item" data-page="events" data-perm="manage_events"><span class="ico">&#9733;</span> Events</button>
+                <button class="nav-item" data-page="weather" data-perm="manage_weather"><span class="ico">&#9728;&#65038;</span> Weather</button>
+                <button class="nav-item" data-page="deaths" data-perm="check_player_inventory"><span class="ico">&#9760;&#65038;</span> Deaths</button>
+                <button class="nav-item" data-page="doorlocks" data-perm="manage_doorlocks"><span class="ico">&#9919;&#65038;</span> Door Locks</button>
+                <button class="nav-item" data-page="bans" data-perm="server_bans_view"><span class="ico">&#8856;</span> Server Bans</button>
+            </nav>
+            <div class="nav-group">Management</div>
+            <nav class="nav">
+                <button class="nav-item" data-page="housing" data-perm="manage_housing"><span class="ico">&#8962;</span> Housing</button>
+                <button class="nav-item" data-page="society" data-perm="manage_society"><span class="ico">&#9878;&#65038;</span> Society</button>
+                <button class="nav-item" data-page="ranches" data-perm="manage_ranch"><span class="ico">&#9822;</span> Ranches</button>
+                <button class="nav-item" data-page="stores" data-perm="manage_stores"><span class="ico">&#9707;</span> Stores</button>
+                <button class="nav-item" data-page="gangs" data-perm="manage_gangs"><span class="ico">&#9827;&#65038;</span> Gangs</button>
+                <button class="nav-item" data-page="perks" data-perm="manage_perks"><span class="ico">&#9824;&#65038;</span> Perks</button>
+                <button class="nav-item" data-page="banks" data-perm="manage_bank"><span class="ico">&#9673;</span> Banks</button>
+                <button class="nav-item" data-page="hideouts" data-perm="manage_hideouts"><span class="ico">&#9711;</span> Hideouts</button>
+                <button class="nav-item" data-page="camps" data-perm="manage_camps"><span class="ico">&#9650;</span> Camps</button>
+                <button class="nav-item" data-page="curses" data-perm="manage_curses"><span class="ico">&#9790;</span> Curses</button>
+                <button class="nav-item" data-page="farms" data-perm="manage_farms"><span class="ico">&#10047;</span> Farms</button>
+                <button class="nav-item" data-page="props" data-perm="list_world_props"><span class="ico">&#9636;</span> World Props</button>
+            </nav>
+            </div>
+            <div class="side-foot">
+                <div class="avatar" id="meAvatar">A</div>
+                <div>
+                    <div class="me-name">Admin</div>
+                    <div class="me-sub" id="meGroup">admin</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <!-- DASHBOARD -->
+            <section class="page" id="page-dashboard">
+                <h1>Dashboard</h1>
+                <p class="sub">Server overview</p>
+                <div class="cards" id="dashCards"></div>
+                <div class="cards small" id="activityCards"></div>
+                <div class="card chart-card">
+                    <div class="card-head">
+                        <div><div class="card-title">Players Online</div><div class="card-sub">last 24 hours</div></div>
+                    </div>
+                    <canvas id="dashChart" height="210"></canvas>
+                </div>
+                <div class="cards" id="econCards"></div>
+            </section>
+
+            <!-- PLAYERS -->
+            <section class="page hidden" id="page-players">
+                <h1>Players</h1>
+                <p class="sub">Everyone on the server right now. Search to reach anyone else.</p>
+                <div class="cards small" id="playerCards"></div>
+                <div class="searchbar">
+                    <input id="playerSearch" type="text" placeholder="Search character name, job, character ID, Steam name, Steam ID or Discord ID..." spellcheck="false" autocomplete="off">
+                </div>
+                <!-- the column header is rendered by panel.js INSIDE the roster
+                     section: it describes those columns, not the live board above -->
+                <div class="rows" id="playerRows"></div>
+            </section>
+
+            <!-- PLAYER DETAIL -->
+            <section class="page hidden" id="page-detail">
+                <button class="back-btn" id="detailBack">&larr; Back to players</button>
+                <div id="detailBody"></div>
+            </section>
+
+            <!-- TOOLS -->
+            <section class="page hidden" id="page-tools">
+                <h1>Tools</h1>
+                <p class="sub">Player mode, spawns and announcements &mdash; each action checks its own permission</p>
+                <div id="toolsBody"></div>
+            </section>
+
+            <!-- TELEPORTS -->
+            <section class="page hidden" id="page-teleports">
+                <h1>Teleports</h1>
+                <p class="sub">The panel closes when you teleport so you can see it happen</p>
+                <div id="teleportsBody"></div>
+            </section>
+
+            <!-- CONSUMABLES (fred_metabolism) -->
+            <section class="page hidden" id="page-consumables">
+                <h1>Consumables</h1>
+                <p class="sub">Food, drinks and medicine for the metabolism &mdash; changes push to players instantly; brand-new items appear in inventories after a vorp_inventory restart</p>
+                <div id="consumablesBody"></div>
+            </section>
+
+            <!-- SMOKES (pup-misc/smokes) -->
+            <section class="page hidden" id="page-smokes">
+                <h1>Smokes</h1>
+                <p class="sub">Pipes, cigars and cigarettes &mdash; stored in the smokes table, changes are live; the item itself must exist in vorp_inventory</p>
+                <div id="page-smokes-body"></div>
+            </section>
+
+            <!-- DEATH LOSSES (pup-medical) -->
+            <section class="page hidden" id="page-deaths">
+                <h1>Deaths</h1>
+                <p class="sub">What a respawn took off each player. Restore hands all of it back in one click &mdash; the character has to be online. Rows stay after a restore so the history is kept.</p>
+                <div id="deathsBody"></div>
+            </section>
+
+            <!-- CRAFTING RECIPES (pup-crafting) -->
+            <section class="page hidden" id="page-crafting">
+                <h1>Crafting</h1>
+                <p class="sub">Recipes for every crafting station &mdash; needs the manage_crafting permission. Edits go live when a player re-opens a station. Recipes are DISABLED, never deleted, so player favourites never shift.</p>
+                <div id="craftingBody"></div>
+            </section>
+
+            <!-- WEAPON CRAFTING RECIPES (pup-weapons) -->
+            <section class="page hidden" id="page-weaponcraft">
+                <h1>Weapon Crafting</h1>
+                <p class="sub">Weapon &amp; ammo recipes for the gunsmith &mdash; needs the manage_crafting permission. The weapon SHOP is separate and unaffected. Edits go live when a player re-opens a gunsmith.</p>
+                <div id="weaponcraftBody"></div>
+            </section>
+
+            <!-- HOUSING MANAGEMENT -->
+            <section class="page hidden" id="page-housing">
+                <h1>Housing</h1>
+                <p class="sub">Every house and motel room &mdash; needs the manage_housing permission. Create House starts the door capture at your location; everything else is managed here.</p>
+                <div id="housingBody"></div>
+            </section>
+
+            <!-- SOCIETY MANAGEMENT -->
+            <section class="page hidden" id="page-society">
+                <h1>Society</h1>
+                <p class="sub">Businesses, staff, ledgers and shops &mdash; needs the manage_society permission. Create businesses and place their points right here; positions use wherever you are standing.</p>
+                <div id="societyBody"></div>
+            </section>
+
+            <!-- RANCH MANAGEMENT -->
+            <section class="page hidden" id="page-ranches">
+                <h1>Ranches</h1>
+                <p class="sub">Every ranch, its owner, hands, herd and production &mdash; needs the manage_ranch permission; price/tax editable, lifecycle stays in-world</p>
+                <div id="ranchesBody"></div>
+            </section>
+
+            <!-- STORES MANAGEMENT -->
+            <section class="page hidden" id="page-stores">
+                <h1>Stores</h1>
+                <p class="sub">Player-owned shops, their owners and ledgers &mdash; needs the manage_stores permission; society shops live under each business in Society</p>
+                <div id="storesBody"></div>
+            </section>
+
+            <!-- GANG MANAGEMENT -->
+            <section class="page hidden" id="page-gangs">
+                <h1>Gangs</h1>
+                <p class="sub">Every gang &mdash; faction, level, points, roster, territory, wars and live drug plants. Needs the manage_gangs permission. Points drive BOTH the map radius and the perk level, so changing them changes what a gang can do. The season reset table clears every ladder at once and needs reset_gang_points.</p>
+                <div id="gangsBody"></div>
+            </section>
+
+            <!-- PERK MANAGEMENT -->
+            <section class="page hidden" id="page-perks">
+                <h1>Perks</h1>
+                <p class="sub">Character progression &mdash; level, experience, perk points and everything unlocked. Needs the manage_perks permission. Works on offline characters; an online one sees the change immediately.</p>
+                <div class="searchbar">
+                    <input id="perkSearch" type="text" placeholder="Search character name or ID..." spellcheck="false" autocomplete="off">
+                </div>
+                <div id="perksBody"></div>
+            </section>
+
+            <!-- BANK MANAGEMENT -->
+            <section class="page hidden" id="page-banks">
+                <h1>Banks</h1>
+                <p class="sub">Every character's bank balances and cash, richest first &mdash; needs the manage_bank permission. Works on offline characters; every wipe or set is written to the bank ledger under your name.</p>
+                <div id="banksBody"></div>
+            </section>
+
+            <!-- HIDEOUT MANAGEMENT -->
+            <section class="page hidden" id="page-curses">
+                <h1>Curses</h1>
+                <p class="sub">Everyone online, and what they carry. Give a curse, ease a harmful one back to its start, or cleanse it. Offline carriers are listed too, and can be cleansed. Needs the manage_curses permission. Changes are logged under your name.</p>
+                <div id="cursesBody"></div>
+            </section>
+
+            <section class="page hidden" id="page-farms">
+                <h1>Farms</h1>
+                <p class="sub">Every plant in the ground, by the character who planted it. Open a grower to see their plants, go to one, or pull it up. Needs the manage_farms permission. Changes reach players in-game at once and are logged under your name.</p>
+                <div id="farmsBody"></div>
+            </section>
+
+            <section class="page hidden" id="page-hideouts">
+                <h1>Hideouts</h1>
+                <p class="sub">Every underground hideout &mdash; owner, co-owners, who is inside, ledger, stash, raids and production. Needs the manage_hideouts permission. Changes reach players in-game immediately and are logged under your name.</p>
+                <div id="hideoutsBody"></div>
+    </section>
+
+    <!-- CAMP MANAGEMENT -->
+    <section class="page hidden" id="page-camps">
+      <h1>Camps</h1>
+      <p class="sub">Every gang camp &mdash; leader, members, safe, tax pot, stash, furniture and repossession. Needs the manage_camps permission. Changes reach players in-game immediately and are logged under your name.</p>
+      <div id="campsBody"></div>
+            </section>
+
+            <!-- WORLD PROPS -->
+            <section class="page hidden" id="page-props">
+                <h1>World Props</h1>
+                <p class="sub">Props placed permanently into the map with the prop placer. They exist for every player until removed here. Removing one needs the delete_world_prop permission and is logged under your name.</p>
+                <div id="propsBody"></div>
+            </section>
+
+            <!-- EVENTS -->
+            <section class="page hidden" id="page-events">
+                <h1>Events</h1>
+                <p class="sub">Seasonal events from pup-events. Forcing one on changes the world for everyone, and the clock control moves the whole server's in-game time. Needs the manage_events permission.</p>
+                <div id="eventsBody"></div>
+            </section>
+
+            <section class="page hidden" id="page-weather">
+                <h1>Weather</h1>
+                <p class="sub">Time, weather and wind for the whole server &mdash; needs the manage_weather permission. Everything here is live for every player the moment it is applied. The readouts refresh once a second while this page is open.</p>
+                <div id="weatherBody"></div>
+            </section>
+
+            <!-- BANS & WHITELIST -->
+            <section class="page hidden" id="page-security">
+                <h1>Anti-Cheat</h1>
+                <p class="sub">Detections are evidence, not proof &mdash; spectate before acting</p>
+                <div id="securityBody"></div>
+            </section>
+
+            <section class="page hidden" id="page-doorlocks">
+                <h1>Door Locks</h1>
+                <p class="sub">Every registered door &mdash; needs the manage_doorlocks permission. Set which jobs hold a key and jump to any door. Changes are live for everyone immediately, no restart.</p>
+                <div id="doorlocksBody"></div>
+            </section>
+
+            <section class="page hidden" id="page-bans">
+                <h1>Server Bans</h1>
+                <p class="sub">Every ban carries a Ban ID &mdash; that is what the player is told and what they appeal with. Search by ID, name, Discord, Steam, licence, IP or reason.</p>
+                <div id="bansBody"></div>
+            </section>
+
+            <!-- ITEMS DB -->
+            <section class="page hidden" id="page-items">
+                <h1>Items DB</h1>
+                <p class="sub">Edits land in the database instantly &mdash; restart vorp_inventory to apply in-game</p>
+                <div class="searchbar">
+                    <input id="itemSearch" type="text" placeholder="Search item or label..." spellcheck="false" autocomplete="off">
+                </div>
+                <div id="itemsBody"></div>
+            </section>
+
+            <!-- LIVE MAP -->
+            <section class="page hidden" id="page-map">
+                <h1>Live Map</h1>
+                <p class="sub">Drag to pan, scroll to zoom. Click a player for actions, right-click the map to teleport there.</p>
+                <div class="map-frame">
+                    <div id="leafMap"></div>
+                    <div class="map-zoom">
+                        <button id="zoomIn" title="Zoom in">+</button>
+                        <button id="zoomOut" title="Zoom out">&minus;</button>
+                        <button id="zoomReset" title="Whole map">&#8634;</button>
+                    </div>
+                    <div id="mapCoords" class="map-coords">x 0 &nbsp; y 0</div>
+                    <div id="mapFollow" class="map-follow hidden">Following <b></b> <button id="mapUnfollow">stop</button></div>
+                    <aside class="map-side">
+                        <div class="ms-head">
+                            <input id="mapSearch" type="text" placeholder="Find a player..." spellcheck="false" autocomplete="off">
+                            <span id="mapOnline" class="ms-count" title="online">0</span>
+                        </div>
+                        <div id="mapList" class="ms-list"></div>
+                        <!-- Guarma sits off the bottom of the map image entirely, so anyone there is listed here instead -->
+                        <div id="guarmaBox" class="ms-guarma hidden">
+                            <div class="ms-title">On Guarma <span id="guarmaCount">0</span></div>
+                            <div id="guarmaList"></div>
+                        </div>
+                        <div class="ms-title">Layers</div>
+                        <div class="map-filters">
+                            <button class="mf on" data-f="players"><i class="dot player"></i> Players <b class="n"></b></button>
+                            <button class="mf on" data-f="staff"><i class="dot staff"></i> Staff <b class="n"></b></button>
+                            <button class="mf" data-f="houses"><i class="dot house"></i> Houses <b class="n"></b></button>
+                            <button class="mf" data-f="hideouts"><i class="dot hideout"></i> Hideouts <b class="n"></b></button>
+                            <button class="mf" data-f="clans"><i class="dot clan"></i> Clans <b class="n"></b></button>
+                            <button class="mf" data-f="doors"><i class="dot door"></i> Doors <b class="n"></b></button>
+                            <button class="mf" data-f="shops"><i class="dot shop"></i> Stores <b class="n"></b></button>
+                            <button class="mf" data-f="socshops"><i class="dot socshop"></i> Society Stores <b class="n"></b></button>
+                            <button class="mf" data-f="ranches"><i class="dot ranch"></i> Ranches <b class="n"></b></button>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="index.js"></script>
+    <!-- styled stand-in for the browser's native confirm(), which rendered as
+         a system dialog titled "cfx-nui-vorp_admin" -->
+    <div id="pconfirm" class="hidden">
+        <div id="pconfirm-card">
+            <div id="pconfirm-title"></div>
+            <div id="pconfirm-body"></div>
+            <div id="pconfirm-actions">
+                <div class="abtn" id="pconfirm-cancel">Cancel</div>
+                <div class="abtn warn" id="pconfirm-ok">Confirm</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor/leaflet.js"></script>
+    <script src="panel.js"></script>
+</body>
+</html>

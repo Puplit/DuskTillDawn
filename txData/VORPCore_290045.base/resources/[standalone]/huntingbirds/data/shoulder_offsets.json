@@ -1,0 +1,481 @@
+{
+  "_note": "Pure data. Per bird model, per player sex: ped bone index, offset xyz, rotation xyz for attaching to the shoulder.",
+  "models": {
+    "a_c_hawk_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.19,
+          0.01,
+          0.27
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.12,
+          -0.02,
+          0.27
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_eagle_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.16,
+          -0.02,
+          0.35
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          -0.04,
+          0.33
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "mp_a_c_owl_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          -0.04,
+          0.33
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          -0.06,
+          0.32
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_californiacondor_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.14,
+          -0.01,
+          0.32
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          -0.02,
+          0.31
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_owl_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          -0.03,
+          0.33
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          -0.05,
+          0.33
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_vulture_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          0.01,
+          0.26
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.12,
+          -0.02,
+          0.26
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_crow_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          0.01,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.12,
+          0.01,
+          0.16
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_raven_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          0.01,
+          0.22
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.13,
+          -0.03,
+          0.22
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_seagull_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          0.01,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          -0.02,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_parrot_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          -0.05,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.115,
+          -0.06,
+          0.155
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_redfootedbooby_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          0.01,
+          0.18
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.115,
+          -0.02,
+          0.16
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_carolinaparakeet_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.15,
+          -0.05,
+          0.12
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.12,
+          -0.03,
+          0.1
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_cormorant_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.16,
+          -0.01,
+          0.2
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.13,
+          -0.01,
+          0.16
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_cranewhooping_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.16,
+          0,
+          0.3
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          0.02,
+          0.27
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_heron_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.13,
+          0,
+          0.35
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.11,
+          0.04,
+          0.32
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_pelican_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.14,
+          -0.06,
+          0.25
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.13,
+          -0.08,
+          0.2
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "a_c_roseatespoonbill_01": {
+      "male": {
+        "bone": 296,
+        "offset": [
+          0.14,
+          0.03,
+          0.35
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      },
+      "female": {
+        "bone": 363,
+        "offset": [
+          0.12,
+          0.03,
+          0.3
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

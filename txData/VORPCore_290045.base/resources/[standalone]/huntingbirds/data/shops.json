@@ -1,0 +1,51 @@
+{
+  "_note": "Pure data. Bird shops. Final price = base price + taxPercent% of base price, rounded to 2 decimals.",
+  "shops": [
+    {
+      "name": "Wapiti Birds",
+      "jobRequired": false,
+      "jobs": [
+        "none"
+      ],
+      "blip": {
+        "show": true,
+        "sprite": -1567930587
+      },
+      "taxPercent": 10,
+      "coords": {
+        "x": 420.978,
+        "y": 2233.704,
+        "z": 254.415
+      },
+      "previewPos": {
+        "x": 420.184,
+        "y": 2235.77,
+        "z": 254.412,
+        "h": 222.00166320801
+      }
+    },
+    {
+      "name": "Smuggler Boat",
+      "jobRequired": false,
+      "jobs": [
+        "none"
+      ],
+      "blip": {
+        "show": true,
+        "sprite": -1567930587
+      },
+      "taxPercent": 150,
+      "coords": {
+        "x": 3002.2827148438,
+        "y": 479.68063354492,
+        "z": 44.738793945313
+      },
+      "previewPos": {
+        "x": 3002.8586425781,
+        "y": 478.49295043945,
+        "z": 45.463111877441,
+        "h": 24.072866439819
+      }
+    }
+  ]
+}

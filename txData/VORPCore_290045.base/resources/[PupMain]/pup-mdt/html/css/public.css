@@ -1,0 +1,43 @@
+/* Public pages: records kiosk, bounty hunter board, prison register, prisoner countdown. */
+#kiosk, #bhboard, #register { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(26,14,6,0.55); z-index: 40; }
+.k-frame { position: relative; width: min(1180px, 94vw); height: min(840px, 92vh); display: flex; background: var(--paper); border: 10px solid var(--wood); box-shadow: 0 24px 60px rgba(0,0,0,0.65), inset 0 0 60px rgba(120,80,30,0.25); overflow: hidden; font-size: calc(14px * var(--text-scale)); }
+.k-nav { width: 230px; flex: none; display: flex; flex-direction: column; gap: 2px; background: var(--header); border-right: 3px double var(--line2); padding: 12px 0; z-index: 1; }
+.k-brand { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 10px 12px; border-bottom: 2px solid var(--line2); margin-bottom: 8px; }
+.k-brand img { width: 70px; opacity: 0.8; mix-blend-mode: multiply; filter: var(--stamp-filter); }
+.k-brand small { font-family: var(--font-type); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--soft); }
+.k-brand b { font-family: var(--font-wood); font-size: 24px; color: var(--heading); font-weight: normal; }
+.k-nav-btn { text-align: left; border: none; background: transparent; padding: 9px 16px; font-size: 14px; border-left: 4px solid transparent; color: var(--ink); }
+.k-nav-btn:hover { background: rgba(0,0,0,0.06); }
+.k-nav-btn.on { border-left-color: #8a1c1c; background: rgba(0,0,0,0.08); font-weight: bold; }
+.k-nav-btn.close { margin-top: auto; color: var(--red); }
+.k-main { position: relative; flex: 1; overflow-y: auto; padding: 16px 22px; z-index: 1; }
+.k-main h2 { font-family: var(--font-wood); color: var(--heading); font-weight: normal; margin: 4px 0 10px; }
+.k-watermark { position: absolute; right: 30px; bottom: 30px; width: 260px; opacity: 0.08; pointer-events: none; z-index: 0; filter: var(--stamp-filter); }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.person-card { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--card); border: 1px solid var(--line2); padding: 10px; text-align: center; }
+.person-card:hover { background: var(--header); }
+.pc-entry { background: var(--raised); border: 1px solid var(--line2); border-left: 6px solid var(--grey); padding: 8px 12px; margin: 8px 0; }
+.tone-border-red { border-left-color: var(--red); } .tone-border-orange { border-left-color: var(--orange); } .tone-border-green { border-left-color: var(--green); }
+.pen-boxes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pen-box { display: flex; flex-direction: column; border: 2px solid currentColor; padding: 4px 10px; min-width: 150px; }
+.pen-box small { font-family: var(--font-type); letter-spacing: 1px; text-transform: uppercase; font-size: 10px; }
+.pre.small { font-size: 11px; }
+
+.bh-panel, .jr-panel { width: min(1100px, 94vw); max-height: 92vh; overflow-y: auto; background: #3a2412; border: 8px solid var(--wood-dark); box-shadow: 0 24px 60px rgba(0,0,0,0.7); padding: 14px 18px; color: var(--cream);
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0) 0 40px, rgba(0,0,0,0.18) 40px 42px); }
+.jr-panel { width: min(560px, 92vw); background: var(--paper); color: var(--ink); background-image: none; }
+.bh-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.bh-head h2 { font-family: var(--font-wood); font-weight: normal; margin: 0; }
+.bh-head .inp { max-width: 260px; color: inherit; border-bottom-color: rgba(245,230,200,0.5); }
+.jr-panel .bh-head .inp { color: var(--ink); }
+.bh-panel .x { color: var(--cream); }
+.bh-panel .poster { cursor: default; color: var(--ink); }
+.bh-panel .pager-t { color: var(--cream); }
+.bh-panel .btn.ghost { color: var(--cream); border-color: rgba(245,230,200,0.4); }
+.bh-hint { min-height: 26px; font-size: 12px; font-style: italic; }
+.bh-panel .empty { color: rgba(245,230,200,0.7); }
+
+#jailtimer { position: fixed; top: 22px; left: 50%; transform: translateX(-50%); z-index: 30; display: flex; align-items: center; gap: 8px; padding: 6px 16px;
+    background: rgba(26,14,6,0.78); color: var(--cream); border: 1px solid rgba(245,230,200,0.35); font-family: var(--font-type); letter-spacing: 1px; pointer-events: none; }
+#jailtimer b { font-family: var(--font-body); font-size: 20px; }
+.jt-l { text-transform: uppercase; font-size: 11px; opacity: 0.8; }

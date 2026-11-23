@@ -1,0 +1,39 @@
+# Server artifacts: everyone downloads their own into Server-data (see Server-data/README.md)
+Server-data/*
+!Server-data/README.md
+
+# txAdmin profile: player database, logs, admin logins, machine-specific paths
+txData/default/
+txData/admins.json
+txData/*/cache/
+txData/*/db/
+
+# No licence to redistribute: downloaded by each user (see README)
+txData/VORPCore_290045.base/resources/\[fred\]/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_inventory/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_barbershop/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_fishing/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_walkanim/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_lootnpcs/
+txData/VORPCore_290045.base/resources/\[VORP\]/vorp_imapviewtool/
+txData/VORPCore_290045.base/resources/\[standalone\]/weathersync/
+txData/VORPCore_290045.base/resources/\[standalone\]/poodlechat/
+txData/VORPCore_290045.base/resources/\[standalone\]/gravedigging/
+txData/VORPCore_290045.base/resources/\[standalone\]/miner_lumber/
+txData/VORPCore_290045.base/resources/\[maps\]/macfarlanes_ranch/
+txData/VORPCore_290045.base/resources/\[maps\]/prop_weed/
+txData/VORPCore_290045.base/resources/\[maps\]/streams/
+
+# Staff-tool output with character names
+txData/VORPCore_290045.base/resources/\[pup\]/pup-events/coords.txt
+**/panel_history.json
+**/polyzone_created_zones.txt
+
+# Logs, backups and database dumps with player data
+backups/
+VORPCore_290045_FULL_*.sql
+*.log
+*.bak*
+.replxx_history
+Thumbs.db
+desktop.ini

@@ -1,0 +1,1328 @@
+/* pup-perks | own UI. Palette and fonts are copies of pup-ui's so it matches the other panels. */
+
+@font-face {
+    font-family: 'PupDisplay';
+    src: url('fonts/oswald.ttf') format('truetype'); /* Oswald - display (SIL OFL 1.1) */
+}
+@font-face {
+    font-family: 'PupSerif';
+    src: url('fonts/imfell.ttf') format('truetype'); /* IM Fell English - serif body (SIL OFL 1.1) */
+}
+
+:root {
+    --ink: rgba(0, 0, 0, 0.82);
+    --parchment: #ffffff;
+    --parchment-dim: #9a9a9a;
+    --gold: #ffffff;
+    --blood: #a83232;
+    --serif: 'PupDisplay', Georgia, 'Times New Roman', serif;  /* headlines */
+    --body: 'PupSerif', Georgia, 'Times New Roman', serif;     /* body text */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+body { overflow: hidden; width: 100vw; height: 100vh; background: transparent; font-family: var(--serif); }
+
+/* body/description text reads better in the serif */
+.toast-sub, #banner-sub, .deck-desc, .pm-perk-desc, .pm-stat, #death-cause,
+#death-hint, #wheel-desc, #poster-crime, .poster-foot, #pm-foot, #deck-foot { font-family: var(--body); }
+.hidden { display: none !important; }
+
+/* ------------------------------------------------------------------ */
+
+/* ---------------- perks panel ---------------- */
+#pk-wrap { position: absolute; inset: 0; }
+/* dim the world behind the window without covering it in black */
+#pk-wrap::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: rgba(10, 8, 6, 0.55);
+    backdrop-filter: blur(2px);
+}
+#pk-panel {
+    position: absolute;
+    left: 5vw; right: 5vw; top: 5vh; bottom: 5vh;
+    display: flex; flex-direction: column;
+    padding: 1.8vh 1.6vw 0;
+    background: #131110;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+    color: var(--parchment);
+    animation: pk-in 200ms ease-out;
+    overflow: hidden;
+}
+#pk-wrap.leaving #pk-panel { animation: pk-out 150ms ease-in forwards; }
+@keyframes pk-in  { from { opacity: 0; transform: translateY(1.2vh) scale(0.994); } to { opacity: 1; transform: none; } }
+@keyframes pk-out { to { opacity: 0; transform: translateY(0.6vh) scale(0.996); } }
+
+/* ---------------------------- top bar ---------------------------- */
+#pk-top { display: flex; align-items: center; gap: 2vw; flex: none; }
+/* the two flanks share the leftover space equally so the progression block
+   sits on the TRUE centre of the panel; with flex:none on the flanks it was
+   pushed off-centre by whichever side happened to be wider */
+#pk-titles { min-width: 0; flex: 1 1 0; }
+#pk-title {
+    font-family: Georgia, 'Palatino Linotype', 'Times New Roman', serif;
+    font-size: 2.8vh; font-weight: bold; letter-spacing: 0.01em;
+    color: var(--parchment); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+    line-height: 1.15;
+}
+#pk-subtitle {
+    margin-top: 0.3vh;
+    font-family: Georgia, 'Palatino Linotype', serif; font-style: italic;
+    font-size: 1.4vh; color: var(--parchment-dim);
+}
+
+/* progression block - the headline component.
+   COLUMN, not row: the side toggle stacks ABOVE the level + xp bar. As a row
+   the two overlapped each other in the middle of the header. */
+#pk-prog {
+    flex: 0 0 auto; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 0.9vh;
+}
+#pk-prog-row { display: flex; align-items: center; gap: 1vw; min-width: 0; width: 34vw; }
+#pk-level-tag {
+    font-size: 1.15vh; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--parchment-dim); flex: none;
+}
+#pk-level {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 3.4vh; font-weight: bold; line-height: 1; flex: none;
+    color: var(--parchment); text-shadow: 0 0 2.4vh rgba(255, 255, 255, 0.18);
+    transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#pk-level.bump { transform: scale(1.35); }
+#pk-xp-block { flex: 1; min-width: 0; }
+#pk-xp-track {
+    position: relative; height: 0.85vh; border-radius: 999px; overflow: hidden;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(239, 230, 213, 0.08);
+}
+#pk-xp-fill {
+    position: absolute; inset: 0 auto 0 0; width: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.55), var(--parchment));
+    border-radius: 999px;
+    transition: width 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* the slice just earned, faded out behind the fill */
+#pk-xp-ghost {
+    position: absolute; inset: 0 auto 0 0; width: 0;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    transition: width 620ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 700ms 500ms;
+}
+#pk-xp-text {
+    margin-top: 0.45vh; display: flex; justify-content: space-between; gap: 1vw;
+    font-size: 1.15vh; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--parchment-dim); white-space: nowrap;
+}
+#pk-xp-text .pk-gain { color: var(--parchment); opacity: 0; transition: opacity 200ms; }
+#pk-xp-text .pk-gain.show { opacity: 1; }
+
+#pk-topright { display: flex; align-items: center; justify-content: flex-end; gap: 1vw; flex: 1 1 0; }
+#pk-points {
+    display: flex; align-items: baseline; gap: 0.45vw;
+    padding: 0.6vh 1vw; border-radius: 100px;
+    background: #23201d; border: 1px solid rgba(239, 230, 213, 0.08);
+    transition: border-color 160ms, background 160ms;
+}
+#pk-points.has { border-color: rgba(255, 255, 255, 0.28); background: #2a2724; }
+#pk-points-n { font-family: Georgia, serif; font-size: 1.9vh; font-weight: bold; color: var(--parchment); }
+#pk-points-tag { font-size: 1.1vh; letter-spacing: 0.22em; text-transform: uppercase; color: var(--parchment-dim); }
+#pk-close {
+    width: 4vh; height: 4vh; flex: none;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    color: var(--parchment-dim);
+    background: rgba(22, 21, 20, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.6vh;
+    transition: color 120ms, border-color 120ms, background 120ms;
+}
+#pk-close svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+#pk-close:hover { color: var(--parchment); border-color: var(--blood); background: rgba(58, 28, 28, 0.65); }
+
+#pk-rule, #pk-rule-foot { height: 1px; flex: none; background: rgba(239, 230, 213, 0.08); }
+#pk-rule { margin-top: 1.4vh; }
+
+/* ------------------------ body: nav | main | detail ------------------------ */
+#pk-body { display: flex; gap: 1.4vw; flex: 1; min-height: 0; padding: 1.6vh 0; }
+
+#pk-nav {
+    width: 11vw; min-width: 150px; max-width: 200px; flex: none;
+    display: flex; flex-direction: column; min-height: 0;
+}
+#pk-nav-cats { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5vh; padding-right: 0.3vw; }
+#pk-nav-cats::-webkit-scrollbar { width: 3px; }
+#pk-nav-cats::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+.pk-cat {
+    position: relative;
+    display: flex; align-items: center; gap: 0.6vw;
+    padding: 0.95vh 0.8vw; cursor: pointer;
+    border-radius: 9px; border: 0; background: transparent;
+    color: var(--parchment-dim);
+    transition: background 120ms, color 120ms;
+}
+.pk-cat:hover { background: #1b1917; color: var(--parchment); }
+.pk-cat.active { background: #23201d; color: var(--parchment); }
+/* the animated selection indicator */
+.pk-cat::before {
+    content: ''; position: absolute; left: 0; top: 50%;
+    width: 2px; height: 0; border-radius: 2px;
+    background: var(--parchment);
+    transform: translateY(-50%);
+    transition: height 180ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.pk-cat.active::before { height: 58%; }
+.pk-cat-ico { width: 1.9vh; height: 1.9vh; flex: none; display: flex; align-items: center; justify-content: center; }
+.pk-cat-ico .pup-svg { width: 1.75vh; height: 1.75vh; fill: currentColor; }
+.pk-cat-label { flex: 1; font-size: 1.35vh; letter-spacing: 0.09em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pk-cat-count { font-size: 1.1vh; color: var(--parchment-dim); font-variant-numeric: tabular-nums; flex: none; }
+.pk-cat.active .pk-cat-count { color: var(--parchment); }
+
+#pk-nav-foot { flex: none; padding-top: 1vh; display: flex; flex-direction: column; gap: 0.5vh; }
+.pk-navbtn {
+    padding: 0.85vh 0.8vw; cursor: pointer; text-align: center;
+    border-radius: 9px;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    background: transparent; color: var(--parchment-dim);
+    font-size: 1.2vh; letter-spacing: 0.16em; text-transform: uppercase;
+    transition: background 120ms, color 120ms, border-color 120ms;
+}
+.pk-navbtn:hover { background: #1b1917; color: var(--parchment); }
+.pk-navbtn.on { background: #23201d; color: var(--parchment); border-color: rgba(255, 255, 255, 0.22); }
+.pk-navbtn.danger:hover { border-color: var(--blood); background: rgba(58, 28, 28, 0.5); color: var(--parchment); }
+
+#pk-main { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+
+/* ----------------------------- toolbar ----------------------------- */
+#pk-toolbar { flex: none; display: flex; align-items: center; gap: 0.7vw; padding-bottom: 1.3vh; }
+#pk-search-box {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.5vw;
+    padding: 0.85vh 0.9vw; border-radius: 9px;
+    background: #1b1917; border: 1px solid rgba(239, 230, 213, 0.08);
+    transition: border-color 140ms;
+}
+#pk-search-box:focus-within { border-color: rgba(255, 255, 255, 0.26); }
+.pk-search-ico { width: 1.7vh; height: 1.7vh; flex: none; fill: none; stroke: var(--parchment-dim); stroke-width: 2; stroke-linecap: round; }
+#pk-search {
+    flex: 1; min-width: 0; background: transparent; border: 0; outline: none;
+    color: var(--parchment); font-family: var(--body); font-size: 1.4vh;
+    user-select: text;
+}
+#pk-search::placeholder { color: var(--parchment-dim); }
+
+.pk-select { position: relative; flex: none; }
+.pk-select-btn {
+    display: flex; align-items: center; gap: 0.5vw;
+    padding: 0.85vh 0.9vw; cursor: pointer; border-radius: 9px;
+    background: #1b1917; border: 1px solid rgba(239, 230, 213, 0.08);
+    color: var(--parchment-dim);
+    font-size: 1.2vh; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+    transition: background 120ms, color 120ms, border-color 120ms;
+}
+.pk-select-btn:hover { background: #23201d; color: var(--parchment); }
+.pk-select.open .pk-select-btn { background: #23201d; color: var(--parchment); border-color: rgba(255, 255, 255, 0.22); }
+.pk-select-btn i {
+    width: 0; height: 0; flex: none;
+    border-left: 0.45vh solid transparent; border-right: 0.45vh solid transparent;
+    border-top: 0.5vh solid currentColor;
+    transition: transform 160ms;
+}
+.pk-select.open .pk-select-btn i { transform: rotate(180deg); }
+.pk-select-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 0.5vh); z-index: 6;
+    min-width: 11vw; padding: 0.4vh;
+    background: #1b1917; border: 1px solid rgba(239, 230, 213, 0.12);
+    border-radius: 9px; box-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
+}
+.pk-select.open .pk-select-menu { display: block; animation: pk-drop 140ms ease-out; }
+@keyframes pk-drop { from { opacity: 0; transform: translateY(-0.5vh); } to { opacity: 1; transform: none; } }
+.pk-opt {
+    padding: 0.75vh 0.8vw; cursor: pointer; border-radius: 6px;
+    color: var(--parchment-dim); font-size: 1.2vh; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
+    transition: background 110ms, color 110ms;
+}
+.pk-opt:hover { background: #23201d; color: var(--parchment); }
+.pk-opt.on { color: var(--parchment); }
+
+/* ----------------------------- card grid ----------------------------- */
+#pk-scroll { flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.4vw; }
+#pk-scroll::-webkit-scrollbar { width: 4px; }
+#pk-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 4px; }
+#pk-grid {
+    display: grid; gap: 1vh 0.9vw;
+    grid-template-columns: repeat(auto-fill, minmax(13.5vw, 1fr));
+    align-content: start;
+}
+.pk-card {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 1.6vh 1vw 1.2vh; cursor: pointer;
+    background: #1b1917;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 11px;
+    transition: transform 140ms, background 140ms, border-color 140ms, box-shadow 140ms;
+    animation: pk-card-in 200ms ease-out both;
+}
+@keyframes pk-card-in { from { opacity: 0; transform: translateY(0.7vh); } to { opacity: 1; transform: none; } }
+.pk-card:hover { transform: translateY(-0.35vh); background: #201d1b; border-color: rgba(255, 255, 255, 0.18); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45); }
+.pk-card.sel { border-color: rgba(255, 255, 255, 0.4); background: #23201d; }
+.pk-card.equipped { border-color: rgba(255, 255, 255, 0.30); }
+.pk-card.equipped::after {
+    content: ''; position: absolute; inset: -1px; border-radius: 11px; pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), inset 0 0 2.4vh rgba(255, 255, 255, 0.05);
+}
+.pk-card.locked { cursor: pointer; filter: grayscale(0.85) brightness(0.62); }
+.pk-card.locked:hover { transform: none; box-shadow: none; }
+
+.pk-ico {
+    width: 5.4vh; height: 5.4vh; flex: none; margin-bottom: 1vh;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(239, 230, 213, 0.10);
+    color: var(--parchment);
+    transition: background 140ms, border-color 140ms;
+}
+.pk-ico .pup-svg { width: 2.9vh; height: 2.9vh; fill: currentColor; }
+.pk-card:hover .pk-ico { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); }
+.pk-card.locked .pk-ico { color: var(--parchment-dim); }
+/* the lock badge on an unreachable perk */
+.pk-lock {
+    position: absolute; top: 1vh; right: 1vh;
+    width: 2.2vh; height: 2.2vh; display: flex; align-items: center; justify-content: center;
+    color: var(--parchment-dim);
+}
+.pk-lock .pup-svg { width: 1.6vh; height: 1.6vh; fill: currentColor; }
+
+.pk-name {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 1.65vh; font-weight: bold; color: var(--parchment); line-height: 1.2;
+}
+.pk-desc {
+    margin-top: 0.5vh; font-family: var(--body);
+    font-size: 1.25vh; line-height: 1.35; color: var(--parchment-dim);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+/* rank pips - reads faster than "3 / 5" alone at a glance */
+.pk-pips { display: flex; gap: 0.35vw; margin-top: 1vh; }
+.pk-pip {
+    width: 1.5vh; height: 0.4vh; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+    transition: background 200ms;
+}
+.pk-pip.on { background: var(--parchment); }
+.pk-rank {
+    margin-top: 0.7vh;
+    font-size: 1.1vh; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment-dim);
+    font-variant-numeric: tabular-nums;
+}
+.pk-status {
+    margin-top: 0.9vh; padding: 0.4vh 0.8vw; border-radius: 999px;
+    font-size: 1.05vh; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    color: var(--parchment-dim);
+}
+.pk-status.equipped { background: rgba(255, 255, 255, 0.14); color: var(--parchment); border-color: rgba(255, 255, 255, 0.28); }
+.pk-status.upgrade  { color: var(--parchment); border-color: rgba(255, 255, 255, 0.3); animation: pk-nudge 2.6s ease-in-out infinite; }
+.pk-status.maxed    { color: var(--parchment); }
+.pk-status.locked   { color: var(--parchment-dim); }
+/* deliberately gentle: this is the ONLY looping animation in the panel */
+@keyframes pk-nudge {
+    0%, 84%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    92%           { box-shadow: 0 0 0 0.35vh rgba(255, 255, 255, 0.07); }
+}
+
+/* --------------------------- empty states --------------------------- */
+#pk-empty {
+    padding: 6vh 2vw; text-align: center;
+    font-family: var(--body); font-size: 1.5vh; color: var(--parchment-dim);
+}
+#pk-empty .pk-empty-sub { margin-top: 0.8vh; font-size: 1.25vh; opacity: 0.75; }
+
+/* --------------------------- detail panel --------------------------- */
+#pk-detail {
+    width: 21vw; min-width: 250px; max-width: 340px; flex: none;
+    display: flex; flex-direction: column; min-height: 0;
+    padding: 1.6vh 1.1vw;
+    background: #171514;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 11px;
+    animation: pk-slide 180ms ease-out;
+}
+@keyframes pk-slide { from { opacity: 0; transform: translateX(1.2vw); } to { opacity: 1; transform: none; } }
+#pk-detail.hidden { display: none; }
+.pk-d-scroll { flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.3vw; }
+.pk-d-scroll::-webkit-scrollbar { width: 3px; }
+.pk-d-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+.pk-d-head { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pk-d-ico {
+    width: 7vh; height: 7vh; margin-bottom: 1.1vh;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(239, 230, 213, 0.12);
+    color: var(--parchment);
+}
+.pk-d-ico .pup-svg { width: 3.6vh; height: 3.6vh; fill: currentColor; }
+.pk-d-name { font-family: Georgia, serif; font-size: 2.1vh; font-weight: bold; line-height: 1.15; }
+.pk-d-cat { margin-top: 0.4vh; font-size: 1.05vh; letter-spacing: 0.26em; text-transform: uppercase; color: var(--parchment-dim); }
+.pk-d-desc { margin-top: 1vh; font-family: var(--body); font-size: 1.3vh; line-height: 1.45; color: var(--parchment-dim); text-align: center; }
+.pk-d-rule { height: 1px; margin: 1.4vh 0; background: rgba(239, 230, 213, 0.08); }
+.pk-d-label { font-size: 1.05vh; letter-spacing: 0.26em; text-transform: uppercase; color: var(--parchment-dim); }
+.pk-d-value { margin-top: 0.4vh; font-family: var(--body); font-size: 1.35vh; line-height: 1.4; color: var(--parchment); }
+.pk-d-value.dim { color: var(--parchment-dim); }
+.pk-d-block + .pk-d-block { margin-top: 1.2vh; }
+.pk-d-req { display: flex; align-items: center; gap: 0.5vw; margin-top: 0.5vh; font-family: var(--body); font-size: 1.25vh; }
+.pk-d-req .pup-svg { width: 1.5vh; height: 1.5vh; flex: none; fill: currentColor; }
+.pk-d-req.ok   { color: var(--parchment); }
+.pk-d-req.no   { color: var(--blood); }
+.pk-d-actions { flex: none; padding-top: 1.3vh; display: flex; flex-direction: column; gap: 0.6vh; }
+/* the one-line "why can't I do this" under a disabled button */
+.pk-d-hint { text-align: center; font-size: 1.15vh; line-height: 1.35; }
+
+.pk-btn {
+    padding: 1.05vh 1vw; cursor: pointer; text-align: center; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid transparent;
+    color: var(--parchment);
+    font-size: 1.25vh; letter-spacing: 0.2em; text-transform: uppercase;
+    transition: background 120ms, transform 90ms, color 120ms, border-color 120ms;
+}
+.pk-btn:hover { background: rgba(255, 255, 255, 0.32); }
+.pk-btn:active { transform: scale(0.975); }
+.pk-btn.ghost { background: transparent; border-color: rgba(255, 255, 255, 0.25); color: var(--parchment-dim); }
+.pk-btn.ghost:hover { background: rgba(255, 255, 255, 0.08); color: var(--parchment); }
+.pk-btn.danger { background: rgba(168, 50, 50, 0.85); }
+.pk-btn.danger:hover { background: var(--blood); }
+.pk-btn.disabled { background: rgba(255, 255, 255, 0.06); color: var(--parchment-dim); cursor: default; }
+.pk-btn.disabled:hover { background: rgba(255, 255, 255, 0.06); }
+.pk-btn.disabled:active { transform: none; }
+
+/* ----------------------------- slot bar ----------------------------- */
+#pk-slots { flex: none; display: flex; align-items: center; gap: 1vw; padding: 1.3vh 0; }
+#pk-slots-label { font-size: 1.1vh; letter-spacing: 0.26em; text-transform: uppercase; color: var(--parchment-dim); flex: none; }
+#pk-slots-row { flex: 1; display: flex; gap: 0.6vw; min-width: 0; }
+
+/* =====================================================================
+   Active row, auto-equip mode: chips shrink to their own text, wrap onto a
+   second line and scroll after that, so the row is readable at 3 perks or 30.
+   ===================================================================== */
+#pk-slots-row.auto {
+    flex-wrap: wrap;
+    align-content: flex-start;
+    row-gap: 0.5vh;
+    max-height: 7.4vh;      /* ~2 rows, then it scrolls rather than growing */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.3vw;
+    scrollbar-width: thin;
+}
+#pk-slots-row.auto::-webkit-scrollbar { width: 4px; }
+#pk-slots-row.auto::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.16); border-radius: 2px; }
+#pk-slots-row.auto::-webkit-scrollbar-track { background: transparent; }
+
+/* chips size to their content instead of a fixed width, and never stretch */
+#pk-slots-row.auto .pk-slot {
+    min-width: 0; flex: 0 0 auto; max-width: 13vw;
+    padding: 0.5vh 0.7vw; gap: 0.35vw; cursor: default;
+}
+/* nothing in this mode is clickable, so drop the "unequip" red hover */
+#pk-slots-row.auto .pk-slot.filled:hover {
+    border-color: rgba(255, 255, 255, 0.22); background: #1b1917;
+}
+#pk-slots-count { flex: none; font-size: 1.1vh; letter-spacing: 0.2em; text-transform: uppercase; color: var(--parchment-dim); font-variant-numeric: tabular-nums; }
+.pk-slot {
+    display: flex; align-items: center; gap: 0.5vw;
+    min-width: 9vw; padding: 0.75vh 0.9vw;
+    border-radius: 9px;
+    background: #1b1917; border: 1px dashed rgba(239, 230, 213, 0.14);
+    color: var(--parchment-dim);
+    font-size: 1.2vh; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background 140ms, border-color 140ms, color 140ms;
+}
+.pk-slot .pup-svg { width: 1.7vh; height: 1.7vh; flex: none; fill: currentColor; }
+.pk-slot.filled {
+    cursor: pointer; border-style: solid; border-color: rgba(255, 255, 255, 0.26);
+    background: #23201d; color: var(--parchment);
+}
+.pk-slot.filled:hover { border-color: var(--blood); background: rgba(58, 28, 28, 0.5); }
+.pk-slot.locked { border-style: solid; border-color: rgba(239, 230, 213, 0.06); opacity: 0.55; }
+.pk-slot-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pk-slot.pop { animation: pk-pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes pk-pop { 0% { transform: scale(0.9); } 60% { transform: scale(1.04); } 100% { transform: none; } }
+
+/* ------------------------------ tree ------------------------------ */
+#pk-tree { position: relative; min-height: 100%; padding: 2vh 1vw; }
+#pk-tree.hidden { display: none; }
+#pk-tree-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#pk-tree-links line { stroke: rgba(255, 255, 255, 0.10); stroke-width: 2; transition: stroke 160ms; }
+#pk-tree-links line.on   { stroke: rgba(255, 255, 255, 0.45); }
+#pk-tree-links line.warm { stroke: var(--parchment); }
+/* branch connectors are right-angle dashed paths */
+#pk-tree-links path {
+    stroke: rgba(255, 255, 255, 0.16); stroke-width: 1.5; fill: none;
+    stroke-dasharray: 4 4; transition: stroke 160ms;
+}
+/* a satisfied branch is solid but not bright - the connectors should read
+   as structure behind the nodes, not compete with them */
+#pk-tree-links path.on   { stroke: rgba(255, 255, 255, 0.32); stroke-dasharray: none; }
+#pk-tree-links path.warm { stroke: rgba(255, 255, 255, 0.7); }
+#pk-tree-nodes { position: relative; display: flex; flex-direction: column; gap: 3.4vh; }
+.pk-tier { display: flex; justify-content: center; gap: 2vw; flex-wrap: wrap; }
+
+/* =====================================================================
+   Specialisation tree: a specialist root, a connector, then one branch per
+   perk, and inside a branch one node per level. States, distinct without colour:
+     locked  hollow, dim, dashed
+     avail   ringed + glow  (the only thing that invites a click)
+     active  filled
+     maxed   filled + solid ring
+   ===================================================================== */
+.pk-treegroup {
+    position: relative; display: flex; flex-direction: column; align-items: center;
+    padding: 2.2vh 0 1vh; gap: 1.6vh;
+}
+.pk-treegroup + .pk-treegroup { border-top: 1px solid rgba(255, 255, 255, 0.07); margin-top: 1.4vh; }
+
+/* the specialist itself */
+.pk-root {
+    display: flex; flex-direction: column; align-items: center; gap: 0.3vh;
+    padding: 1vh 1.6vw; cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 0.5vh;
+    background: #16140f; transition: border-color 160ms, background 160ms, transform 160ms;
+}
+.pk-root:hover { border-color: rgba(255, 255, 255, 0.34); transform: translateY(-1px); }
+.pk-root .pup-svg { width: 2.4vh; height: 2.4vh; fill: currentColor; }
+.pk-root-name { font-size: 1.7vh; letter-spacing: 0.22em; color: var(--parchment); }
+.pk-root-tag  { font-size: 0.95vh; letter-spacing: 0.24em; color: var(--parchment-dim); }
+.pk-root.chosen {
+    border-color: rgba(255, 255, 255, 0.55); background: #221f19;
+    box-shadow: 0 0 3vh rgba(255, 255, 255, 0.08);
+}
+.pk-root.chosen .pk-root-tag { color: var(--parchment); }
+/* a tree you have not taken reads as an option, not as your progression */
+.pk-treegroup:not(.chosen):not(.always) .pk-branches { opacity: 0.42; }
+
+.pk-branches { display: flex; justify-content: center; align-items: flex-start; gap: 2.2vw; flex-wrap: wrap; }
+
+/* stacked rows, one per prerequisite depth - children sit under what they
+   need, which is what makes the elbow connectors read as a tree */
+/* `align-items: stretch` matters: the base rule sets flex-start, which in a
+   column container shrinks each row to its content and pins it to the left */
+.pk-branches.rows { flex-direction: column; flex-wrap: nowrap; gap: 2.4vh; width: 100%; align-items: stretch; }
+.pk-branchrow { display: flex; justify-content: center; align-items: flex-start; gap: 2.4vw; flex-wrap: wrap; width: 100%; }
+
+.pk-branch {
+    display: flex; flex-direction: column; align-items: center; gap: 0.8vh;
+    padding: 0.8vh 0.9vw 1.2vh; cursor: pointer; border-radius: 0.5vh;
+    border: 1px solid transparent; transition: border-color 160ms, background 160ms;
+}
+.pk-branch:hover { background: rgba(255, 255, 255, 0.03); }
+.pk-branch.sel   { border-color: rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
+.pk-branch.locked { filter: grayscale(0.8) brightness(0.72); }
+.pk-branch-head { display: flex; flex-direction: column; align-items: center; gap: 0.2vh; }
+.pk-branch-head .pup-svg { width: 2vh; height: 2vh; fill: currentColor; opacity: 0.85; }
+.pk-branch-name { font-size: 1.25vh; letter-spacing: 0.16em; color: var(--parchment); text-align: center; max-width: 9vw; }
+.pk-branch-rank { font-size: 1vh; letter-spacing: 0.14em; color: var(--parchment-dim); font-variant-numeric: tabular-nums; }
+
+/* the ladder of levels */
+.pk-ladder { display: flex; flex-direction: column; align-items: center; }
+.pk-stem { width: 2px; height: 1.5vh; background: rgba(255, 255, 255, 0.10); }
+.pk-stem.on { background: rgba(255, 255, 255, 0.3); }
+
+.pk-lvl {
+    position: relative; width: 3.4vh; height: 3.4vh; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.16); background: #14120e;
+    color: var(--parchment-dim); font-size: 1.15vh; font-variant-numeric: tabular-nums;
+    transition: transform 140ms, border-color 140ms, background 140ms, box-shadow 140ms;
+}
+.pk-lvl:hover { transform: scale(1.1); }
+.pk-lvl.locked { border-style: dashed; opacity: 0.62; }
+.pk-lvl.avail {
+    border-color: var(--parchment); color: var(--parchment);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06), 0 0 2.4vh rgba(255, 255, 255, 0.16);
+    animation: pk-lvl-pulse 2.4s ease-in-out infinite;
+}
+.pk-lvl.active { background: var(--parchment); border-color: var(--parchment); color: #12100c; }
+.pk-lvl.maxed  { background: var(--parchment); border-color: var(--parchment); color: #12100c;
+                 box-shadow: 0 0 0 2px #14120e, 0 0 0 3px rgba(255, 255, 255, 0.6); }
+@keyframes pk-lvl-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05), 0 0 2vh rgba(255, 255, 255, 0.12); }
+    50%      { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.10), 0 0 3vh rgba(255, 255, 255, 0.22); }
+}
+/* requirement / cost sits beside the node so the gate needs no click */
+.pk-lvl-meta {
+    position: absolute; left: 110%; top: 50%; transform: translateY(-50%);
+    font-size: 0.9vh; letter-spacing: 0.12em; color: var(--parchment-dim); white-space: nowrap;
+}
+.pk-lvl.avail .pk-lvl-meta { color: var(--parchment); }
+
+/* =====================================================================
+   Diamond nodes. Must come after the base .pk-lvl rules. The node itself is
+   not rotated: the diamond is a rotated ::before behind it, so the number and
+   the cost label lay out normally and every state restyles the pseudo-element.
+   ===================================================================== */
+.pk-lvl {
+    width: 3.6vh; height: 3.6vh;
+    border: none; background: none; border-radius: 0;
+    transform: none; overflow: visible;
+}
+/* `.pk-lvl.active` outranks a bare `.pk-lvl`, so the state rules above would
+   still paint a square behind every diamond. Same specificity, declared later,
+   so these win and the shape is the ::before alone. */
+.pk-lvl.locked, .pk-lvl.avail, .pk-lvl.active, .pk-lvl.maxed {
+    background: none; border: none; border-radius: 0;
+}
+/* owned nodes are a soft lit fill with a bright edge; the only thing that
+   really shines is the node you can buy next */
+.pk-lvl::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    transform: rotate(45deg); border-radius: 6%;
+    border: 1.5px solid rgba(255, 255, 255, 0.16); background: #131109;
+    transition: transform 140ms, border-color 140ms, background 140ms, box-shadow 140ms;
+}
+.pk-lvl > * { position: relative; z-index: 1; }
+.pk-lvl:hover { transform: none; }
+.pk-lvl:hover::before { transform: rotate(45deg) scale(1.1); border-color: rgba(255, 255, 255, 0.42); }
+
+.pk-lvl.locked { opacity: 0.45; color: var(--parchment-dim); }
+.pk-lvl.locked::before { border-style: dashed; }
+
+/* the one node worth looking at */
+.pk-lvl.avail { color: var(--parchment); animation: none; box-shadow: none; }
+.pk-lvl.avail::before {
+    border-color: rgba(255, 255, 255, 0.85); background: #201d15;
+    animation: pk-dia-pulse 2.6s ease-in-out infinite;
+}
+
+/* bought: lit, not blinding */
+.pk-lvl.active, .pk-lvl.maxed { color: var(--parchment); box-shadow: none; }
+.pk-lvl.active::before {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+/* the last rank of a perk earns a slightly stronger edge, nothing more */
+.pk-lvl.maxed::before {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.72);
+}
+
+@keyframes pk-dia-pulse {
+    0%, 100% { box-shadow: 0 0 1.2vh rgba(255, 255, 255, 0.10); }
+    50%      { box-shadow: 0 0 2.4vh rgba(255, 255, 255, 0.20); }
+}
+
+/* the cost sits clear of the diamond's corner, upright, and never overlaps the
+   stem below it */
+.pk-lvl-meta {
+    left: 108%; top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85vh; letter-spacing: 0.1em;
+}
+
+/* tighter ladder: the stems were long enough that a cost label collided with
+   the node under it */
+.pk-stem { height: 1.1vh; }
+
+/* =====================================================================
+   Density: branches sit close together, the root sits directly above its own
+   branches, and a group does not claim the full width.
+   ===================================================================== */
+#pk-tree { padding: 1.4vh 1vw 3vh; }
+.pk-treegroup { padding: 1.2vh 0 0.6vh; gap: 0.9vh; }
+.pk-treegroup + .pk-treegroup { margin-top: 0.8vh; }
+.pk-branchrow { gap: 1.6vw; }
+.pk-branch { padding: 0.4vh 0.5vw 0.6vh; gap: 0.5vh; }
+.pk-branch-name { font-size: 1.15vh; letter-spacing: 0.12em; max-width: 8vw; }
+.pk-branch-rank { font-size: 0.95vh; }
+.pk-root { padding: 0.7vh 1.2vw; }
+.pk-root-name { font-size: 1.5vh; letter-spacing: 0.18em; }
+.pk-root-tag { font-size: 0.85vh; }
+
+/* the weekly-reset button while it is on cooldown */
+.pk-navbtn.cooling { opacity: 0.5; cursor: default; }
+.pk-navbtn.cooling:hover { background: transparent; color: var(--parchment-dim); }
+.pk-node {
+    position: relative; width: 8vh; height: 8vh; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: #1b1917; border: 1px solid rgba(239, 230, 213, 0.10);
+    color: var(--parchment);
+    transition: transform 140ms, border-color 140ms, background 140ms, box-shadow 140ms;
+}
+.pk-node:hover { transform: scale(1.06); border-color: rgba(255, 255, 255, 0.34); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); }
+.pk-node.owned { border-color: rgba(255, 255, 255, 0.30); background: #23201d; }
+.pk-node.equipped { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 2.6vh rgba(255, 255, 255, 0.07); }
+.pk-node.locked { filter: grayscale(0.85) brightness(0.6); }
+.pk-node.sel { border-color: rgba(255, 255, 255, 0.5); }
+.pk-node .pup-svg { width: 2.6vh; height: 2.6vh; fill: currentColor; }
+.pk-node-rank { margin-top: 0.4vh; font-size: 1vh; letter-spacing: 0.12em; color: var(--parchment-dim); font-variant-numeric: tabular-nums; }
+.pk-node-label {
+    position: absolute; top: calc(100% + 0.5vh); left: 50%; transform: translateX(-50%);
+    font-size: 1.1vh; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--parchment-dim); white-space: nowrap; pointer-events: none;
+}
+.pk-tier-label {
+    text-align: center; margin-bottom: 0.4vh;
+    font-size: 1.05vh; letter-spacing: 0.3em; text-transform: uppercase; color: var(--parchment-dim);
+}
+
+/* ------------------------------ modal ------------------------------ */
+#pk-modal { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; }
+#pk-modal.hidden { display: none; }
+#pk-modal::before { content: ''; position: absolute; inset: 0; background: rgba(6, 5, 4, 0.6); }
+#pk-modal-card {
+    position: relative; width: 30vw; min-width: 340px; max-width: 460px;
+    padding: 2.4vh 1.8vw 1.8vh;
+    background: #171514;
+    border: 1px solid rgba(239, 230, 213, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.7);
+    animation: pk-modal-in 170ms ease-out;
+}
+@keyframes pk-modal-in { from { opacity: 0; transform: translateY(0.9vh) scale(0.985); } to { opacity: 1; transform: none; } }
+#pk-modal-title {
+    font-family: Georgia, serif; font-size: 2.1vh; font-weight: bold; text-align: center; color: var(--parchment);
+}
+#pk-modal-body {
+    margin-top: 1.2vh; font-family: var(--body); font-size: 1.35vh; line-height: 1.5;
+    color: var(--parchment-dim); text-align: center;
+}
+#pk-modal-body .pk-m-row {
+    display: flex; align-items: center; justify-content: center; gap: 0.8vw;
+    margin-top: 1.2vh; font-size: 1.5vh; color: var(--parchment);
+}
+#pk-modal-body .pk-m-arrow { color: var(--parchment-dim); }
+#pk-modal-body .pk-m-cost { margin-top: 1.2vh; font-size: 1.25vh; letter-spacing: 0.16em; text-transform: uppercase; }
+#pk-modal-actions { margin-top: 2vh; display: flex; gap: 0.8vw; }
+#pk-modal-actions .pk-btn { flex: 1; }
+
+/* ----------------------------- tooltip ----------------------------- */
+#pk-tip {
+    position: absolute; z-index: 20; pointer-events: none;
+    width: 17vw; min-width: 210px; max-width: 300px;
+    padding: 1.1vh 0.9vw;
+    background: #0f0d0c; border: 1px solid rgba(239, 230, 213, 0.14);
+    border-radius: 9px; box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
+    animation: pk-tip-in 120ms ease-out;
+}
+#pk-tip.hidden { display: none; }
+@keyframes pk-tip-in { from { opacity: 0; } to { opacity: 1; } }
+.pk-tip-name { font-family: Georgia, serif; font-size: 1.5vh; font-weight: bold; color: var(--parchment); }
+.pk-tip-desc { margin-top: 0.4vh; font-family: var(--body); font-size: 1.2vh; line-height: 1.4; color: var(--parchment-dim); }
+.pk-tip-rule { height: 1px; margin: 0.8vh 0; background: rgba(239, 230, 213, 0.10); }
+.pk-tip-row { display: flex; justify-content: space-between; gap: 0.8vw; font-size: 1.15vh; margin-top: 0.3vh; }
+.pk-tip-row span:first-child { color: var(--parchment-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+.pk-tip-row span:last-child { color: var(--parchment); font-family: var(--body); text-align: right; }
+.pk-tip-row.bad span:last-child { color: var(--blood); }
+
+/* --------------------------- narrow screens --------------------------- */
+/* the detail panel is the first thing to go when there is no room for it */
+@media (max-aspect-ratio: 16/10) {
+    #pk-grid { grid-template-columns: repeat(auto-fill, minmax(16vw, 1fr)); }
+}
+@media (max-width: 1500px) {
+    #pk-detail { min-width: 220px; }
+    .pk-slot { min-width: 7.5vw; }
+    /* must beat the rule above: the auto row sizes chips to their text, and a
+       7.5vw floor would push them off the panel on narrow displays */
+    #pk-slots-row.auto .pk-slot { min-width: 0; }
+}
+
+/* ---- perks: side toggle + specialisation picker ------------------- */
+/* the side toggle reads as a real tab strip, so the second progression is obviously one click away */
+#pk-sides {
+    display: flex; justify-content: center; gap: 0.3vw;
+    padding: 0.35vh; border-radius: 999px;
+    background: #100e0d;
+    border: 1px solid rgba(239, 230, 213, 0.10);
+}
+.pk-side {
+    display: flex; align-items: center; gap: 0.5vw;
+    padding: 0.7vh 1.4vw; cursor: pointer; border-radius: 999px;
+    background: transparent; border: 1px solid transparent;
+    color: var(--parchment-dim);
+    font-size: 1.25vh; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap;
+    transition: background 130ms, color 130ms, border-color 130ms;
+}
+.pk-side:hover { color: var(--parchment); background: #1b1917; }
+.pk-side.active {
+    color: var(--parchment); background: #2b2724;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.pk-side .pup-svg { width: 1.4vh; height: 1.4vh; fill: currentColor; }
+.pk-side-tree { color: var(--parchment-dim); text-transform: none; letter-spacing: 0.06em; font-family: var(--body); }
+.pk-side.active .pk-side-tree { color: var(--parchment); }
+.pk-side-dot {
+    width: 0.6vh; height: 0.6vh; border-radius: 50%; flex: none;
+    background: rgba(255, 255, 255, 0.35);
+}
+.pk-side.has-points .pk-side-dot { background: var(--parchment); box-shadow: 0 0 0.8vh rgba(255,255,255,0.5); }
+
+#pk-pick { padding: 1vh 0 2vh; }
+#pk-pick.hidden { display: none; }
+#pk-pick-head { text-align: center; margin-bottom: 2.2vh; }
+#pk-pick-title {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 2.4vh; font-weight: bold; color: var(--parchment);
+}
+#pk-pick-sub {
+    margin-top: 0.5vh; font-family: var(--body); font-size: 1.35vh;
+    color: var(--parchment-dim);
+}
+#pk-pick-cards {
+    display: grid; gap: 1.2vh 1vw;
+    grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr));
+}
+.pk-spec {
+    position: relative; display: flex; flex-direction: column;
+    min-height: 26vh; padding: 2vh 1.2vw 1.6vh; cursor: pointer;
+    background: linear-gradient(180deg, #1d1a18 0%, #151312 100%);
+    border: 1px solid rgba(239, 230, 213, 0.10);
+    border-radius: 12px; overflow: hidden;
+    transition: transform 150ms, border-color 150ms, box-shadow 150ms;
+    animation: pk-card-in 220ms ease-out both;
+}
+.pk-spec:hover {
+    transform: translateY(-0.5vh);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+}
+/* a soft wash so the cards read as posters, not table rows */
+.pk-spec::after {
+    content: ''; position: absolute; inset: auto 0 0 0; height: 55%;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.035));
+    pointer-events: none;
+}
+.pk-spec-ico {
+    width: 7.4vh; height: 7.4vh; margin: 0 auto 1.6vh;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(239, 230, 213, 0.12);
+    color: var(--parchment);
+}
+.pk-spec-ico .pup-svg { width: 3.8vh; height: 3.8vh; fill: currentColor; }
+.pk-spec-name {
+    text-align: center; font-family: Georgia, serif;
+    font-size: 2.3vh; font-weight: bold; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--parchment);
+}
+.pk-spec-desc {
+    margin-top: 0.9vh; flex: 1;
+    font-family: var(--body); font-size: 1.25vh; line-height: 1.45;
+    color: var(--parchment-dim); text-align: center;
+}
+.pk-spec-foot {
+    margin-top: 1.4vh; text-align: center;
+    font-size: 1.05vh; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--parchment-dim);
+}
+.pk-spec:hover .pk-spec-foot { color: var(--parchment); }
+
+/* the tree you gave up - visible so the choice means something */
+.pk-cat.forgone { opacity: 0.42; }
+.pk-cat.forgone:hover { background: transparent; color: var(--parchment-dim); cursor: default; }
+
+/* a not-chosen tree is an offer: clicking it opens the switch dialog. Dimmer
+   than a chosen tree, but it lights up and invites the click. */
+.pk-cat.forgone.switchable { opacity: 0.62; cursor: pointer; }
+.pk-cat.forgone.switchable:hover {
+    opacity: 1; background: #1b1917; color: var(--parchment); cursor: pointer;
+}
+.pk-cat.forgone.switchable:hover .pk-cat-count { color: var(--parchment); }
+.pk-cat.forgone.switchable .pk-cat-count {
+    font-size: 0.95vh; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.pk-cat-lock { width: 1.4vh; height: 1.4vh; flex: none; display: flex; align-items: center; }
+.pk-cat-lock .pup-svg { width: 1.3vh; height: 1.3vh; fill: currentColor; }
+.pk-nav-group {
+    margin: 1.2vh 0 0.4vh; padding-left: 0.3vw;
+    font-size: 1vh; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--parchment-dim); opacity: 0.7;
+}
+.pk-nav-group:first-child { margin-top: 0; }
+
+/* ---- perks: picker fills the panel instead of floating in a void ---- */
+/* while choosing there is no tree to navigate, so the rail is dead weight */
+#pk-body.picking #pk-nav { display: none; }
+/* NOT align-items:center - on a flex COLUMN that stops #pk-scroll stretching,
+   so it collapsed to content width and forced the card grid down to two
+   columns with the third wrapping off the bottom. The picker centres itself
+   with its own max-width + auto margins instead. */
+#pk-body.picking #pk-main { align-items: stretch; }
+
+#pk-pick {
+    min-height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 1.4vh 0;
+    width: 100%; max-width: 72vw; margin: 0 auto;
+}
+#pk-pick-head { margin-bottom: 2.4vh; }
+/* narrower measure - the blurb ran nearly the full panel width and read as a
+   wall rather than a sentence */
+#pk-pick-sub { max-width: 40vw; margin-left: auto; margin-right: auto; line-height: 1.55; }
+
+/* Sized so a full row FITS without scrolling. 34vh cards pushed the third one
+   off the bottom of the panel. */
+#pk-pick-cards { grid-template-columns: repeat(auto-fit, minmax(15vw, 1fr)); gap: 1.4vh 1.2vw; }
+.pk-spec { min-height: 0; padding: 2.6vh 1.4vw 1.8vh; }
+.pk-spec-ico { width: 7.2vh; height: 7.2vh; margin-bottom: 1.6vh; }
+.pk-spec-ico .pup-svg { width: 3.7vh; height: 3.7vh; }
+.pk-spec-name { font-size: 2.3vh; }
+.pk-spec-desc {
+    margin-top: 1vh; font-size: 1.3vh; flex: none;
+    max-width: 20vw; margin-left: auto; margin-right: auto;
+}
+/* a hairline of light along the top edge stops the cards reading as flat slabs */
+.pk-spec::before {
+    content: ''; position: absolute; top: 0; left: 12%; right: 12%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+}
+/* the footer reads as the button it effectively is */
+.pk-spec-foot {
+    margin-top: 2vh; padding: 0.9vh 1vw; border-radius: 999px;
+    border: 1px solid rgba(239, 230, 213, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+    transition: background 140ms, border-color 140ms, color 140ms;
+}
+.pk-spec:hover .pk-spec-foot {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--parchment);
+}
+/* reset lives under the picker while the rail is hidden */
+#pk-pick-foot { margin-top: 3vh; display: flex; justify-content: center; }
+#pk-pick-foot.hidden { display: none; }
+#pk-pick-foot .pk-navbtn { min-width: 16vw; }
+
+/* ---- perks: read a tree before committing to it ------------------- */
+#pk-preview {
+    min-height: 100%; padding: 2vh 0;
+    width: 100%; max-width: 74vw; margin: 0 auto;
+    animation: pk-slide 180ms ease-out;
+}
+#pk-preview.hidden { display: none; }
+#pk-preview-top {
+    display: flex; align-items: center; gap: 1.4vw;
+    padding-bottom: 1.8vh; margin-bottom: 2vh;
+    border-bottom: 1px solid rgba(239, 230, 213, 0.08);
+}
+#pk-preview-top .pk-navbtn { flex: none; min-width: 10vw; }
+#pk-preview-top .pk-btn { flex: none; min-width: 13vw; }
+#pk-preview-titles { flex: 1; min-width: 0; }
+#pk-preview-name {
+    font-family: Georgia, 'Palatino Linotype', serif;
+    font-size: 2.4vh; font-weight: bold; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--parchment);
+}
+#pk-preview-desc {
+    margin-top: 0.4vh; font-family: var(--body);
+    font-size: 1.3vh; line-height: 1.45; color: var(--parchment-dim);
+}
+#pk-preview-list { display: flex; flex-direction: column; gap: 1.2vh; }
+
+.pk-pv {
+    display: flex; gap: 1.2vw; padding: 1.6vh 1.3vw;
+    background: #1b1917;
+    border: 1px solid rgba(239, 230, 213, 0.08);
+    border-radius: 11px;
+    animation: pk-card-in 200ms ease-out both;
+}
+.pk-pv-ico {
+    width: 5vh; height: 5vh; flex: none;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(239, 230, 213, 0.10);
+    color: var(--parchment);
+}
+.pk-pv-ico .pup-svg { width: 2.6vh; height: 2.6vh; fill: currentColor; }
+.pk-pv-body { flex: 1; min-width: 0; }
+.pk-pv-name {
+    font-family: Georgia, serif; font-size: 1.7vh; font-weight: bold; color: var(--parchment);
+}
+.pk-pv-name .pk-pv-cap {
+    margin-left: 0.6vw; padding: 0.2vh 0.6vw; border-radius: 999px;
+    font-family: var(--serif); font-size: 1vh; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--parchment-dim); border: 1px solid rgba(239, 230, 213, 0.14);
+}
+.pk-pv-desc {
+    margin-top: 0.4vh; font-family: var(--body); font-size: 1.25vh;
+    line-height: 1.4; color: var(--parchment-dim);
+}
+/* the rank ladder - the thing a player is actually here to read */
+.pk-pv-tiers { margin-top: 1vh; display: flex; flex-direction: column; gap: 0.4vh; }
+.pk-pv-tier {
+    display: grid; grid-template-columns: 4.5vw 1fr auto;
+    align-items: baseline; gap: 0.8vw;
+    padding: 0.5vh 0.7vw; border-radius: 7px;
+    background: rgba(255, 255, 255, 0.02);
+    font-family: var(--body); font-size: 1.2vh; color: var(--parchment);
+}
+.pk-pv-tier-n {
+    font-family: var(--serif); font-size: 1.05vh; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--parchment-dim);
+}
+.pk-pv-tier-cost {
+    font-family: var(--serif); font-size: 1.05vh; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--parchment-dim); white-space: nowrap;
+}
+.pk-pv-foot {
+    margin-top: 2.4vh; display: flex; justify-content: space-between;
+    align-items: center; gap: 1vw;
+    font-size: 1.15vh; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--parchment-dim);
+}
+
+/* pup-perks | standalone page shell - as its own ui_page these must be set
+   here, or the panel renders on opaque white with the game invisible. */
+html, body {
+    width: 100vw; height: 100vh; margin: 0; padding: 0;
+    overflow: hidden; background: transparent;
+}
+
+/* ==================================================================
+   pup-perks | ABILITY CARDS
+   Perks are independent cards you collect, upgrade and slot into a
+   four-card loadout, so the panel reads as a collection screen.
+   ================================================================== */
+
+/* ---- the loadout row ---- */
+#pk-slots-row.loadout {
+    display: flex; align-items: center; gap: 0.7vw;
+    flex-wrap: wrap; overflow: visible; max-height: none;
+}
+.pk-slot-kind {
+    font-size: 0.95vh; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--parchment-dim); margin: 0 0.3vw 0 0.8vw; white-space: nowrap;
+}
+.pk-slot-kind:first-child { margin-left: 0; }
+
+#pk-slots-row.loadout .pk-slot {
+    flex: 0 0 auto; min-width: 0; width: 9vw; height: 6.4vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.15vh; padding: 0.4vh 0.5vw; cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px;
+    background: #131109;
+}
+/* the signature slot is the headline of the loadout, so it reads bigger */
+#pk-slots-row.loadout .pk-slot.special {
+    width: 11vw; border-color: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(180deg, #1d1a12, #131109);
+}
+#pk-slots-row.loadout .pk-slot.empty {
+    border-style: dashed; border-color: rgba(255, 255, 255, 0.1);
+}
+#pk-slots-row.loadout .pk-slot.empty .pk-slot-name { color: var(--parchment-dim); opacity: 0.7; }
+#pk-slots-row.loadout .pk-slot.filled { cursor: pointer; }
+#pk-slots-row.loadout .pk-slot.filled:hover {
+    border-color: var(--blood); background: rgba(58, 28, 28, 0.4);
+}
+#pk-slots-row.loadout .pk-slot .pup-svg { width: 1.9vh; height: 1.9vh; fill: currentColor; }
+#pk-slots-row.loadout .pk-slot-name {
+    font-size: 1.05vh; letter-spacing: 0.1em; text-align: center;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pk-slot-lv {
+    font-size: 0.9vh; letter-spacing: 0.14em; color: var(--parchment-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- the collection: cards, not rows ---- */
+#pk-grid { grid-template-columns: repeat(auto-fill, minmax(12.5vw, 1fr)); gap: 1vw; }
+
+.pk-card {
+    display: flex; flex-direction: column; align-items: stretch;
+    border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 5px;
+    background: linear-gradient(180deg, #1a1811, #121009);
+    overflow: hidden; cursor: pointer;
+    transition: border-color 150ms, transform 150ms, box-shadow 150ms;
+}
+.pk-card:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.35); }
+/* the art plate - an icon on a plate until real card art exists */
+.pk-card-art {
+    height: 8vh; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.07), transparent 70%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pk-card-art .pup-svg { width: 3.4vh; height: 3.4vh; fill: var(--parchment); opacity: 0.9; }
+.pk-card-body { padding: 0.7vh 0.7vw 0.9vh; display: flex; flex-direction: column; gap: 0.3vh; }
+.pk-card-name {
+    font-size: 1.25vh; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--parchment); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pk-card-cat { font-size: 0.9vh; letter-spacing: 0.18em; text-transform: uppercase; color: var(--parchment-dim); }
+/* level pips read faster than "2/3" at a glance */
+.pk-card-pips { display: flex; gap: 0.25vw; margin-top: 0.3vh; }
+.pk-pip {
+    width: 1.1vh; height: 1.1vh; border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.pk-pip.on { background: var(--parchment); border-color: var(--parchment); }
+
+/* states, immediately distinguishable */
+.pk-card.locked   { opacity: 0.45; }
+.pk-card.locked .pk-card-art .pup-svg { opacity: 0.45; }
+.pk-card.owned    { border-color: rgba(255, 255, 255, 0.24); }
+.pk-card.equipped {
+    border-color: var(--parchment);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18), 0 0 2.4vh rgba(255,255,255,0.07);
+}
+.pk-card.maxed .pk-card-art { background: radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.16), transparent 72%); }
+.pk-card.upgrade { border-color: rgba(255, 255, 255, 0.6); }
+.pk-card.sel     { border-color: var(--parchment); }
+
+/* the corner tag that names the state */
+.pk-card-tag {
+    position: absolute; top: 0.5vh; right: 0.5vw;
+    font-size: 0.8vh; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 0.15vh 0.35vw; border-radius: 2px;
+    background: rgba(0, 0, 0, 0.55); color: var(--parchment-dim);
+}
+.pk-card { position: relative; }
+.pk-card.equipped .pk-card-tag { color: var(--parchment); background: rgba(255,255,255,0.14); }
+.pk-card.special .pk-card-art { border-bottom-color: rgba(255, 255, 255, 0.28); }
+
+/* ================================================================== */
+/* WESTERN STYLE - dividers, button plates and the modal frame match   */
+/* the other western panels.                                           */
+/* ================================================================== */
+
+#pk-rule,
+#pk-rule-foot {
+    height: 5px;
+    background: url('img/western/divider_line.png') center / 100% 100% no-repeat;
+    opacity: 0.95;
+    border: none;
+}
+
+.pk-btn,
+.pk-btn.ghost,
+.pk-navbtn,
+.pk-navbtn.danger {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+.pk-btn:hover,
+.pk-navbtn:hover {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    transform: scale(0.97);
+}
+
+#pk-modal-card {
+    background-color: rgba(12, 10, 8, 0.96);
+    background-image: url('img/western/double_border.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 4vh 2.4vw 3.4vh;
+}
+/* ---- western: nav + side pills ---- */
+.pk-cat.active,
+.pk-cat:hover {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+.pk-side.active {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+/* ---- western: admin-panel-style furniture ---- */
+/* ability cards on the engraved plate (square art, made for stretching) */
+.pk-card {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+
+/* side pills (Honest Work / Outlaw) on selection plates */
+.pk-side {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+.pk-side.active {
+    background:
+        url('img/western/selsected.png') center / 100% 100% no-repeat,
+        url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+}
+
+/* points badge, search, filter/sort dropdown buttons */
+#pk-points,
+#pk-search-box,
+.pk-select-btn {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+.pk-select-menu {
+    background-color: rgba(14, 12, 10, 0.97);
+    border: none;
+    border-radius: 0;
+}
+
+/* the bottom Active-perk chips */
+.pk-slot {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+    border-radius: 0;
+}
+
+/* ================================================================== */
+/* INK MENU: the same look as pup-ui and pup_gunsmith. An ink-roller   */
+/* panel, an engraved title plate, textured rows, white type on black  */
+/* and gold-leaf for what matters. Stays last so it wins.              */
+/* ================================================================== */
+:root { --gold-leaf: #c9a227; --gold-soft: #e6cd8b; }
+
+#pk-panel {
+    left: 4vw; right: 4vw; top: 3.5vh; bottom: 3.5vh;
+    padding: 4vh 3.4vw 3.2vh;
+    background: url('img/western/inkroller_1a.png') center / 100% 100% no-repeat;
+    border: none; border-radius: 0; box-shadow: none;
+}
+
+/* one type family throughout, like the other panels */
+#pk-title, #pk-level, #pk-points-n, .pk-d-name, #pk-modal-title, .pk-tip-name, #pk-pick-title,
+.pk-spec-name, #pk-preview-name, .pk-pv-name, .pk-name {
+    font-family: var(--serif); font-weight: normal; text-shadow: none;
+}
+#pk-title {
+    display: inline-block; padding: 1.5vh 2.6vw 1.3vh;
+    background: url('img/western/menu_header_1a.png') center / 100% 100% no-repeat;
+    font-size: 2.5vh; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+}
+#pk-subtitle { margin-top: 0.5vh; font-family: var(--body); font-style: normal; font-size: 1.3vh; letter-spacing: 0.08em; }
+.pk-d-name, #pk-modal-title, .pk-tip-name, #pk-pick-title, .pk-spec-name, #pk-preview-name, .pk-pv-name {
+    letter-spacing: 0.08em; text-transform: uppercase;
+}
+#pk-pick-title { font-size: 2.7vh; }
+.pk-pv-name { font-size: 1.8vh; }
+.pk-spec-name { font-size: 2.4vh; }
+
+/* gold leaf: your numbers, and the things you can act on */
+#pk-level, #pk-points-n { color: var(--gold-soft); text-shadow: none; }
+#pk-xp-track { background: rgba(255, 255, 255, 0.08); border: none; border-radius: 0; }
+#pk-xp-fill { background: linear-gradient(90deg, var(--gold-leaf), var(--gold-soft)); border-radius: 0; }
+#pk-xp-ghost { border-radius: 0; }
+.pk-pip.on { background: var(--gold-leaf); border-color: var(--gold-leaf); }
+.pk-side.has-points .pk-side-dot { background: var(--gold-leaf); box-shadow: 0 0 0.8vh rgba(201, 162, 39, 0.6); }
+.pk-cat.active .pk-cat-count { color: var(--gold-soft); }
+.pk-card.upgrade .pk-card-tag { color: var(--gold-soft); }
+.pk-btn { color: var(--gold-soft); font-size: 1.4vh; letter-spacing: 0.14em; }
+.pk-btn:hover { color: var(--parchment); }
+.pk-btn.danger, .pk-btn.danger:hover { color: #efb1a7; }
+.pk-btn.disabled, .pk-btn.disabled:hover { color: var(--parchment-dim); opacity: 0.55; transform: none; }
+.pk-card.sel, .pk-card.equipped { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.pk-card.sel { box-shadow: inset 0 0 0 1px var(--gold-leaf); }
+
+/* the choice cards and read-through rows sit on the engraved plate */
+.pk-spec, .pk-pv {
+    background: url('img/western/grid.png') center / 100% 100% no-repeat;
+    border: none; border-radius: 0;
+}
+.pk-spec::before, .pk-spec::after { display: none; }
+.pk-spec:hover { box-shadow: none; border: none; }
+.pk-spec-foot {
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none; border-radius: 0; color: var(--parchment); font-size: 1.15vh;
+}
+.pk-spec:hover .pk-spec-foot {
+    background:
+        url('img/western/selsected.png') center / 100% 100% no-repeat,
+        url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+    border: none;
+}
+.pk-pv-tier { background: rgba(0, 0, 0, 0.3); border-radius: 0; }
+.pk-spec-ico, .pk-pv-ico, .pk-d-ico { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.16); }
+.pk-spec-desc, .pk-pv-desc, #pk-preview-desc, #pk-pick-sub { color: #c9c9c9; font-size: 1.45vh; }
+
+/* the two right-hand columns: a perk's details, and the guide */
+#pk-detail, #pk-guide {
+    background: rgba(0, 0, 0, 0.42);
+    border: none; border-radius: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+.pk-d-rule { height: 5px; background: url('img/western/divider_line.png') center / 100% 100% no-repeat; }
+.pk-d-desc, .pk-d-value.dim { color: #c9c9c9; }
+#pk-tip, .pk-select-menu { border-radius: 0; background: #0b0a09; }
+.pk-opt { border-radius: 0; }
+#pk-modal-body { color: #c9c9c9; font-size: 1.5vh; }
+#pk-modal-body .pk-m-arrow { font-size: 1.2vh; letter-spacing: 0.1em; text-transform: uppercase; }
+#pk-modal-body .pk-m-row b { color: var(--gold-soft); font-weight: normal; }
+
+#pk-topright { gap: 0.8vw; }
+#pk-guide-btn { flex: none; min-width: 7vw; padding: 1vh 1vw; font-size: 1.4vh; color: var(--parchment); }
+#pk-guide-btn.on {
+    background:
+        url('img/western/selsected.png') center / 100% 100% no-repeat,
+        url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+}
+#pk-points { border-radius: 0; padding: 0.8vh 1.1vw; }
+#pk-close { border-radius: 0; background: rgba(0, 0, 0, 0.5); }
+
+/* the guide */
+#pk-guide {
+    width: 24vw; min-width: 300px; max-width: 460px; flex: none;
+    display: flex; flex-direction: column; min-height: 0;
+    padding: 1.2vh 0.3vw 1.2vh 1.1vw;
+    animation: pk-slide 180ms ease-out;
+}
+.pk-g-scroll { flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.7vw; }
+.pk-g-scroll::-webkit-scrollbar { width: 3px; }
+.pk-g-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.35); }
+.pk-g-sec { padding-bottom: 1.5vh; margin-bottom: 1.4vh; background: url('img/western/divider_line.png') center bottom / 100% 5px no-repeat; }
+.pk-g-sec:last-child { background: none; margin-bottom: 0; }
+.pk-g-head { display: flex; align-items: center; gap: 0.5vw; margin-bottom: 0.8vh; }
+.pk-g-ico { width: 1.9vh; height: 1.9vh; flex: none; color: var(--gold-soft); }
+.pk-g-ico .pup-svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+.pk-g-title { font-size: 1.85vh; letter-spacing: 0.08em; text-transform: uppercase; color: var(--parchment); }
+.pk-g-text { font-family: var(--body); font-size: 1.45vh; line-height: 1.4; color: #d6d6d6; user-select: text; }
+.pk-g-text + .pk-g-text { margin-top: 0.6vh; }
+.pk-g-text.keep { color: var(--gold-soft); }
+.pk-g-step { display: flex; align-items: baseline; gap: 0.6vw; margin-top: 0.5vh; }
+.pk-g-step-n { flex: none; width: 1.3vw; font-size: 1.5vh; color: var(--gold-soft); text-align: center; }
+.pk-g-row { margin-top: 0.9vh; }
+.pk-g-row-label { font-size: 1.25vh; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-soft); margin-bottom: 0.2vh; }
+.pk-g-opt { padding: 1.2vh 0.9vw; margin-top: 0.8vh; background: url('img/western/grid.png') center / 100% 100% no-repeat; }
+.pk-g-opt-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6vw; margin-bottom: 0.6vh; }
+.pk-g-opt-name { font-size: 1.6vh; letter-spacing: 0.06em; text-transform: uppercase; color: var(--parchment); }
+.pk-g-opt-cost { font-family: var(--body); font-size: 1.25vh; color: var(--gold-soft); text-align: right; }
+.pk-g-status { margin-top: 0.7vh; font-family: var(--body); font-size: 1.3vh; color: var(--parchment-dim); }
+.pk-g-opt .pk-btn { margin-top: 0.9vh; }
+
+/* four specialisations fit on one row even with the guide open */
+#pk-pick { max-width: none; }
+#pk-pick-cards { grid-template-columns: repeat(auto-fit, minmax(12.6vw, 1fr)); }
+.pk-spec { padding: 2.4vh 1vw 1.8vh; }
+.pk-spec-desc { max-width: none; }
+
+/* the heading above these already says "Switch specialisation", and the words were pushing the names off the row */
+.pk-cat.forgone .pk-cat-lock, .pk-cat.forgone .pk-cat-count { display: none; }
+
+/* the Active chips are plates, with no box drawn on top */
+.pk-slot.filled, #pk-slots-row.auto .pk-slot.filled, #pk-slots-row.auto .pk-slot.filled:hover {
+    border: none;
+    background: url('img/western/selection_box_bg_1d.png') center / 100% 100% no-repeat;
+}
+
+/* a shorter description must not lift that card's button out of line with its neighbours */
+.pk-spec-desc { flex: 1; }
+
+/* the title plate sits centred like the other panels, with the tabs and xp under it;
+   the guide, points and close stay in the top right corner */
+#pk-top { position: relative; flex-direction: column; align-items: center; gap: 0.8vh; }
+#pk-titles { flex: none; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#pk-title { padding: 1.3vh 3vw 1.1vh; }
+#pk-subtitle { margin-top: 0.3vh; }
+#pk-topright { position: absolute; top: 0.6vh; right: 0; flex: none; }
+#pk-rule { margin-top: 1vh; }

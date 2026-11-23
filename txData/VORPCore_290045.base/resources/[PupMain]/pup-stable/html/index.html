@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stable</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section id="panel" class="hidden" aria-live="polite">
+    <!-- ornate header frame (pup-ui's cs_header art), then the page name and a purse line -->
+    <header id="head">
+        <div id="store-title">Stable</div>
+    </header>
+    <div id="menu-line"><span id="menu-title"></span></div>
+    <div id="meta">
+        <span class="nav"><button id="back-btn" type="button" aria-label="Back">&#x2039;</button><span id="counter"></span></span>
+        <div id="cash"><span id="cash-money"></span><span id="cash-gold"></span></div>
+    </div>
+    <div class="rule"></div>
+    <div id="up-hint" class="scroll-hint">&#x25B2;</div>
+    <ul id="list" role="listbox"></ul>
+    <div id="down-hint" class="scroll-hint">&#x25BC;</div>
+    <div class="rule thin"></div>
+    <div id="detail">
+        <div id="sliders"></div>
+        <div id="desc"></div>
+        <div id="stats"></div>
+    </div>
+    <footer id="actions"></footer>
+    <div id="hints"></div>
+</section>
+<!-- the darkened side of the screen behind the panel, as pup-ui's menus have; shown only while the panel is -->
+<div id="shade" aria-hidden="true"></div>
+<script src="app.js"></script>
+</body>
+</html>

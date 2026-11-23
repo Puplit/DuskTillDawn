@@ -1,0 +1,2002 @@
+{
+  "_note": "Pure data. Zone lookup order: places (zone type 12), then areas (11), then districts (10); first hash match wins; no match -> the districts entry whose hash is fallbackHash. prey=false means use the fallback zone. There is no Lakay area row on purpose.",
+  "fallbackHash": 1684533001,
+  "places": [
+    {
+      "zone": "W_4_ABANDONED_MISSION",
+      "hex": "0xD1113443",
+      "hash": -787401661,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Abandoned Mission"
+    },
+    {
+      "zone": "W_4_ABANDONED_TRADING_POST",
+      "hex": "0x44CE7B03",
+      "hash": 1154382595,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Abandoned Trading Post"
+    },
+    {
+      "zone": "W_4_ABERDEEN_PIG_FARM",
+      "hex": "0x0D0F2B79",
+      "hash": 219097977,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Aberdeen Pig Farm"
+    },
+    {
+      "zone": "W_4_ADLER_RANCH",
+      "hex": "0xC1CD737F",
+      "hash": -1043500161,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Adler Ranch"
+    },
+    {
+      "zone": "W_4_APPLESEED_TIMBER_COMPANY",
+      "hex": "0xE6F7DBF9",
+      "hash": -419963911,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Appleseed Timber Company"
+    },
+    {
+      "zone": "W_4_BAYGALL_EDGE",
+      "hex": "0x0BE5C4CF",
+      "hash": 199607503,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Baygall Edge"
+    },
+    {
+      "zone": "W_4_BEAR_CLAW",
+      "hex": "0xF035FC69",
+      "hash": -264897431,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Bear Claw"
+    },
+    {
+      "zone": "W_4_BEECHERS_HOPE",
+      "hex": "0x63F741E1",
+      "hash": 1677148641,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Beechers Hope"
+    },
+    {
+      "zone": "W_4_BRITTLEBRUSH_TRAWL",
+      "hex": "0xC9592823",
+      "hash": -916903901,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "BrittleBrush Trawl"
+    },
+    {
+      "zone": "W_4_BUTCHER_CREEK",
+      "hex": "0xE6A471EB",
+      "hash": -425430549,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Butcher Creek"
+    },
+    {
+      "zone": "W_4_CAIRN_LODGE",
+      "hex": "0x88CA196B",
+      "hash": -2000021141,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Cairn Lodge"
+    },
+    {
+      "zone": "W_4_CANEBREAK_MANOR",
+      "hex": "0x229D05AC",
+      "hash": 580715948,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Canebreak Manor"
+    },
+    {
+      "zone": "W_4_CARMODY_DELL",
+      "hex": "0x8EA16502",
+      "hash": -1902025470,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Carmody Dell"
+    },
+    {
+      "zone": "W_4_CASTORS_RIDGE",
+      "hex": "0xDB1A94C6",
+      "hash": -619014970,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Castors Ridge"
+    },
+    {
+      "zone": "W_4_CATFISH_JACKSONS",
+      "hex": "0x656FB687",
+      "hash": 1701820039,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Catfish Jacksons"
+    },
+    {
+      "zone": "W_4_CENTRAL_UNION_RAILROAD_1",
+      "hex": "0x20144315",
+      "hash": 538198805,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Central Union Railroad 1"
+    },
+    {
+      "zone": "W_4_CENTRAL_UNION_RAILROAD_2",
+      "hex": "0x5CDBBCA3",
+      "hash": 1557904547,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Central Union Railroad 2"
+    },
+    {
+      "zone": "W_4_CENTRAL_UNION_RAILROAD_3",
+      "hex": "0x4A98181C",
+      "hash": 1251481628,
+      "huntable": true,
+      "prey": "sparrow_redboa",
+      "label": "Central Union Railroad 3"
+    },
+    {
+      "zone": "W_4_CHEZ_PORTER",
+      "hex": "0x86BE76ED",
+      "hash": -2034338067,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Chez Porter"
+    },
+    {
+      "zone": "W_4_CLAWSONS_REST",
+      "hex": "0x620D6F83",
+      "hash": 1645047683,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Clawsons Rest"
+    },
+    {
+      "zone": "W_4_CLEMENS_POINT",
+      "hex": "0x6D17AC2F",
+      "hash": 1830267951,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Clemens Point"
+    },
+    {
+      "zone": "W_4_CLINGMAN",
+      "hex": "0x767DC860",
+      "hash": 1987954784,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Clingman"
+    },
+    {
+      "zone": "W_4_COCHINAY",
+      "hex": "0x1321E567",
+      "hash": 320988519,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Cochinay"
+    },
+    {
+      "zone": "W_4_COLTER",
+      "hex": "0xA6CC7164",
+      "hash": -1496551068,
+      "huntable": true,
+      "prey": "squirrel2_redboa",
+      "label": "Colter"
+    },
+    {
+      "zone": "W_4_COMPSONS_STEAD",
+      "hex": "0x1F24B6AE",
+      "hash": 522499758,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Compsons Stead"
+    },
+    {
+      "zone": "W_4_COOTS_CHAPEL",
+      "hex": "0xFC5A9494",
+      "hash": -61172588,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Coots Chapel"
+    },
+    {
+      "zone": "W_4_COPPERHEAD_LANDING",
+      "hex": "0x40815011",
+      "hash": 1082216465,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Copperhead Landing"
+    },
+    {
+      "zone": "W_4_CORNWALL_KEROSENE_TAR",
+      "hex": "0x1D5BC2A5",
+      "hash": 492552869,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cornwall Kerosene Tar"
+    },
+    {
+      "zone": "W_4_CRAWDAD_WILLIES",
+      "hex": "0xBA9A795B",
+      "hash": -1164281509,
+      "huntable": true,
+      "prey": "squirrel_ferdelance",
+      "label": "Crawdad Willies"
+    },
+    {
+      "zone": "W_4_CUEVA_SECA",
+      "hex": "0x4A606200",
+      "hash": 1247830528,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cueva Seca"
+    },
+    {
+      "zone": "W_4_DODDS_BLUFF",
+      "hex": "0x96933878",
+      "hash": -1768736648,
+      "huntable": true,
+      "prey": "squirrel_ferdelance",
+      "label": "Doods Bluff"
+    },
+    {
+      "zone": "W_4_DORMIN_CREST",
+      "hex": "0xC88AA5E6",
+      "hash": -930437658,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Dormin Crest"
+    },
+    {
+      "zone": "W_4_DOVERHILL",
+      "hex": "0xD98BB81D",
+      "hash": -645154787,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Doverhill"
+    },
+    {
+      "zone": "W_4_DOWNES_RANCH",
+      "hex": "0xD8D62973",
+      "hash": -657053325,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Downes Ranch"
+    },
+    {
+      "zone": "W_4_EL_NIDO",
+      "hex": "0x18E91D1B",
+      "hash": 417930523,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "El Nido"
+    },
+    {
+      "zone": "W_4_EVELYN_MILLER_CAMP",
+      "hex": "0x3D67DD7C",
+      "hash": 1030217084,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Evelyn Miller Camp"
+    },
+    {
+      "zone": "W_4_EWING_BASIN",
+      "hex": "0xDF753206",
+      "hash": -545967610,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Ewing Basin"
+    },
+    {
+      "zone": "W_4_FACE_ROCK",
+      "hex": "0x9372C764",
+      "hash": -1821194396,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Face Rock"
+    },
+    {
+      "zone": "W_4_FAIRVALE_SHANTY",
+      "hex": "0x9F50855A",
+      "hash": -1622112934,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Fairvale Shanty"
+    },
+    {
+      "zone": "W_4_FIRE_LOOKOUT_TOWER",
+      "hex": "0xD3A671FC",
+      "hash": -744066564,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Fire Lookout Tower"
+    },
+    {
+      "zone": "W_4_FIRWOOD_RISE",
+      "hex": "0xF7453243",
+      "hash": -146460093,
+      "huntable": true,
+      "prey": "squirrel_redboa",
+      "label": "Firwood Rise"
+    },
+    {
+      "zone": "W_4_FLATTENED_CABIN",
+      "hex": "0x565B032F",
+      "hash": 1448805167,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Flattened Cabin"
+    },
+    {
+      "zone": "W_4_FORT_RIGGS_HOLDING_CAMP",
+      "hex": "0xCE9BA997",
+      "hash": -828659305,
+      "huntable": true,
+      "prey": "oriole_redboa",
+      "label": "Fort Riggs Holding Camp"
+    },
+    {
+      "zone": "W_4_GAPTOOTH_BREACH",
+      "hex": "0x026256CA",
+      "hash": 39999178,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Gaptooth Breach"
+    },
+    {
+      "zone": "W_4_GILL_LANDING",
+      "hex": "0xFF6DBCB4",
+      "hash": -9585484,
+      "huntable": true,
+      "prey": "oriole_redboa",
+      "label": "Gill Landing"
+    },
+    {
+      "zone": "W_4_GRANGERS_HOGGERY",
+      "hex": "0xCC18EFF5",
+      "hash": -870780939,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Grangers Hoggery"
+    },
+    {
+      "zone": "W_4_GREENHOLLOW",
+      "hex": "0x729C12AF",
+      "hash": 1922831023,
+      "huntable": true,
+      "prey": "oriole_redboa",
+      "label": "Green Hollow"
+    },
+    {
+      "zone": "W_4_GUTHRIE_FARM",
+      "hex": "0xA83D828C",
+      "hash": -1472363892,
+      "huntable": true,
+      "prey": "rat_ferdelance",
+      "label": "Guthrie Farm"
+    },
+    {
+      "zone": "W_4_HAGEN_ORCHARDS",
+      "hex": "0x01D5FAC3",
+      "hash": 30800579,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Hagen Orchards"
+    },
+    {
+      "zone": "W_4_HANGING_DOG_RANCH",
+      "hex": "0xF9D63EB6",
+      "hash": -103399754,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Hanging Dog Ranch"
+    },
+    {
+      "zone": "W_4_HANIS_BETHEL",
+      "hex": "0x2202EE4D",
+      "hash": 570617421,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Hanis Bethel"
+    },
+    {
+      "zone": "W_4_HILL_HAVEN_RANCH",
+      "hex": "0x96872368",
+      "hash": -1769528472,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Hill Haven Ranch"
+    },
+    {
+      "zone": "W_4_HORSESHOE_OVERLOOK",
+      "hex": "0xAEF74FB9",
+      "hash": -1359523911,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Horseshoe Overlook"
+    },
+    {
+      "zone": "W_4_HOUSEBOAT",
+      "hex": "0x70F74B60",
+      "hash": 1895254880,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Houseboat"
+    },
+    {
+      "zone": "W_4_LARNED_SOD",
+      "hex": "0x695954DA",
+      "hash": 1767462106,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Larned Sod"
+    },
+    {
+      "zone": "W_4_LONE_MULE_STEAD",
+      "hex": "0xDD9EFEE5",
+      "hash": -576782619,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Lone Mule Stead"
+    },
+    {
+      "zone": "W_4_LONNIES_SHACK",
+      "hex": "0x2DF010E2",
+      "hash": 770707682,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Lonnies Shack"
+    },
+    {
+      "zone": "W_4_LUCKYS_CABIN",
+      "hex": "0x0DAD94D2",
+      "hash": 229479634,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Lucky's Cabin"
+    },
+    {
+      "zone": "W_4_MACLEANS_HOUSE",
+      "hex": "0xA11AEDB9",
+      "hash": -1592070727,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Maclean's House"
+    },
+    {
+      "zone": "W_4_MACOMBS_END",
+      "hex": "0x3F53BC77",
+      "hash": 1062452343,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Macomb's End"
+    },
+    {
+      "zone": "W_4_MANITO_GLADE",
+      "hex": "0x55A6D12B",
+      "hash": 1436995883,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Manito Glade"
+    },
+    {
+      "zone": "W_4_MARTHAS_SWAIN",
+      "hex": "0x300DE595",
+      "hash": 806217109,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Martha's Swain"
+    },
+    {
+      "zone": "W_4_MERKINS_WALLER",
+      "hex": "0x5082CF03",
+      "hash": 1350749955,
+      "huntable": true,
+      "prey": "oriole_iguana",
+      "label": "Merkins Waller"
+    },
+    {
+      "zone": "W_4_METEOR_HOUSE",
+      "hex": "0x8C3CD7F3",
+      "hash": -1942169613,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Meteor House"
+    },
+    {
+      "zone": "W_4_MICAHS_HIDEOUT",
+      "hex": "0x59D077AC",
+      "hash": 1506834348,
+      "huntable": true,
+      "prey": "pigeon_iguana",
+      "label": "Micah's Hideout"
+    },
+    {
+      "zone": "W_4_MILLESANI_CLAIM",
+      "hex": "0x7F1C3407",
+      "hash": 2132554759,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Millesani Claim"
+    },
+    {
+      "zone": "W_4_MOSSY_FLATS",
+      "hex": "0x3C93944A",
+      "hash": 1016304714,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Mossy Flats"
+    },
+    {
+      "zone": "W_4_NEKOTI_ROCK",
+      "hex": "0x1667C7A9",
+      "hash": 375900073,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Nekoti Rock"
+    },
+    {
+      "zone": "W_4_ODDFELLOWS_REST",
+      "hex": "0xDA5FA6D8",
+      "hash": -631265576,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Oddfellows Rest"
+    },
+    {
+      "zone": "W_4_OIL_DERRICK",
+      "hex": "0x4DEBB513",
+      "hash": 1307292947,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Oil Derrick"
+    },
+    {
+      "zone": "W_4_OLD_GREENBANK_MILL",
+      "hex": "0xEEA64B2B",
+      "hash": -291091669,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Old Greenbank"
+    },
+    {
+      "zone": "W_4_OLD_HARRY_FEN",
+      "hex": "0x5055B4E0",
+      "hash": 1347794144,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Old Harry Fen"
+    },
+    {
+      "zone": "W_4_OLD_TOMS_BLIND",
+      "hex": "0x5F8E4341",
+      "hash": 1603158849,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Old Toms Blind"
+    },
+    {
+      "zone": "W_4_OLD_TRAIL_RISE",
+      "hex": "0xF32CB01B",
+      "hash": -215175141,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Old Trail Rise"
+    },
+    {
+      "zone": "W_4_OSMAN_GROVE",
+      "hex": "0x15673770",
+      "hash": 359085936,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Osman Grove"
+    },
+    {
+      "zone": "W_4_PAINTED_SKY",
+      "hex": "0xA54B8915",
+      "hash": -1521776363,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Painted Sky"
+    },
+    {
+      "zone": "W_4_PIKES_BASIN",
+      "hex": "0xEBEF68EE",
+      "hash": -336631570,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Pikes Basin"
+    },
+    {
+      "zone": "W_4_PLANTERS_BAWN",
+      "hex": "0x9AAED2F4",
+      "hash": -1699818764,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Planters Bawn"
+    },
+    {
+      "zone": "W_4_PLEASANCE",
+      "hex": "0x353AC7BD",
+      "hash": 893044669,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Pleasance"
+    },
+    {
+      "zone": "W_4_PLEASANCE_HOUSE",
+      "hex": "0x86B12D24",
+      "hash": -2035208924,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Pleasance House"
+    },
+    {
+      "zone": "W_4_PRINZ_CO",
+      "hex": "0x6EE5C62B",
+      "hash": 1860552235,
+      "huntable": true,
+      "prey": "pigeon_gilamonster",
+      "label": "Prinz Co"
+    },
+    {
+      "zone": "W_4_PRONGHORN_RANCH",
+      "hex": "0xF8D01ECE",
+      "hash": -120578354,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Pronghorn Ranch"
+    },
+    {
+      "zone": "W_4_RATTLESNAKE_HOLLOW",
+      "hex": "0x58105158",
+      "hash": 1477464408,
+      "huntable": true,
+      "prey": "chipmunk_gilamonster",
+      "label": "Rattlesnake Hollow"
+    },
+    {
+      "zone": "W_4_REPENTANCE",
+      "hex": "0x43BCB764",
+      "hash": 1136441188,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Repentance"
+    },
+    {
+      "zone": "W_4_RIDGE_VIEW",
+      "hex": "0xD0BA4C63",
+      "hash": -793097117,
+      "huntable": true,
+      "prey": "chipmunk_gilamonster",
+      "label": "Ridge View"
+    },
+    {
+      "zone": "W_4_RIDGEWOOD_FARM",
+      "hex": "0x5C0805AB",
+      "hash": 1544029611,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Ridgewood Farm"
+    },
+    {
+      "zone": "W_4_RILEYS_CHARGE",
+      "hex": "0x2C0B51CA",
+      "hash": 738939338,
+      "huntable": true,
+      "prey": "chipmunk_gilamonster",
+      "label": "Rileys Charge"
+    },
+    {
+      "zone": "W_4_RIO_DEL_LOBO_HOUSE",
+      "hex": "0xB5A7CAAE",
+      "hash": -1247294802,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Rio Del Lobo House"
+    },
+    {
+      "zone": "W_4_ROADSIDE_BROTHEL",
+      "hex": "0x664A6EF4",
+      "hash": 1716154100,
+      "huntable": true,
+      "prey": "chipmunk_gilamonster",
+      "label": "Roadside Brothel"
+    },
+    {
+      "zone": "W_4_ROBARD_FARM",
+      "hex": "0x53800035",
+      "hash": 1400897589,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Robard Farm"
+    },
+    {
+      "zone": "W_4_SAWBONE_CLEARING",
+      "hex": "0x3292E8D5",
+      "hash": 848488661,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Sawbone Clearing"
+    },
+    {
+      "zone": "W_4_SCRATCHING_POST",
+      "hex": "0x005E5CEB",
+      "hash": 6184171,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Scratching Post"
+    },
+    {
+      "zone": "W_4_SHADY_BELLE",
+      "hex": "0x33A0D3EC",
+      "hash": 866178028,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Shady Belle"
+    },
+    {
+      "zone": "W_4_SHEPHERDS_RISE",
+      "hex": "0xE1F57D42",
+      "hash": -504005310,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Shepherds Rise"
+    },
+    {
+      "zone": "W_4_SILENT_STEAD",
+      "hex": "0xCC3A1981",
+      "hash": -868607615,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Silent Stead"
+    },
+    {
+      "zone": "W_4_SILTWATER_STRAND",
+      "hex": "0x377AB2F9",
+      "hash": 930788089,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Siltwater Strand"
+    },
+    {
+      "zone": "W_4_SIX_POINT_CABIN",
+      "hex": "0x7A9A9F57",
+      "hash": 2056953687,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Six Point Cabin"
+    },
+    {
+      "zone": "W_4_SOLOMONS_FOLLY",
+      "hex": "0x345C766C",
+      "hash": 878474860,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Solomon's Folly"
+    },
+    {
+      "zone": "W_4_STILLWATER_CABIN",
+      "hex": "0x6F889F10",
+      "hash": 1871224592,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Stillwater Cabin"
+    },
+    {
+      "zone": "W_4_STILT_SHACK",
+      "hex": "0x4135DBBC",
+      "hash": 1094048700,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Stilt Shack"
+    },
+    {
+      "zone": "W_4_SWADBASS_POINT",
+      "hex": "0xBE7D779C",
+      "hash": -1099073636,
+      "huntable": true,
+      "prey": "chipmunk_iguanadesert",
+      "label": "Swadbass Point"
+    },
+    {
+      "zone": "W_4_TANNERS_REACH",
+      "hex": "0xAB5E835F",
+      "hash": -1419869345,
+      "huntable": true,
+      "prey": "chipmunk_redboa",
+      "label": "Tanners Reach"
+    },
+    {
+      "zone": "W_4_TAXIDERMIST_HOUSE",
+      "hex": "0x8F1BCA55",
+      "hash": -1894004139,
+      "huntable": true,
+      "prey": "rat_iguanadesert",
+      "label": "Taxidermist House"
+    },
+    {
+      "zone": "W_4_THE_HANGING_ROCK",
+      "hex": "0x01DDD396",
+      "hash": 31314838,
+      "huntable": true,
+      "prey": "chipmunk_redboa",
+      "label": "Hanging Rock"
+    },
+    {
+      "zone": "W_4_THE_LOFT",
+      "hex": "0xE5D84B79",
+      "hash": -438809735,
+      "huntable": true,
+      "prey": "rat_iguanadesert",
+      "label": "The Loft"
+    },
+    {
+      "zone": "W_4_THE_OLD_BACCHUS_PLACE",
+      "hex": "0xBA0B2C82",
+      "hash": -1173672830,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Old Bacchus Place"
+    },
+    {
+      "zone": "W_4_TRADING_POST",
+      "hex": "0x845CED96",
+      "hash": -2074284650,
+      "huntable": true,
+      "prey": "rat_iguanadesert",
+      "label": "Trading Post"
+    },
+    {
+      "zone": "W_4_TRAPPERS_CABIN",
+      "hex": "0x163AE1E1",
+      "hash": 372957665,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Trappers Cabin"
+    },
+    {
+      "zone": "W_4_TWO_CROWS",
+      "hex": "0x80DC09EC",
+      "hash": -2133063188,
+      "huntable": true,
+      "prey": "rat_iguanadesert",
+      "label": "Two Crows"
+    },
+    {
+      "zone": "W_4_UTOPIAN_COLONY_BUILDING",
+      "hex": "0xD21EE891",
+      "hash": -769726319,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Utopian Colony Building"
+    },
+    {
+      "zone": "W_4_VAN_HORN_MANSION",
+      "hex": "0x34863110",
+      "hash": 881209616,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Van Horn Mansion"
+    },
+    {
+      "zone": "W_4_VENTERS_PLACE",
+      "hex": "0x0783569F",
+      "hash": 126047903,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Venters Place"
+    },
+    {
+      "zone": "W_4_VETERANS_HOMESTEAD",
+      "hex": "0x3BAF424F",
+      "hash": 1001341519,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Veterans Homestead"
+    },
+    {
+      "zone": "W_4_WALLACE_OVERLOOK",
+      "hex": "0x65994796",
+      "hash": 1704544150,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Wallace Overlook"
+    },
+    {
+      "zone": "W_4_WATSONS_CABIN",
+      "hex": "0xBAC9B3A9",
+      "hash": -1161186391,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Watson's Cabin"
+    },
+    {
+      "zone": "W_4_WILLARDS_REST",
+      "hex": "0xF6C518EB",
+      "hash": -154855189,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Willard's Rest"
+    },
+    {
+      "zone": "W_4_WITCHES_CAULDRON",
+      "hex": "0x3375B1D2",
+      "hash": 863351250,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Witches Cauldron"
+    },
+    {
+      "zone": "W_5_ARGIL_RISE",
+      "hex": "0x0EA363C9",
+      "hash": 245588937,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Argil Rise"
+    },
+    {
+      "zone": "W_5_BEAVER_HOLLOW",
+      "hex": "0xF7B0EB8A",
+      "hash": -139400310,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Beaver Hollow"
+    },
+    {
+      "zone": "W_5_BERYLS_DREAM",
+      "hex": "0x4848054E",
+      "hash": 1212679502,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Beryls Dream"
+    },
+    {
+      "zone": "W_5_BLACK_BALSAM_RISE",
+      "hex": "0xC62FFBC6",
+      "hash": -969933882,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Black Balsam Rise"
+    },
+    {
+      "zone": "W_5_BLACK_BONE_FOREST",
+      "hex": "0xA43C8951",
+      "hash": -1539536559,
+      "huntable": true,
+      "prey": "bat_redboa",
+      "label": "Black Bone Forest"
+    },
+    {
+      "zone": "W_5_BROKEN_TREE",
+      "hex": "0x81417DA0",
+      "hash": -2126414432,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Broken Tree"
+    },
+    {
+      "zone": "W_5_CHADWICK_FARM",
+      "hex": "0xCF732CFE",
+      "hash": -814535426,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Chadwick Farm"
+    },
+    {
+      "zone": "W_5_DEER_COTTAGE",
+      "hex": "0x298A013E",
+      "hash": 696910142,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Deer Cottage"
+    },
+    {
+      "zone": "W_5_FISHINGSPOT",
+      "hex": "0x7C690B35",
+      "hash": 2087258933,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Fishing Spot"
+    },
+    {
+      "zone": "W_5_FORT_BRENNAND",
+      "hex": "0x97800BD2",
+      "hash": -1753216046,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Fort Brennand"
+    },
+    {
+      "zone": "W_5_GRAND_KORRIGAN_DOCKED",
+      "hex": "0x88CD8123",
+      "hash": -1999797981,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Grand Korrigan"
+    },
+    {
+      "zone": "W_5_GRAND_KORRIGAN_SEA",
+      "hex": "0x603377B9",
+      "hash": 1613985721,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Grand Korrigan Sea"
+    },
+    {
+      "zone": "W_5_HURON_GLEN",
+      "hex": "0x0DC39324",
+      "hash": 230920996,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Huron Glen"
+    },
+    {
+      "zone": "W_5_LENORA_VIEW",
+      "hex": "0x3FE3547E",
+      "hash": 1071862910,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Lenora View"
+    },
+    {
+      "zone": "W_5_LIMPANY",
+      "hex": "0xCE67AF12",
+      "hash": -832065774,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Limpany"
+    },
+    {
+      "zone": "W_5_RADLEYS_PASTURE",
+      "hex": "0xF0840204",
+      "hash": -259784188,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Radleys Pasture"
+    },
+    {
+      "zone": "W_5_VALLEY_VIEW",
+      "hex": "0x292C5252",
+      "hash": 690770514,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Valley View"
+    },
+    {
+      "zone": "W_5_VETTERS_ECHO",
+      "hex": "0x5511F36C",
+      "hash": 1427239788,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Vetter's Echo"
+    },
+    {
+      "zone": "W_6_RADLEYS_HOUSE",
+      "hex": "0x7678268D",
+      "hash": 1987585677,
+      "huntable": true,
+      "prey": "toad_redboa",
+      "label": "Radley's House"
+    },
+    {
+      "zone": "W_6_REED_COTTAGE",
+      "hex": "0x59607054",
+      "hash": 1499492436,
+      "huntable": true,
+      "prey": "rat_blacktailrattle",
+      "label": "Reed Cottage"
+    }
+  ],
+  "areas": [
+    {
+      "zone": "p_2_bluewater_marsh",
+      "hex": "0x93334804",
+      "hash": -1825355772,
+      "huntable": true,
+      "prey": "toad_ferdelance",
+      "label": "Bluewater Marsh District"
+    },
+    {
+      "zone": "P_3_AURORA_BASIN",
+      "hex": "0x47192461",
+      "hash": 1192830049,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Aurora Basin"
+    },
+    {
+      "zone": "P_3_BAHIA_DE_LA_PAZ",
+      "hex": "0x9D32963D",
+      "hash": -1657629123,
+      "huntable": true,
+      "prey": "toad_carolinaparakeet_ferdelance",
+      "label": "Bahia De la Paz"
+    },
+    {
+      "zone": "P_3_BARROW_LAGOON",
+      "hex": "0x594D596C",
+      "hash": 1498241388,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Barrow Lagoon"
+    },
+    {
+      "zone": "P_3_CAIRN_LAKE",
+      "hex": "0x233DD2DA",
+      "hash": 591254234,
+      "huntable": true,
+      "prey": "songbird_ferdelance",
+      "label": "Cairn Lake"
+    },
+    {
+      "zone": "P_3_CATTAIL_POND",
+      "hex": "0x911B42FC",
+      "hash": -1860484356,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cattail Pond"
+    },
+    {
+      "zone": "P_3_DAKOTA_RIVER",
+      "hex": "0xF7BC627C",
+      "hash": -138648964,
+      "huntable": true,
+      "prey": "songbird_ferdelance",
+      "label": "Dakota River"
+    },
+    {
+      "zone": "P_3_DEADBOOT_CREEK",
+      "hex": "0x54898248",
+      "hash": 1418297928,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Deadboot Creek"
+    },
+    {
+      "zone": "P_3_DEWBERRY_CREEK",
+      "hex": "0xF37CEFEA",
+      "hash": -209915926,
+      "huntable": true,
+      "prey": "songbird_ferdelance",
+      "label": "Dewberry Creek"
+    },
+    {
+      "zone": "P_3_ELYSIAN_POOL",
+      "hex": "0x6822C55D",
+      "hash": 1747109213,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Elysian Pool"
+    },
+    {
+      "zone": "P_3_ERIS_FIELD",
+      "hex": "0x478F80B5",
+      "hash": 1200586933,
+      "huntable": true,
+      "prey": "songbird_ferdelance",
+      "label": "Eris Field"
+    },
+    {
+      "zone": "P_3_FLAT_IRON_LAKE",
+      "hex": "0x00DBDA50",
+      "hash": 14408272,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Flat Iron Lake"
+    },
+    {
+      "zone": "P_3_HEARTLAND_OIL_FIELDS",
+      "hex": "0xC9C79854",
+      "hash": -909666220,
+      "huntable": true,
+      "prey": "songbird_ferdelance",
+      "label": "Heartland Oil Fields"
+    },
+    {
+      "zone": "P_3_HEARTLAND_OVERFLOW",
+      "hex": "0x7DC4A1C6",
+      "hash": 2110038470,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Heartland Overflow"
+    },
+    {
+      "zone": "P_3_LAKE_DON_JULIO",
+      "hex": "0x472F164A",
+      "hash": 1194268234,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Lake Don Julio"
+    },
+    {
+      "zone": "P_3_LANNAHECHEE_RIVER",
+      "hex": "0x5CE61D88",
+      "hash": 1558584712,
+      "huntable": true,
+      "prey": "songbird_iguana",
+      "label": "Lannahechee River"
+    },
+    {
+      "zone": "P_3_LITTLE_CREEK_RIVER",
+      "hex": "0x780F20F9",
+      "hash": 2014257401,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Little Creek River"
+    },
+    {
+      "zone": "P_3_LOWER_MONTANA_RIVER",
+      "hex": "0xC4270FE7",
+      "hash": -1004072985,
+      "huntable": true,
+      "prey": "songbird_iguana",
+      "label": "Lower Montana River"
+    },
+    {
+      "zone": "P_3_MATTOCK_POND",
+      "hex": "0x5D0900C3",
+      "hash": 1560871107,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Mattock Pond"
+    },
+    {
+      "zone": "P_3_MONTOS_REST",
+      "hex": "0xB6F67FD4",
+      "hash": -1225359404,
+      "huntable": true,
+      "prey": "songbird_iguana",
+      "label": "Montos Rest"
+    },
+    {
+      "zone": "P_3_MOONSTONE_POND",
+      "hex": "0x63F6ACB4",
+      "hash": 1677110452,
+      "huntable": true,
+      "prey": "songbird_redboa",
+      "label": "Moonstone Pond"
+    },
+    {
+      "zone": "P_3_MOUNT_HAGEN",
+      "hex": "0x6BA71EFC",
+      "hash": 1806114556,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Mount Hagen"
+    },
+    {
+      "zone": "P_3_OCREAGHS_RUN",
+      "hex": "0x2BD2B4E6",
+      "hash": 735229158,
+      "huntable": true,
+      "prey": "cardinal_redboa",
+      "label": "Ocreagh's Run"
+    },
+    {
+      "zone": "P_3_OWANJILA",
+      "hex": "0x5DCD45F1",
+      "hash": 1573733873,
+      "huntable": true,
+      "prey": false,
+      "label": "Owanjila"
+    },
+    {
+      "zone": "P_3_ROANOKE_VALLEY",
+      "hex": "0x58DB6580",
+      "hash": 1490773376,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Roanoke Valley"
+    },
+    {
+      "zone": "P_3_SAN_LUIS_RIVER",
+      "hex": "0x678A6057",
+      "hash": 1737121879,
+      "huntable": true,
+      "prey": "cardinal_redboa",
+      "label": "San Luis River"
+    },
+    {
+      "zone": "P_3_SEA_OF_CORONADO",
+      "hex": "0xE29827A8",
+      "hash": -493344856,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Sea of Coronado"
+    },
+    {
+      "zone": "P_3_SOUTHFIELD_FLATS",
+      "hex": "0xE78CB65F",
+      "hash": -410208673,
+      "huntable": true,
+      "prey": "cardinal_iguanadesert",
+      "label": "Southfield Flats"
+    },
+    {
+      "zone": "P_3_SPIDER_GORGE",
+      "hex": "0x649E4CEF",
+      "hash": 1688095983,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Spider Gorge"
+    },
+    {
+      "zone": "P_3_STILLWATER_CREEK",
+      "hex": "0xBD5364C5",
+      "hash": -1118608187,
+      "huntable": true,
+      "prey": "cardinal_redboa",
+      "label": "Stillwater Creek"
+    },
+    {
+      "zone": "P_3_UPPER_MONTANA_RIVER",
+      "hex": "0x4E98B0E9",
+      "hash": 1318629609,
+      "huntable": true,
+      "prey": "rat_iguanadesert",
+      "label": "Upper Montana River"
+    },
+    {
+      "zone": "P_3_WHINYARD_STRAIT",
+      "hex": "0x9640BA83",
+      "hash": -1774142845,
+      "huntable": true,
+      "prey": "cardinal_redboa",
+      "label": "Whinyard Strait"
+    },
+    {
+      "zone": "P_4_AGUASDULCES",
+      "hex": "0xB32BD1BD",
+      "hash": -1288973891,
+      "huntable": true,
+      "prey": "rat_carolinaparakeet_iguanadesert",
+      "label": "Afuasdulces"
+    },
+    {
+      "zone": "P_4_ARMADILLO",
+      "hex": "0xE6EAEFF7",
+      "hash": -420810761,
+      "huntable": true,
+      "prey": "cardinal_iguanadesert",
+      "label": "Armadillo"
+    },
+    {
+      "zone": "P_4_ARROYO_DE_LA_VIBORA",
+      "hex": "0xCD5CE9A2",
+      "hash": -849548894,
+      "huntable": true,
+      "prey": "rat_carolinaparakeet_iguanadesert",
+      "label": "Arroyo De La Vibora"
+    },
+    {
+      "zone": "P_4_BACCHUS_BRIDGE",
+      "hex": "0x0C52C6A8",
+      "hash": 206751400,
+      "huntable": true,
+      "prey": "crab_redboa",
+      "label": "Bacchus Bridge"
+    },
+    {
+      "zone": "P_4_BACCHUS_STATION",
+      "hex": "0xCBF9C0AF",
+      "hash": -872824657,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Bacchus Station"
+    },
+    {
+      "zone": "P_4_BARDS_CROSSING",
+      "hex": "0x9CFF54C5",
+      "hash": -1660988219,
+      "huntable": true,
+      "prey": "crab_iguanadesert",
+      "label": "Bards Crossing"
+    },
+    {
+      "zone": "P_4_BEARTOOTH_BECK",
+      "hex": "0xB76E9142",
+      "hash": -1217490622,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Beartooth Beck"
+    },
+    {
+      "zone": "P_4_BENEDICT_PASS",
+      "hex": "0x57DBD9B8",
+      "hash": 1474025912,
+      "huntable": true,
+      "prey": "crab_iguanadesert",
+      "label": "Benedict Pass"
+    },
+    {
+      "zone": "P_4_BENEDICT_POINT",
+      "hex": "0xD3920730",
+      "hash": -745404624,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Benedict Point"
+    },
+    {
+      "zone": "P_4_BLACKWATER",
+      "hex": "0xC87D8B8A",
+      "hash": -931296374,
+      "huntable": true,
+      "prey": "crab_bat",
+      "label": "Blackwater"
+    },
+    {
+      "zone": "P_4_BOLGER_GLADE",
+      "hex": "0xFBFEE55C",
+      "hash": -67181220,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Bolger Glade"
+    },
+    {
+      "zone": "P_4_BRAITHWAITE_MANOR",
+      "hex": "0xF60E3AED",
+      "hash": -166839571,
+      "huntable": true,
+      "prey": "crab_bat",
+      "label": "Braithwaite Manor"
+    },
+    {
+      "zone": "P_4_CALIBANS_SEAT",
+      "hex": "0x222E5CED",
+      "hash": 573463789,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Caligans Seat"
+    },
+    {
+      "zone": "P_4_CALIGA_HALL",
+      "hex": "0x7C43315A",
+      "hash": 2084778330,
+      "huntable": true,
+      "prey": "crab_bat",
+      "label": "Caliga Hall"
+    },
+    {
+      "zone": "P_4_CALUMET_RAVINE",
+      "hex": "0x192F0A3E",
+      "hash": 422513214,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Calumet Ravine"
+    },
+    {
+      "zone": "P_4_CINCO_TORRES",
+      "hex": "0x871DB74E",
+      "hash": -2028095666,
+      "huntable": true,
+      "prey": "crab_carolinaparakeet_gilamonster",
+      "label": "Cinco Torres"
+    },
+    {
+      "zone": "P_4_CITADEL_ROCK",
+      "hex": "0xAF900BFB",
+      "hash": -1349514245,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Citadel Rock"
+    },
+    {
+      "zone": "P_4_COTORRA_SPRINGS",
+      "hex": "0xC69E4B94",
+      "hash": -962704492,
+      "huntable": true,
+      "prey": "crab_redboa",
+      "label": "Cotorra Springs"
+    },
+    {
+      "zone": "P_4_CUMBERLAND_FALLS",
+      "hex": "0xE325C1F3",
+      "hash": -484064781,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cumberland Falls"
+    },
+    {
+      "zone": "P_4_DIABLO_RIDGE",
+      "hex": "0x3DB72923",
+      "hash": 1035413795,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Diablo Ridge"
+    },
+    {
+      "zone": "P_4_DONNER_FALLS",
+      "hex": "0x7500A60F",
+      "hash": 1962976783,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Donner Falls"
+    },
+    {
+      "zone": "P_4_EMERALD_RANCH",
+      "hex": "0x14DE5EA9",
+      "hash": 350117545,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Emerald Ranch"
+    },
+    {
+      "zone": "P_4_FLATNECK_STATION",
+      "hex": "0xCD806933",
+      "hash": -847222477,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Flatneck Station"
+    },
+    {
+      "zone": "P_4_FORT_MERCER",
+      "hex": "0xC22A2C44",
+      "hash": -1037423548,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Fort Mercer"
+    },
+    {
+      "zone": "P_4_FORT_WALLACE",
+      "hex": "0xFA0BEEA7",
+      "hash": -99881305,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Fort Wallace"
+    },
+    {
+      "zone": "P_4_GRANITE_PASS",
+      "hex": "0xBD8B165E",
+      "hash": -1114958242,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Granite pass"
+    },
+    {
+      "zone": "P_4_HAWKS_EYE_CREEK",
+      "hex": "0xD5457035",
+      "hash": -716869579,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Hawks Eye Creek"
+    },
+    {
+      "zone": "P_4_JORGES_GAP",
+      "hex": "0x785538B2",
+      "hash": 2018850994,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Jorges Gap"
+    },
+    {
+      "zone": "P_4_LA_CAPILLA",
+      "hex": "0x3FFC8A8F",
+      "hash": 1073515151,
+      "huntable": true,
+      "prey": "rat_carolinaparakeet_gilamonster",
+      "label": "La Capilla"
+    },
+    {
+      "zone": "P_4_LAGRAS",
+      "hex": "0x3552B0DE",
+      "hash": 894611678,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Lagras"
+    },
+    {
+      "zone": "P_4_LAKE_ISABELLA",
+      "hex": "0x31941238",
+      "hash": 831787576,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Lake Isabella"
+    },
+    {
+      "zone": "P_4_MACFARLANES_RANCH",
+      "hex": "0xA4A17FBD",
+      "hash": -1532919875,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Macfarlanes Ranch"
+    },
+    {
+      "zone": "P_4_MANTECA_FALLS",
+      "hex": "0xB84137A2",
+      "hash": -1203685470,
+      "huntable": true,
+      "prey": "rat_gilamonster",
+      "label": "Manteca Falls"
+    },
+    {
+      "zone": "P_4_MANZANITA_POST",
+      "hex": "0x2279EE5F",
+      "hash": 578416223,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Manzanita Post"
+    },
+    {
+      "zone": "P_4_MERCER_STATION",
+      "hex": "0xF6AD913C",
+      "hash": -156397252,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Mercer Station"
+    },
+    {
+      "zone": "P_4_MOUNT_SHANN",
+      "hex": "0x20B2D466",
+      "hash": 548590694,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Mount Shann"
+    },
+    {
+      "zone": "P_4_OWANJILA_DAM",
+      "hex": "0xAB5763FF",
+      "hash": -1420336129,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Owanjila Dam"
+    },
+    {
+      "zone": "P_4_PLAINVIEW",
+      "hex": "0x109B730C",
+      "hash": 278622988,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Plainview"
+    },
+    {
+      "zone": "P_4_QUAKERS_COVE",
+      "hex": "0x2AF9F7C1",
+      "hash": 721024961,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Quakers Cove"
+    },
+    {
+      "zone": "P_4_RATHSKELLER_FORK",
+      "hex": "0xCC796CBD",
+      "hash": -864457539,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Rathskeller Fork"
+    },
+    {
+      "zone": "P_4_RHODES",
+      "hex": "0x4DD509F6",
+      "hash": 1305807350,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Rhodes"
+    },
+    {
+      "zone": "P_4_RIGGS_STATION",
+      "hex": "0x2DDEDE9F",
+      "hash": 769580703,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Riggs Station"
+    },
+    {
+      "zone": "P_4_RINGNECK_CREEK",
+      "hex": "0x695D3BFE",
+      "hash": 1767717886,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Ringneck Creek"
+    },
+    {
+      "zone": "P_4_RIO_DEL_LOBO_ROCK",
+      "hex": "0x6EE4B99E",
+      "hash": 1860483486,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Rio Del Lobo Rock"
+    },
+    {
+      "zone": "P_4_SAINT_DENIS",
+      "hex": "0x009BA3DC",
+      "hash": 10200028,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Saint Denis"
+    },
+    {
+      "zone": "P_4_SISIKA_PENITENTIARY",
+      "hex": "0x41F983C2",
+      "hash": 1106871234,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Sisika Penitentiary"
+    },
+    {
+      "zone": "P_4_TEMPEST_RIM",
+      "hex": "0x867F0549",
+      "hash": -2038495927,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Tempest Rim"
+    },
+    {
+      "zone": "P_4_THIEVES_LANDING",
+      "hex": "0x35DCE61E",
+      "hash": 903669278,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Thieves Landing"
+    },
+    {
+      "zone": "P_4_THREE_SISTERS",
+      "hex": "0x8D2C1E7E",
+      "hash": -1926488450,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Three Sisters"
+    },
+    {
+      "zone": "P_4_TUMBLEWEED",
+      "hex": "0x85D4C0D0",
+      "hash": -2049654576,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Tumbleweed"
+    },
+    {
+      "zone": "P_4_TWIN_ROCKS",
+      "hex": "0x89764F23",
+      "hash": -1988735197,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Twins Rocks"
+    },
+    {
+      "zone": "P_4_TWIN_STACK_PASS",
+      "hex": "0x3BD66C97",
+      "hash": 1003908247,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Twin Stack Pass"
+    },
+    {
+      "zone": "P_4_VALENTINE",
+      "hex": "0x960B8448",
+      "hash": -1777630136,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Valentine"
+    },
+    {
+      "zone": "P_4_VAN_HORN_TRADING_POST",
+      "hex": "0x9E9E3406",
+      "hash": -1633799162,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Van Horn Trading Post"
+    },
+    {
+      "zone": "P_4_WALLACE_STATION",
+      "hex": "0x56A56E44",
+      "hash": 1453682244,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Wallace Station"
+    },
+    {
+      "zone": "P_4_WINDOW_ROCK",
+      "hex": "0x4A4C3F63",
+      "hash": 1246510947,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Window Rock"
+    },
+    {
+      "zone": "P_5_BRANDYWINE_DROP",
+      "hex": "0x40B8C6F2",
+      "hash": 1085851378,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Brandywine Drop"
+    },
+    {
+      "zone": "P_5_EMERALD_STATION",
+      "hex": "0xB69452F7",
+      "hash": -1231793417,
+      "huntable": true,
+      "prey": "rat_water",
+      "label": "Emerald Station"
+    },
+    {
+      "zone": "P_5_STRAWBERRY",
+      "hex": "0xEB56F48B",
+      "hash": -346622837,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Strawberry"
+    },
+    {
+      "zone": "P_5_WAPITI_INDIAN_RESERVATION",
+      "hex": "0xD423D45C",
+      "hash": -735849380,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Wapiti Indian Reservation"
+    },
+    {
+      "zone": "P_6_ANNESBURG",
+      "hex": "0x88B34053",
+      "hash": -2001518509,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Annesburg"
+    }
+  ],
+  "districts": [
+    {
+      "zone": "BayouNwa",
+      "hex": "0x78BFE1AC",
+      "hash": 2025841068,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Bayou Nwa"
+    },
+    {
+      "zone": "bigvalley",
+      "hex": "0x3108C492",
+      "hash": 822658194,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Big Valley"
+    },
+    {
+      "zone": "BluewaterMarsh",
+      "hex": "0x4DFA0B50",
+      "hash": 1308232528,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Bluewater Marsh"
+    },
+    {
+      "zone": "ChollaSprings",
+      "hex": "0xF9831C72",
+      "hash": -108848014,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cholla Springs"
+    },
+    {
+      "zone": "Cumberland",
+      "hex": "0x6D67801E",
+      "hash": 1835499550,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Cumberland"
+    },
+    {
+      "zone": "DiezCoronas",
+      "hex": "0x19700C95",
+      "hash": 426773653,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Diez Coronas"
+    },
+    {
+      "zone": "GaptoothRidge",
+      "hex": "0x84D7AD0E",
+      "hash": -2066240242,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Gaptooth Ridge"
+    },
+    {
+      "zone": "greatPlains",
+      "hex": "0x1C68EA97",
+      "hash": 476637847,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Great Plains"
+    },
+    {
+      "zone": "GrizzliesEast",
+      "hex": "0xF8D68DC1",
+      "hash": -120156735,
+      "huntable": true,
+      "prey": "rat_iguana",
+      "label": "Grizzlies East"
+    },
+    {
+      "zone": "GrizzliesWest",
+      "hex": "0x62162401",
+      "hash": 1645618177,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Grizzlies West"
+    },
+    {
+      "zone": "GuarmaD",
+      "hex": "0xE1736CD7",
+      "hash": -512529193,
+      "huntable": true,
+      "prey": "rat_carolinaparakeet_redboa",
+      "label": "Guarma"
+    },
+    {
+      "zone": "Heartlands",
+      "hex": "0x07D4FF5F",
+      "hash": 131399519,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Heartlands"
+    },
+    {
+      "zone": "HennigansStead",
+      "hex": "0x35390B10",
+      "hash": 892930832,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Hennigan's Stead"
+    },
+    {
+      "zone": "Perdido",
+      "hex": "0xB1531168",
+      "hash": -1319956120,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Perdido"
+    },
+    {
+      "zone": "PuntaOrgullo",
+      "hex": "0x56A7C746",
+      "hash": 1453836102,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Punta Orgullo"
+    },
+    {
+      "zone": "RioBravo",
+      "hex": "0x8016C23F",
+      "hash": -2145992129,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Rio Bravo"
+    },
+    {
+      "zone": "roanoke",
+      "hex": "0x0AA5F25D",
+      "hash": 178647645,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Roanoke"
+    },
+    {
+      "zone": "scarlettMeadows",
+      "hex": "0xCC7C3314",
+      "hash": -864275692,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Scarlett Meadows"
+    },
+    {
+      "zone": "TallTrees",
+      "hex": "0x6467EF09",
+      "hash": 1684533001,
+      "huntable": true,
+      "prey": "rat_redboa",
+      "label": "Tall Trees"
+    }
+  ]
+}

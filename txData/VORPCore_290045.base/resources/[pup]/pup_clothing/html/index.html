@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>pup_clothing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- store -->
+    <section id="store" class="panel hidden" aria-label="store">
+        <header class="head">
+            <h1 id="storeTitle"></h1>
+            <svg class="rule" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 6 H120 M180 6 H300" />
+                <path d="M150 1 L156 6 L150 11 L144 6 Z" />
+                <circle cx="132" cy="6" r="1.6" /><circle cx="168" cy="6" r="1.6" />
+            </svg>
+        </header>
+        <nav id="tabs" class="tabs"></nav>
+        <div id="rows" class="rows"></div>
+
+        <div id="colour" class="colour hidden">
+            <div class="colour-head">
+                <span id="colourTitle"></span>
+            </div>
+            <div id="colourSliders"></div>
+            <p id="colourHint" class="hint"></p>
+            <button id="removeColour" class="btn small"></button>
+        </div>
+
+        <footer class="foot">
+            <div class="sep" aria-hidden="true"></div>
+            <div class="buttons">
+                <button id="btnSave" class="btn primary half"></button>
+                <button id="btnReset" class="btn half"></button>
+                <button id="btnSaveAs" class="btn full"></button>
+                <button id="btnCancel" class="btn full"></button>
+            </div>
+        </footer>
+    </section>
+
+    <!-- camera controls: a prompt strip in the screen corner opposite the menu, like the game's own -->
+    <div id="keyHint" class="keys hidden"></div>
+
+    <!-- wardrobe -->
+    <section id="wardrobe" class="panel hidden" aria-label="wardrobe">
+        <header class="head">
+            <h1 id="wardrobeTitle"></h1>
+            <svg class="rule" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 6 H120 M180 6 H300" />
+                <path d="M150 1 L156 6 L150 11 L144 6 Z" />
+                <circle cx="132" cy="6" r="1.6" /><circle cx="168" cy="6" r="1.6" />
+            </svg>
+        </header>
+        <input id="search" class="search" type="text" maxlength="60" autocomplete="off" spellcheck="false">
+        <div id="outfits" class="outfits"></div>
+        <p id="noOutfits" class="empty hidden"></p>
+        <footer class="foot">
+            <div class="buttons"><button id="btnClose" class="btn"></button></div>
+        </footer>
+    </section>
+
+    <!-- dialogs -->
+    <div id="veil" class="veil hidden">
+        <div id="confirm" class="dialog hidden" role="dialog">
+            <p id="confirmText"></p>
+            <div class="buttons">
+                <button id="confirmYes" class="btn primary"></button>
+                <button id="confirmNo" class="btn"></button>
+            </div>
+        </div>
+        <div id="nameBox" class="dialog hidden" role="dialog">
+            <input id="nameInput" type="text" autocomplete="off" spellcheck="false">
+            <div class="buttons">
+                <button id="nameCreate" class="btn primary"></button>
+                <button id="nameCancel" class="btn"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

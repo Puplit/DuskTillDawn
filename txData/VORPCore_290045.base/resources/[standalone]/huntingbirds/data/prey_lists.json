@@ -1,0 +1,2317 @@
+{
+  "_note": "Pure data. Named prey lists referenced by hunt zones.",
+  "lists": {
+    "rat_redboa": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "sparrow_redboa": [
+      {
+        "model": "a_c_sparrow_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_blacktailrattle": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeblacktailrattle_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "squirrel_redboa": [
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_ferdelance": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeferdelance_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "squirrel2_redboa": [
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "squirrel_ferdelance": [
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeferdelance_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "oriole_redboa": [
+      {
+        "model": "a_c_oriole_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "oriole_iguana": [
+      {
+        "model": "a_c_oriole_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguana_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "pigeon_iguana": [
+      {
+        "model": "a_c_pigeon",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguana_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "pigeon_gilamonster": [
+      {
+        "model": "a_c_pigeon",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_gilamonster_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "chipmunk_gilamonster": [
+      {
+        "model": "a_c_chipmunk_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_gilamonster_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "chipmunk_iguanadesert": [
+      {
+        "model": "a_c_chipmunk_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguanadesert_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "chipmunk_redboa": [
+      {
+        "model": "a_c_chipmunk_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_iguanadesert": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguanadesert_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "bat_redboa": [
+      {
+        "model": "a_c_bat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_water": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakewater_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "toad_redboa": [
+      {
+        "model": "a_c_toad_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "toad_ferdelance": [
+      {
+        "model": "a_c_toad_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeferdelance_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "toad_carolinaparakeet_ferdelance": [
+      {
+        "model": "a_c_toad_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_carolinaparakeet_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeferdelance_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "songbird_ferdelance": [
+      {
+        "model": "a_c_songbird_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeferdelance_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "songbird_iguana": [
+      {
+        "model": "a_c_songbird_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguana_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "songbird_redboa": [
+      {
+        "model": "a_c_songbird_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_iguana": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguana_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "cardinal_redboa": [
+      {
+        "model": "a_c_cardinal_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "cardinal_iguanadesert": [
+      {
+        "model": "a_c_cardinal_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguanadesert_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_carolinaparakeet_iguanadesert": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_carolinaparakeet_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguanadesert_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "crab_redboa": [
+      {
+        "model": "a_c_crab_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "crab_iguanadesert": [
+      {
+        "model": "a_c_crab_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_iguanadesert_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "crab_bat": [
+      {
+        "model": "a_c_crab_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_bat_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "crab_carolinaparakeet_gilamonster": [
+      {
+        "model": "a_c_crab_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_carolinaparakeet_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_gilamonster_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_gilamonster": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_woodpecker_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_gilamonster_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_carolinaparakeet_gilamonster": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_carolinaparakeet_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_gilamonster_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ],
+    "rat_carolinaparakeet_redboa": [
+      {
+        "model": "a_c_rat_01",
+        "preset": 0,
+        "xp": 1,
+        "xpRequired": 0
+      },
+      {
+        "model": "a_c_carolinaparakeet_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 30
+      },
+      {
+        "model": "a_c_frogbull_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 100
+      },
+      {
+        "model": "a_c_snake_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 250
+      },
+      {
+        "model": "a_c_rabbit_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 350
+      },
+      {
+        "model": "a_c_snakeredboa_01",
+        "preset": 1,
+        "xp": 4,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_skunk_01",
+        "preset": 0,
+        "xp": 2,
+        "xpRequired": 400
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 3,
+        "xpRequired": 500
+      },
+      {
+        "model": "a_c_bluejay_01",
+        "preset": 0,
+        "xp": 4,
+        "xpRequired": 700
+      },
+      {
+        "model": "a_c_muskrat_01",
+        "preset": 0,
+        "xp": 5,
+        "xpRequired": 900
+      },
+      {
+        "model": "a_c_squirrel_01",
+        "preset": 2,
+        "xp": 3,
+        "xpRequired": 500
+      }
+    ]
+  }
+}

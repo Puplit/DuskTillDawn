@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gunsmith Bench</title>
+    <link rel="stylesheet" href="bench.css">
+</head>
+<body>
+<div id="root" class="hidden">
+    <div class="vignette"></div>
+    <div class="shade"></div>
+    <div class="letterbox lb-top"></div>
+    <div class="letterbox lb-bottom"></div>
+
+    <div id="stage"></div>
+
+    <div id="keys" class="keys hidden"></div>
+
+    <aside id="panel">
+        <div class="plate">
+            <section id="pick" class="view">
+                <header class="head">
+                    <div class="kicker" id="pickBench"></div>
+                    <h1 class="title" id="pickTitle"></h1>
+                    <div class="sub" id="pickSub"></div>
+                    <div class="rule"></div>
+                </header>
+                <div class="scroll" id="pickList"></div>
+                <footer class="foot" id="pickFoot"></footer>
+            </section>
+
+            <section id="sheet" class="view hidden">
+                <header class="head">
+                    <div class="kicker" id="sheetKicker"></div>
+                    <h1 class="title" id="sheetTitle"></h1>
+                    <div class="sub" id="sheetSerial"></div>
+                    <nav class="tabs" id="tabs"></nav>
+                    <div class="rule"></div>
+                </header>
+                <div class="scroll" id="rows"></div>
+                <footer class="bill" id="bill">
+                    <div class="rule"></div>
+                    <div class="bill-line"><span id="billCount"></span><span class="gold" id="billTotal"></span></div>
+                    <div class="wallet" id="billWallet"></div>
+                    <div class="buttons">
+                        <button type="button" class="btn quiet" id="btnUndo"></button>
+                        <button type="button" class="btn" id="btnFit"></button>
+                    </div>
+                </footer>
+            </section>
+        </div>
+    </aside>
+
+    <div id="receipt" class="modal hidden">
+        <div class="card">
+            <div class="kicker" id="rcKicker"></div>
+            <h2 class="title" id="rcTitle"></h2>
+            <div class="rule"></div>
+            <div id="rcLines" class="rc-lines"></div>
+            <div class="rule"></div>
+            <div class="bill-line"><span id="rcTotalLabel"></span><span class="gold" id="rcTotal"></span></div>
+            <div class="buttons">
+                <button type="button" class="btn quiet" id="rcNo"></button>
+                <button type="button" class="btn" id="rcYes"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="progress" class="progress hidden">
+        <div class="progress-label" id="progressLabel"></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+</div>
+<script src="bench.js"></script>
+</body>
+</html>
