@@ -167,6 +167,7 @@ A heavily extended control panel. Staff only see the pages their permissions all
 | **Voice** | mumble (pma-voice) |
 | **Queue** | DiscordQueue |
 | **Utility** | oxmysql, ox_lib, PolyZone, xsound, radialmenu, redm-ipls, qadr-safe, dataview_lua |
+| **Chat and weather** | poodlechat (chat box), weathersync (time and weather sync, event hour windows, rain watering) |
 | **Base** | mapmanager, spawnmanager, redm-map-one, hardcap (Cfx.re defaults) |
 | **Extras** | lockpick, female-fix, interiors, moonshine_interiors (kept stopped), weapon_log, mumble_display |
 | **Installed separately** | The maps (MacFarlane's Ranch, weed props). See [Install these separately](#install-these-separately). |
@@ -192,7 +193,7 @@ No recipe is needed. The repository is the whole server (clone it into a folder 
 3. **Keys:** at the top of `txData\VORPCore_290045.base\server.cfg`, fill in your Cfx.re license key (`sv_licenseKey`), Steam Web API key (`steam_webApiKey`) and database login (`mysql_connection_string`).
 4. **Fred:** download [fred_metabolism_free](https://github.com/SirFreddie/fred_metabolism_free) and put `fred_metabolism` and `fred_hud` in `resources\[fred]`.
 5. **vorp_inventory:** download VORP's copy, then copy this server's files over it. See [vorp_inventory](#vorp_inventory) below.
-6. **Third-party scripts:** install at least weathersync and poodlechat, see [Install these separately](#install-these-separately) below.
+6. **Optional third-party scripts:** see [Install these separately](#install-these-separately) below. None of them is needed to start.
 7. **Start:** run `Server-data\FXServer.exe`. txAdmin opens in your browser: choose **Existing Server Data** and point it at `txData\VORPCore_290045.base`.
 8. **OneSync:** in txAdmin, open **Settings > FXServer** and set **OneSync** to **On**, then restart the server. `server.cfg` doesn't set it; txAdmin does.
 9. **Make yourself admin:** join once so your account exists, then do one or both of these:
@@ -227,8 +228,6 @@ These resources have no licence (or no known author), so this repository can't i
 
 | Resource | Author | Link | Folder | Needed? |
 |---|---|---|---|---|
-| weathersync | kibukj (kibook) | [kibook/weathersync](https://github.com/kibook/weathersync) | `[standalone]` | **Required.** Without it, time and weather aren't synced, event hour windows never open, there's no rain watering and boat shop opening hours aren't enforced. Also restore `exec resources/[standalone]/weathersync/permissions.cfg` in `server.cfg`. |
-| poodlechat | kibukj (kibook) | [kibook/poodlechat](https://github.com/kibook/poodlechat) | `[standalone]` | **Required** (or any other chat resource). Without it there's no chat box. |
 | gravedigging | devchacha | [Devchacha01/devchacha-graverobbery](https://github.com/Devchacha01/devchacha-graverobbery) | `[standalone]` | Optional. The original is for RSG/ox; see docs/third-party-changes.md for the VORP port. |
 | miner_lumber | Blue | no public source found | `[standalone]` | Optional (mining and lumberjacking). |
 | macfarlanes_ranch | Younra | [Younra/macfarlanes_ranch](https://github.com/Younra/macfarlanes_ranch) | `[maps]` | Optional (map). |
@@ -315,7 +314,7 @@ All bundled fonts are free fonts, with each licence next to its font file: Oswal
 | Safe crack and door lock sounds (pup-minigames, pup-ui) | [Fesliyan Studios](https://www.fesliyanstudios.com), free-use terms | |
 | mumble | AvarianKnight (pma-voice), **MIT** | [AvarianKnight/pma-voice](https://github.com/AvarianKnight/pma-voice) |
 | objectloader | kibukj (kibook), included (console prints quietened, see docs/third-party-changes.md). Its XML parser SLAXML is by Gavin Kistner, **MIT** | [kibook/redm-objectloader](https://github.com/kibook/redm-objectloader) |
-| weathersync, poodlechat | kibukj (not included, install separately) | [kibook/weathersync](https://github.com/kibook/weathersync), [kibook/poodlechat](https://github.com/kibook/poodlechat) |
+| weathersync, poodlechat | kibukj (kibook), included with this server's changes (see docs/third-party-changes.md). poodlechat bundles Vue 2.3.3 (Evan You, **MIT**) and animate.css 3.5.2 (Daniel Eden, **MIT**) | [kibook/weathersync](https://github.com/kibook/weathersync), [kibook/poodlechat](https://github.com/kibook/poodlechat) |
 | oxmysql | Overextended (now Community Ox), **LGPL-3.0** | [communityox/oxmysql](https://github.com/communityox/oxmysql) |
 | ox_lib | Overextended (now Community Ox), **LGPL-3.0**. RedM build with a restyled UI by Rexshack-RedM, font changed by Puppet. The restyled UI ships compiled only: its source isn't public upstream either (see its `MODIFIED.md` for swapping in the official build) | [communityox/ox_lib](https://github.com/communityox/ox_lib), [Rexshack-RedM/ox_lib](https://github.com/Rexshack-RedM/ox_lib) |
 | Maps: prop_weed, macfarlanes_ranch | Hobbs@RisingSunRP, Younra (not included, install separately) | [DerHobbs/Weed_plant_prop_for_RedM](https://github.com/DerHobbs/Weed_plant_prop_for_RedM), [Younra/macfarlanes_ranch](https://github.com/Younra/macfarlanes_ranch) |

@@ -1,6 +1,6 @@
 # Changes made to third-party resources
 
-Several resources this server runs have no licence, so they are not in this repository. Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
+Several resources this server runs have no licence, so most are not in this repository (weathersync, poodlechat and objectloader are included with their changes already made). Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
 
 It contains only instructions and lines written for Dusk Till Dawn, never the original authors' code. Line numbers are approximate.
 
@@ -10,7 +10,7 @@ Unchanged (install as published): **prop_weed**, **macfarlanes_ranch**, **vorp_i
 
 ## weathersync (kibook)
 
-Upstream: https://github.com/kibook/weathersync
+Upstream: https://github.com/kibook/weathersync. Included in this repository at `[standalone]/weathersync` with the changes below already made; they are listed so you can see what differs from upstream.
 
 1. **Ace-gate the admin events** (security). In `server.lua`, replace the block of `AddEventHandler("weathersync:setWeather", setWeather)` ... `AddEventHandler("weathersync:resetWind", resetWind)` lines with:
 
@@ -66,11 +66,11 @@ Upstream: https://github.com/kibook/weathersync
 5. **Optional winter pattern.** `config.lua` gained a `Config.winterRdrWeatherPattern` table, used by the winter preset. It is a copy of the RDR pattern with snow states (`snowlight`, `snow`, `blizzard`, `groundblizzard`, `whiteout`) mixed in. Every snow state needs its own exit row, or the weather never leaves it.
 6. `permissions.cfg`: there is no functional change. `server.cfg` already grants `group.admin` all commands.
 
-Used by (all guarded, all optional): vorp_character (creator and selection sky), pup-bloodmoon, pup-events (hour windows), pup_homestead (rain watering), pup_realestate (interior weather), pup-camera, vorp_admin's Weather page. Restore `exec resources/[standalone]/weathersync/permissions.cfg` in `server.cfg` after installing.
+Used by (all guarded, all optional): vorp_character (creator and selection sky), pup-bloodmoon, pup-events (hour windows), pup_homestead (rain watering), pup_realestate (interior weather), pup-camera, vorp_admin's Weather page. `server.cfg` runs `exec resources/[standalone]/weathersync/permissions.cfg`.
 
 ## poodlechat (kibook)
 
-Upstream: https://github.com/kibook/poodlechat
+Upstream: https://github.com/kibook/poodlechat. Included in this repository at `[standalone]/poodlechat` with the changes below already made.
 
 1. `fxmanifest.lua`: remove `dependency "discord_rest"` (it is optional, and the hard dependency stops chat starting). Add `'@pup-ui/ptt.lua',` as the first `client_scripts` entry, so push-to-talk keeps working while the chat box has focus.
 2. `server/common.lua`: make the Discord report and bridge checks also require `GetResourceState('discord_rest') == 'started'`.
@@ -88,7 +88,7 @@ Upstream: https://github.com/kibook/poodlechat
 4. `server/config.lua`: this server adds a **job lock**, `ServerConfig.JobLock`. Text chat (Local, Global, `/me`, `/w`) is allowed only for listed jobs (law, medical, press, judges, undertakers, rail) and staff. Staff are recognised by a vorp_admin permission key, the `group` column or a server.cfg ace. The server handler for each channel checks the sender's `characters.job` against the list and refuses with a configurable message.
 5. `html/config.js` and `html/index.css`: western colours and fonts only.
 
-Without poodlechat the server has no chat box. Install it, or another chat resource, for chat to work.
+Discord features need [kibook/discord_rest](https://github.com/kibook/discord_rest) (not included); without it chat works and the Discord parts stay off.
 
 ## objectloader (kibook)
 
