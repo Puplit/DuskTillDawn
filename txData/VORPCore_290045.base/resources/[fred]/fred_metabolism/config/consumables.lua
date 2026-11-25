@@ -1,0 +1,41 @@
+-- fred_metabolism | config/consumables.lua
+-- File-managed consumables. The live list is the `fred_consumables` database table.
+
+-- HOW CONSUMABLES WORK
+-- Every consumable on this server is a row in the `fred_consumables` table, edited
+-- in game from the vorp_admin panel ("Consumables" page). The server reads the
+-- table on start, adds it to this list and sends the result to every client.
+-- sql/install.sql seeds the table on a fresh install.
+--
+-- Entries written here are FILE-MANAGED: they are always loaded, the admin panel
+-- cannot delete them, and a database row with the same Name replaces them.
+-- The list is empty on purpose; add an entry only for an item you want fixed in code.
+--
+-- Fields. Name, InnerCoreStamina and InnerCoreHealth are required (use 0 for none);
+-- every other field may be left out.
+--   Name                  item name in the `items` table (a-z, 0-9, _)
+--   DisplayName           name shown in the "You consumed ..." tip and the drink prompt
+--   Hunger / Thirst       added to the 0-100 food / water bars (negative drains)
+--   Metabolism            added to the 0-20000 metabolism value
+--   Animation             eat, drink, drink_cup, bowl, shortbottle, longbottle, syringe, berry, smoke, sponge
+--   PropName              prop held during eat / drink / shortbottle / longbottle / smoke
+--   Effect                screen effect name played after use
+--   EffectDuration        screen effect length in milliseconds
+--   InnerCoreStamina      stamina core fill added (0-100)
+--   InnerCoreHealth       health core fill added (0-100)
+--   InnerCoreDeadeye      dead eye core fill added (0-100)
+--   *Gold fields          fortify (gold) amount for InnerCore/OuterCore Stamina, Health, Deadeye
+--   Diff                  pup-minigames skill bar difficulty; 0 = no skill check, 5000 = normal
+--
+-- Example:
+--   {
+--       Name             = 'apple',
+--       DisplayName      = 'Apple',
+--       Hunger           = 6,
+--       Thirst           = 5,
+--       Animation        = 'eat',
+--       PropName         = 's_bit_apple01x',
+--       InnerCoreStamina = 2,
+--       InnerCoreHealth  = 1,
+--   },
+Config.Consumables = {}

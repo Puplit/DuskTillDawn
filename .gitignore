@@ -9,7 +9,6 @@ txData/*/cache/
 txData/*/db/
 
 # No licence to redistribute: downloaded by each user (see README)
-txData/VORPCore_290045.base/resources/\[fred\]/
 txData/VORPCore_290045.base/resources/\[VORP\]/vorp_inventory/
 txData/VORPCore_290045.base/resources/\[VORP\]/vorp_barbershop/
 txData/VORPCore_290045.base/resources/\[VORP\]/vorp_fishing/

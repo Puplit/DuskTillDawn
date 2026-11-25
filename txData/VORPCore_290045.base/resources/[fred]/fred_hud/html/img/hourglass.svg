@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- pup: heist sand timer icon, gold line weight matching eco.svg -->
+  <path d="M6 3h12M6 21h12M8 3v3.5c0 1.2.5 2.3 1.4 3.1L12 12l-2.6 2.4A4.2 4.2 0 0 0 8 17.5V21M16 3v3.5c0 1.2-.5 2.3-1.4 3.1L12 12l2.6 2.4c.9.8 1.4 1.9 1.4 3.1V21"
+        stroke="#e6b422" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 18.5h4" stroke="#e6b422" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

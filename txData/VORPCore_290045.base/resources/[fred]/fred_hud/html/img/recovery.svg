@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- pup: post-revive recovery icon for fred_hud. Solid white line art to match
+       the hunger/thirst/thermometer icons - the old stress2.png was a red blob
+       that read as a wound and clashed with every other circle on the HUD.
+       A pulse line says "recovering" without competing with the heart. -->
+  <path d="M2 12.4h4.6l2.1-5.6 3.4 10.4 2.6-7.3 1.7 2.5H22"
+        stroke="#ffffff" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

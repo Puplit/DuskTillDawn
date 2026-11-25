@@ -1,0 +1,127 @@
+<html>
+
+	<head>
+		<title>Fred Hud</title>
+		<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+		<link href="styles.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body style="opacity:100;">
+		<div id="statusHud">
+			<div id="varHealth" class="bar">
+				<img class="barIcon" src="img/heart.svg"></img>
+				<div id="boxSetHealth"></div>
+			</div>
+			<!-- <div id="varArmor" class="bar"> -->
+				<!-- <img class="barIcon" src="img/shield.svg"></img> -->
+				<!-- <div id="boxSetArmour"></div> -->
+			<!-- </div> -->
+			
+			<!--<div id="varMoney" class="money top c100 p100 small top">
+                <span><img class="barIcon" src="img/money.svg"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+                <small>Caricamento...</small>
+            </div>-->
+			
+            <div id="varHunger" class="c100 small first">
+                <span><img class="barIcon" src="img/hunger.png"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <div id="varThirst" class="c100 small second">
+                <span><img class="barIcon" src="img/water.png"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <div id="varTemp" class="c100 p100 small third">
+                <span><img class="barIcon" src="img/thermometer.png"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+                <small>Loading...</small>
+            </div>
+            <!-- pup: post-revive weakness countdown - same circle style as hunger/
+                 thirst; the pie drains from 100 to 0 over the recovery duration -->
+            <div id="varRecovery" class="c100 small second p100" style="display:none">
+                <span><img class="barIcon" src="img/recovery.svg"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <!-- pup: Eco Boost (pup-misc) - the gold ring IS the progress bar; the
+                 numbers live in the sale tips and on the pinboard button -->
+            <div id="varEco" class="c100 small second eco p1" style="display:none">
+                <span><img class="barIcon" src="img/eco.svg"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <!-- pup: bank heist (pup_robbery) - sand timer fills as the clock
+                 runs down; alarm fills a quarter per rung -->
+            <div id="varHeist" class="c100 small second heist p1" style="display:none">
+                <span><img class="barIcon" src="img/hourglass.svg"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <div id="varAlarm" class="c100 small second alarm p1" style="display:none">
+                <span><img class="barIcon" src="img/alarm.svg"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+			<!-- <div id="varOxygen" class="bar"> -->
+				<!-- <img class="barIcon" src="img/oxy.svg"></img> -->
+				<!-- <div id="boxSetOxygen"></div> -->
+            <!-- </div> -->
+            <!--<div id="varStress" class="c100 small p1 first">
+                <span><img class="barIcon" src="img/stress.png"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+                <small>Stress</small>
+            </div>-->
+            <!--<div id="varStress" class="c100 small p70 first">
+                <span><img class="barIcon" src="img/stress2.png"></img></span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+                <small>Stress</small>
+            </div>-->
+			</div><!-- /statusHud (was never closed) -->
+
+		<!-- pup: HUD LAYOUT EDITOR. Hidden and pointer-events:none until
+		     /hudmenu turns it on, so the normal HUD is never clickable and
+		     never steals a mouse click from the game. -->
+		<div id="hudEdit" class="hidden">
+			<div id="hudEditPanel">
+				<div id="hudEditTitle">HUD</div>
+				<div class="hud-sec">Display</div>
+				<div id="hudSetList"></div>
+				<div class="hud-sec">Position</div>
+				<div id="hudEditHint">Drag a gauge, or click a row to reset it</div>
+				<div id="hudEditList"></div>
+				<div id="hudEditBtns">
+					<button id="hudEditSave" class="primary">Save</button>
+					<button id="hudEditReset">Reset All</button>
+					<button id="hudEditClose">Close</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="script.js" type="text/javascript"></script>
+</html>

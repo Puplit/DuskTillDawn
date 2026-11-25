@@ -163,7 +163,7 @@ A heavily extended control panel. Staff only see the pages their permissions all
 | Group | Resources |
 |---|---|
 | **VORP** | vorp_core, vorp_character, vorp_animations, vorp_lib, vorp_admin (vorp_inventory: VORP's download plus this server's files, see [vorp_inventory](#vorp_inventory)). vorp_utils and vorp_outlaws are included but not started by default: nothing here uses them. |
-| **HUD and needs** | fred_hud, fred_metabolism (installed separately) |
+| **HUD and needs** | fred_hud, fred_metabolism (in `[fred]`; `/hud` also holds the Menus: Left/Right setting the pup menus follow) |
 | **Voice** | mumble (pma-voice) |
 | **Queue** | DiscordQueue |
 | **Utility** | oxmysql, ox_lib, PolyZone, xsound, radialmenu, redm-ipls, qadr-safe, dataview_lua |
@@ -191,7 +191,7 @@ No recipe is needed. The repository is the whole server (clone it into a folder 
 1. **Artifacts:** download the [RedM server artifacts](https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/) and extract them into `Server-data`, so that `Server-data\FXServer.exe` exists.
 2. **Database:** you need **MariaDB 10.5 or newer**. MySQL 8 is not supported: the tables use `TEXT` columns with default values and `ADD COLUMN IF NOT EXISTS`, which MySQL rejects. Before the first server start, import `VORPCore_FRESH_2026-11-19.sql` into an empty MariaDB server (HeidiSQL, phpMyAdmin or the `mariadb` command line). It creates the `VORPCore_290045` database and every table for you, with no player data. Every resource's `sql/install.sql` is already included in it; those files are only needed to add a single resource to an existing database. To use another database name, change it at the top of that file and in `mysql_connection_string` in `server.cfg`.
 3. **Keys:** at the top of `txData\VORPCore_290045.base\server.cfg`, fill in your Cfx.re license key (`sv_licenseKey`), Steam Web API key (`steam_webApiKey`) and database login (`mysql_connection_string`).
-4. **Fred:** download [fred_metabolism_free](https://github.com/SirFreddie/fred_metabolism_free) and put `fred_metabolism` and `fred_hud` in `resources\[fred]`.
+4. **Fred:** nothing to do. `fred_metabolism` and `fred_hud` are included in `resources\[fred]`, already set up for this server.
 5. **vorp_inventory:** download VORP's copy, then copy this server's files over it. See [vorp_inventory](#vorp_inventory) below.
 6. **Optional third-party scripts:** see [Install these separately](#install-these-separately) below. None of them is needed to start.
 7. **Start:** run `Server-data\FXServer.exe`. txAdmin opens in your browser: choose **Existing Server Data** and point it at `txData\VORPCore_290045.base`.
@@ -299,7 +299,7 @@ All bundled fonts are free fonts, with each licence next to its font file: Oswal
 | vorp_inventory | VORP team. `docs/vorp_inventory/vorp_inventory/` holds VORP's files as modified by this server, under VORP's licence (`license.md` in that folder). The `pup_*` files and `server/config.lua` there are Puppet's own code (GPL-3.0). The item pictures in its `html/img/items/` are not Puppet's work: most are RDR2 game icons (© Rockstar Games) or community-made icons |  [VORPCORE/vorp_inventory-v2](https://github.com/VORPCORE/vorp_inventory-v2) |
 | vorp_barbershop, vorp_fishing, vorp_walkanim, vorp_lootnpcs, vorp_imapviewtool | VORP team, no licence published (not included, install separately) | [github.com/VORPCORE](https://github.com/VORPCORE) |
 | gravedigging | devchacha, ported to VORP (not included, install separately) | [Devchacha01/devchacha-graverobbery](https://github.com/Devchacha01/devchacha-graverobbery) |
-| fred_hud, fred_metabolism | Fred | [SirFreddie/fred_metabolism_free](https://github.com/SirFreddie/fred_metabolism_free) |
+| fred_hud, fred_metabolism | SirFreddie (Fred), an edit of kamelzarandah's edit of Malik's spaghetti_metabolismo; included with this server's changes (HUD layout editor, menu side setting, Eco Boost gauge, indoor shelter bonus) | [SirFreddie/fred_metabolism_free](https://github.com/SirFreddie/fred_metabolism_free) |
 | Garment, propset and camera-effect names (pup_clothing, pup_tailor, pup-misc) | femga / rdr3_discoveries community research | [femga/rdr3_discoveries](https://github.com/femga/rdr3_discoveries) |
 | Door list (pup_realestate `client/doors.lua`) | femga and contributors, rdr3_discoveries door hash list (door hashes, models and positions: game data). No licence is stated. Re-laid out for pup_realestate; two doors of existing houses added | [femga/rdr3_discoveries](https://github.com/femga/rdr3_discoveries/tree/master/doorHashes) |
 | pup-magic vampire feeding | First based on Jeffy DeTexas' "feed" resource (courtesy note; rewritten) | |

@@ -1,6 +1,6 @@
 # Changes made to third-party resources
 
-Several resources this server runs have no licence, so most are not in this repository (weathersync, poodlechat and objectloader are included with their changes already made). Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
+Several resources this server runs have no licence, so most are not in this repository (weathersync, poodlechat, objectloader and fred_hud / fred_metabolism are included with their changes already made; see `[fred]/README.md` for fred's). Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
 
 It contains only instructions and lines written for Dusk Till Dawn, never the original authors' code. Line numbers are approximate.
 
