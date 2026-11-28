@@ -2,6 +2,10 @@
 
 What changed in each update of this repository, newest first.
 
+## 2026-11-28
+
+- miner_lumber (mining and lumberjacking) is now included in `[standalone]`, started by `ensure [standalone]`. Its tools and materials are already in the fresh database.
+
 ## 2026-11-25
 
 - fred_hud and fred_metabolism are now included in `[fred]` with this server's changes (HUD layout editor, the Menus: Left/Right setting, Eco Boost gauge, indoor shelter). No separate download needed.

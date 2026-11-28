@@ -1,6 +1,6 @@
 # Changes made to third-party resources
 
-Several resources this server runs have no licence, so most are not in this repository (weathersync, poodlechat, objectloader and fred_hud / fred_metabolism are included with their changes already made; see `[fred]/README.md` for fred's). Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
+Several resources this server runs have no licence, so most are not in this repository (weathersync, poodlechat, objectloader, miner_lumber and fred_hud / fred_metabolism are included with their changes already made; see `[fred]/README.md` for fred's). Install each one from its author's page (see the README, "Install these separately"). Then, in `server.cfg`, replace its `# install separately: <name> (see README)` line with `ensure <name>`; a resource with no such line is started by its folder's `ensure [standalone]` / `ensure [maps]`, except vorp_imapviewtool, which needs its own `ensure vorp_imapviewtool`. This server runs modified versions, and this file describes those changes so you can make them yourself.
 
 It contains only instructions and lines written for Dusk Till Dawn, never the original authors' code. Line numbers are approximate.
 
@@ -135,7 +135,7 @@ Other changes: night-only digging (`Config.NightOnly`, 22:00-05:00). Cooldowns e
 
 ## miner_lumber (Blue)
 
-Upstream: no public source found. The resource was supplied as `author 'Blue'` with no link.
+Upstream: no public source found. The resource was supplied as `author 'Blue'` with no link. Included in this repository at `[standalone]/miner_lumber` with the changes below already made; `ensure [standalone]` starts it.
 
 This server's changes: renamed from `pup_miner_lumber` (its events keep the `pup_miner_lumber:` prefix). The config was reshaped into `Config.Tools`, `Config.Gather`, `Config.Nodes`, `Config.Props` and `Config.NodeDefaults`. `data.lua` moved to shared scripts, so the server can distance-check a gather (10 m). Prop gathers are rate-limited to the minigame's swing time. The swing is `pup-minigames` `skill_bar` (a hard dependency). Durability is kept in item metadata.
 

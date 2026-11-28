@@ -229,7 +229,6 @@ These resources have no licence (or no known author), so this repository can't i
 | Resource | Author | Link | Folder | Needed? |
 |---|---|---|---|---|
 | gravedigging | devchacha | [Devchacha01/devchacha-graverobbery](https://github.com/Devchacha01/devchacha-graverobbery) | `[standalone]` | Optional. The original is for RSG/ox; see docs/third-party-changes.md for the VORP port. |
-| miner_lumber | Blue | no public source found | `[standalone]` | Optional (mining and lumberjacking). |
 | macfarlanes_ranch | Younra | [Younra/macfarlanes_ranch](https://github.com/Younra/macfarlanes_ranch) | `[maps]` | Optional (map). |
 | prop_weed | Hobbs (RisingSunRP) | [DerHobbs/Weed_plant_prop_for_RedM](https://github.com/DerHobbs/Weed_plant_prop_for_RedM) | `[maps]` | Optional. Without it, pup_homestead's Hemp and Gang Crop plants grow invisibly. |
 | vorp_barbershop | VORP | [VORPCORE/vorp_barbershop_lua](https://github.com/VORPCORE/vorp_barbershop_lua) | `[VORP]` | Optional (barber chairs). |
@@ -304,7 +303,7 @@ All bundled fonts are free fonts, with each licence next to its font file: Oswal
 | Door list (pup_realestate `client/doors.lua`) | femga and contributors, rdr3_discoveries door hash list (door hashes, models and positions: game data). No licence is stated. Re-laid out for pup_realestate; two doors of existing houses added | [femga/rdr3_discoveries](https://github.com/femga/rdr3_discoveries/tree/master/doorHashes) |
 | pup-magic vampire feeding | First based on Jeffy DeTexas' "feed" resource (courtesy note; rewritten) | |
 | DataView (dataview_lua, used by pup-misc, skinanimals, huntingbirds) | gottfriedleibniz (DataView for Lua), shared through femga/rdr3_discoveries. No licence is stated. | [femga/rdr3_discoveries](https://github.com/femga/rdr3_discoveries/blob/master/AI/EVENTS/dataview_by_Gottfriedleibniz.lua) |
-| miner_lumber | Blue (not included, install separately) | |
+| miner_lumber | Blue (no public source found); included with this server's changes (see docs/third-party-changes.md) | |
 | radialmenu | Murphy Workshop, **GPL-3.0**, modified by Puppet (see its `MODIFIED.md`) | [levraimurphy/murphy_radialmenu](https://github.com/levraimurphy/murphy_radialmenu) |
 | qadr-safe | abdulkadiraktas, **MIT** (its `LICENSE` names Victor Hall, 2021) | [abdulkadiraktas/qadr-safe](https://github.com/abdulkadiraktas/qadr-safe) |
 | PolyZone | Michael Afrin, **MIT** | [mkafrin/PolyZone](https://github.com/mkafrin/PolyZone) |
